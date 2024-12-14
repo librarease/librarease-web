@@ -9,7 +9,7 @@ export type Subscription = WithCommon<{
   loan_period: number;
   active_loan_limit: number;
   user: Pick<User, "id" | "name">;
-  memberhip: Pick<Membership, "id" | "name" | "library_id" | "library">;
+  membership: Pick<Membership, "id" | "name" | "library_id" | "library">;
 }>;
 
 export type SubscriptionDetail = Omit<Subscription, "user" | "membership"> & {

@@ -34,3 +34,22 @@ export const getBook = async (query: GetBookQuery): GetBookResponse => {
   const response = await fetch(url.toString());
   return response.json();
 };
+
+export const createBorrow = async (
+  data: Pick<Borrow, "book_id" | "subscription_id" | "staff_id">
+): GetBookResponse => {
+  const response = await fetch(BORROW_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const e = await response.json();
+    throw e;
+  }
+
+  return response.json();
+};

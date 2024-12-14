@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -56,22 +58,27 @@ export default async function Borrows({
   const prevURL = `/borrows?skip=${prevSkip}&limit=${limit}`;
 
   return (
-    <div>
+    <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Borrows</h1>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
+      <div className="flex justify-between items-center">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <Link href="/" passHref legacyBehavior>
+                <BreadcrumbLink>Home</BreadcrumbLink>
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
 
-          <BreadcrumbItem>
-            <BreadcrumbPage>Borrows</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Borrows</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <Button asChild>
+          <Link href="/borrows/new">New Borrow</Link>
+        </Button>
+      </div>
 
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
@@ -82,6 +89,7 @@ export default async function Borrows({
             <TableHead>User</TableHead>
             <TableHead>Due</TableHead>
             <TableHead>Title</TableHead>
+            <TableHead>Library</TableHead>
             <TableHead>Returned Date</TableHead>
           </TableRow>
         </TableHeader>
@@ -93,7 +101,10 @@ export default async function Borrows({
               <TableCell>{b.subscription.user.name}</TableCell>
               <TableCell>{b.due_at}</TableCell>
               <TableCell>{b.book.title}</TableCell>
-              <TableCell>{b.returned_at}</TableCell>
+              <TableCell>{b.subscription.membership.library.name}</TableCell>
+              <TableCell>
+                {b.returned_at ?? <Badge variant="outline">Active</Badge>}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -13,7 +13,7 @@ export type Borrow = WithCommon<{
   book: Pick<Book, "id" | "title" | "code">;
   subscription: Pick<
     Subscription,
-    "id" | "user_id" | "membership_id" | "user" | "memberhip"
+    "id" | "user_id" | "membership_id" | "user" | "membership"
   >;
   staff: Pick<Staff, "id" | "name">;
 }>;
