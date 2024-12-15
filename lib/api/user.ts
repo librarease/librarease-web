@@ -35,3 +35,22 @@ export const getUser = async (query: GetUserQuery): GetUserResponse => {
   const response = await fetch(url.toString())
   return response.json()
 }
+
+type CreateUserQuery = Pick<User, 'name' | 'email'>
+type CreateBookResponse = Promise<ResSingle<Pick<User, 'id'>>>
+export const createUser = async (
+  query: CreateUserQuery
+): CreateBookResponse => {
+  const response = await fetch(USERS_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(query),
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}

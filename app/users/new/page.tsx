@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createBook } from '@/lib/api/book'
+import { createUser } from '@/lib/api/user'
 
 import {
   Breadcrumb,
@@ -13,30 +13,24 @@ import {
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-export default function NewBook() {
+export default function NewUser() {
   async function create(formData: FormData) {
     'use server'
 
-    const title = formData.get('title') as string
-    const author = formData.get('author') as string
-    const year = formData.get('year') as string
-    const code = formData.get('code') as string
-    const library_id = formData.get('library_id') as string
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
 
-    await createBook({
-      title,
-      author,
-      year: Number(year),
-      code,
-      library_id,
+    await createUser({
+      name,
+      email,
     })
 
-    redirect('/books')
+    redirect('/users')
   }
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Books</h1>
+      <h1 className="text-2xl font-semibold">Add User</h1>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -46,23 +40,20 @@ export default function NewBook() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/books" passHref legacyBehavior>
-              <BreadcrumbLink>Books</BreadcrumbLink>
+            <Link href="/users" passHref legacyBehavior>
+              <BreadcrumbLink>Users</BreadcrumbLink>
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Register Book</BreadcrumbPage>
+            <BreadcrumbPage>Add a User</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <form action={create} className="space-y-4 md:max-w-[40%]">
-        <Input name="title" placeholder="Title" required />
-        <Input name="author" placeholder="Author" required />
-        <Input name="year" type="number" placeholder="Year" required />
-        <Input name="code" placeholder="Code" required />
-        <Input name="library_id" placeholder="Library ID" required />
+        <Input name="name" placeholder="Name" required />
+        <Input name="email" placeholder="Email" type="email" required />
         <Button type="submit">Create</Button>
       </form>
     </div>
