@@ -25,7 +25,7 @@ import {
 import { getListBooks } from "@/lib/api/book";
 import Link from "next/link";
 
-export default async function Borrows({
+export default async function Books({
   searchParams,
 }: {
   searchParams: Promise<{
