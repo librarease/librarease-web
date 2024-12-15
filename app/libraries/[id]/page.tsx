@@ -5,7 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from '@/components/ui/breadcrumb'
 
 import {
   Table,
@@ -16,30 +16,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { getListBooks } from "@/lib/api/book";
-import { getLibrary } from "@/lib/api/library";
-import Link from "next/link";
+} from '@/components/ui/table'
+import { getListBooks } from '@/lib/api/book'
+import { getLibrary } from '@/lib/api/library'
+import Link from 'next/link'
 
 export default async function LibraryDetail({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
+  const { id } = await params
   const [libRes, bookRes] = await Promise.all([
     getLibrary({ id }),
     getListBooks({ limit: 20, library_id: id }),
-  ]);
+  ])
 
-  if ("error" in libRes) {
-    console.log({ libRes });
-    return <div>{JSON.stringify(libRes.message)}</div>;
+  if ('error' in libRes) {
+    console.log({ libRes })
+    return <div>{JSON.stringify(libRes.message)}</div>
   }
 
-  if ("error" in bookRes) {
-    console.log({ bookRes });
-    return <div>{JSON.stringify(bookRes.message)}</div>;
+  if ('error' in bookRes) {
+    console.log({ bookRes })
+    return <div>{JSON.stringify(bookRes.message)}</div>
   }
 
   return (
@@ -94,5 +94,5 @@ export default async function LibraryDetail({
         </TableFooter> */}
       </Table>
     </div>
-  );
+  )
 }

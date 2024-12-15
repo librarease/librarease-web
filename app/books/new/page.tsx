@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { createBook } from "@/lib/api/book";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { createBook } from '@/lib/api/book'
 
 import {
   Breadcrumb,
@@ -9,19 +9,19 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+} from '@/components/ui/breadcrumb'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default function NewBook() {
   async function create(formData: FormData) {
-    "use server";
+    'use server'
 
-    const title = formData.get("title") as string;
-    const author = formData.get("author") as string;
-    const year = formData.get("year") as string;
-    const code = formData.get("code") as string;
-    const library_id = formData.get("library_id") as string;
+    const title = formData.get('title') as string
+    const author = formData.get('author') as string
+    const year = formData.get('year') as string
+    const code = formData.get('code') as string
+    const library_id = formData.get('library_id') as string
 
     await createBook({
       title,
@@ -29,9 +29,9 @@ export default function NewBook() {
       year: Number(year),
       code,
       library_id,
-    });
+    })
 
-    redirect("/books");
+    redirect('/books')
   }
 
   return (
@@ -66,5 +66,5 @@ export default function NewBook() {
         <Button type="submit">Create</Button>
       </form>
     </div>
-  );
+  )
 }

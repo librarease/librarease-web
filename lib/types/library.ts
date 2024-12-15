@@ -1,5 +1,5 @@
-import { WithCommon } from "./common";
+import { WithCommon } from './common'
 
 export type Library = WithCommon<{
-  name: string;
-}>;
+  name: string
+}>

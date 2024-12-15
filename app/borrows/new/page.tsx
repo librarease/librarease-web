@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { cn } from "@/lib/utils";
-import { toast } from "@/components/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { cn } from '@/lib/utils'
+import { toast } from '@/components/hooks/use-toast'
+import { Button } from '@/components/ui/button'
 import {
   Command,
   // CommandEmpty,
@@ -15,7 +15,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command'
 import {
   Form,
   FormControl,
@@ -24,12 +24,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -37,47 +37,47 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { getListUsers } from "@/lib/api/user";
-import { User } from "@/lib/types/user";
-import { Book } from "@/lib/types/book";
-import { getListBooks } from "@/lib/api/book";
-import { Subscription } from "@/lib/types/subscription";
-import { getListSubs } from "@/lib/api/subscription";
-import { Staff } from "@/lib/types/staff";
-import { getListStaffs } from "@/lib/api/staff";
-import { createBorrow } from "@/lib/api/borrow";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/breadcrumb'
+import Link from 'next/link'
+import { useCallback, useEffect, useState } from 'react'
+import { getListUsers } from '@/lib/api/user'
+import { User } from '@/lib/types/user'
+import { Book } from '@/lib/types/book'
+import { getListBooks } from '@/lib/api/book'
+import { Subscription } from '@/lib/types/subscription'
+import { getListSubs } from '@/lib/api/subscription'
+import { Staff } from '@/lib/types/staff'
+import { getListStaffs } from '@/lib/api/staff'
+import { createBorrow } from '@/lib/api/borrow'
+import { useRouter } from 'next/navigation'
 
 const FormSchema = z.object({
   user_id: z.string({
-    required_error: "Please select a user.",
+    required_error: 'Please select a user.',
   }),
   book_id: z.string({
-    required_error: "Please select a book.",
+    required_error: 'Please select a book.',
   }),
   subscription_id: z.string({
-    required_error: "Please select a subscription.",
+    required_error: 'Please select a subscription.',
   }),
   staff_id: z.string({
-    required_error: "Please select a staff.",
+    required_error: 'Please select a staff.',
   }),
-});
+})
 
 export default function ComboboxForm() {
-  const router = useRouter();
+  const router = useRouter()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     createBorrow(data)
       .then(console.log)
       .then(() => {
         toast({
-          title: "You submitted the following values:",
+          title: 'You submitted the following values:',
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
               <code className="text-white">
@@ -85,63 +85,63 @@ export default function ComboboxForm() {
               </code>
             </pre>
           ),
-        });
-        router.push("/borrows");
+        })
+        router.push('/borrows')
       })
       .catch((e) => {
         toast({
-          title: "Error",
+          title: 'Error',
           description: e?.error,
-          variant: "destructive",
-        });
-      });
+          variant: 'destructive',
+        })
+      })
   }
 
   const onReset = useCallback(() => {
-    form.reset();
-  }, [form]);
+    form.reset()
+  }, [form])
 
-  const [userQ, setUserQ] = useState("");
-  const [users, setUsers] = useState<User[]>([]);
+  const [userQ, setUserQ] = useState('')
+  const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
     getListUsers({
       limit: 20,
       name: userQ,
     }).then((res) => {
-      if ("error" in res) {
+      if ('error' in res) {
         toast({
-          title: "Error",
+          title: 'Error',
           description: res.message,
-        });
-        return;
+        })
+        return
       }
-      setUsers(res.data);
-    });
-  }, [userQ]);
+      setUsers(res.data)
+    })
+  }, [userQ])
 
-  const [bookQ, setBookQ] = useState("");
-  const [books, setBooks] = useState<Book[]>([]);
+  const [bookQ, setBookQ] = useState('')
+  const [books, setBooks] = useState<Book[]>([])
 
   useEffect(() => {
     getListBooks({
       limit: 20,
       title: bookQ,
     }).then((res) => {
-      if ("error" in res) {
+      if ('error' in res) {
         toast({
-          title: "Error",
+          title: 'Error',
           description: res.message,
-        });
-        return;
+        })
+        return
       }
-      setBooks(res.data);
-    });
-  }, [bookQ]);
+      setBooks(res.data)
+    })
+  }, [bookQ])
 
-  const [subQ, setSubQ] = useState("");
-  const [subs, setSubs] = useState<Subscription[]>([]);
-  const selectedUser = form.watch("user_id");
+  const [subQ, setSubQ] = useState('')
+  const [subs, setSubs] = useState<Subscription[]>([])
+  const selectedUser = form.watch('user_id')
 
   useEffect(() => {
     getListSubs({
@@ -150,35 +150,35 @@ export default function ComboboxForm() {
       membership_name: subQ,
       is_active: true,
     }).then((res) => {
-      if ("error" in res) {
+      if ('error' in res) {
         toast({
-          title: "Error",
+          title: 'Error',
           description: res.message,
-        });
-        return;
+        })
+        return
       }
-      setSubs(res.data);
-    });
-  }, [subQ, selectedUser]);
+      setSubs(res.data)
+    })
+  }, [subQ, selectedUser])
 
-  const [staffQ, setStaffQ] = useState("");
-  const [staffs, setStaffs] = useState<Staff[]>([]);
+  const [staffQ, setStaffQ] = useState('')
+  const [staffs, setStaffs] = useState<Staff[]>([])
 
   useEffect(() => {
     getListStaffs({
       limit: 20,
       name: staffQ,
     }).then((res) => {
-      if ("error" in res) {
+      if ('error' in res) {
         toast({
-          title: "Error",
+          title: 'Error',
           description: res.message,
-        });
-        return;
+        })
+        return
       }
-      setStaffs(res.data);
-    });
-  }, [staffQ]);
+      setStaffs(res.data)
+    })
+  }, [staffQ])
 
   return (
     <div className="grid grid-rows-2">
@@ -222,14 +222,14 @@ export default function ComboboxForm() {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
+                            'w-[200px] justify-between',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value
                             ? books.find((book) => book.id === field.value)
                                 ?.title
-                            : "Select Book"}
+                            : 'Select Book'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -249,16 +249,16 @@ export default function ComboboxForm() {
                                 value={book.id}
                                 key={book.id}
                                 onSelect={() => {
-                                  form.setValue("book_id", book.id);
+                                  form.setValue('book_id', book.id)
                                 }}
                               >
                                 {book.title}
                                 <Check
                                   className={cn(
-                                    "ml-auto",
+                                    'ml-auto',
                                     book.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>
@@ -289,14 +289,14 @@ export default function ComboboxForm() {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
+                            'w-[200px] justify-between',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value
                             ? users.find((user) => user.id === field.value)
                                 ?.name
-                            : "Select user"}
+                            : 'Select user'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -316,16 +316,16 @@ export default function ComboboxForm() {
                                 value={user.id}
                                 key={user.id}
                                 onSelect={() => {
-                                  form.setValue("user_id", user.id);
+                                  form.setValue('user_id', user.id)
                                 }}
                               >
                                 {user.name}
                                 <Check
                                   className={cn(
-                                    "ml-auto",
+                                    'ml-auto',
                                     user.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>
@@ -356,15 +356,15 @@ export default function ComboboxForm() {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
+                            'w-[200px] justify-between',
+                            !field.value && 'text-muted-foreground'
                           )}
                           disabled={!selectedUser}
                         >
                           {field.value
                             ? subs.find((sub) => sub.id === field.value)
                                 ?.membership.name
-                            : "Select subscription"}
+                            : 'Select subscription'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -384,16 +384,16 @@ export default function ComboboxForm() {
                                 value={sub.id}
                                 key={sub.id}
                                 onSelect={() => {
-                                  form.setValue("subscription_id", sub.id);
+                                  form.setValue('subscription_id', sub.id)
                                 }}
                               >
                                 {sub.membership.name}
                                 <Check
                                   className={cn(
-                                    "ml-auto",
+                                    'ml-auto',
                                     sub.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>
@@ -424,14 +424,14 @@ export default function ComboboxForm() {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
+                            'w-[200px] justify-between',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value
                             ? staffs.find((staff) => staff.id === field.value)
                                 ?.name
-                            : "Select Staff"}
+                            : 'Select Staff'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -451,16 +451,16 @@ export default function ComboboxForm() {
                                 value={staff.id}
                                 key={staff.id}
                                 onSelect={() => {
-                                  form.setValue("staff_id", staff.id);
+                                  form.setValue('staff_id', staff.id)
                                 }}
                               >
                                 {staff.name}
                                 <Check
                                   className={cn(
-                                    "ml-auto",
+                                    'ml-auto',
                                     staff.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>
@@ -486,5 +486,5 @@ export default function ComboboxForm() {
         </Form>
       </div>
     </div>
-  );
+  )
 }
