@@ -37,3 +37,22 @@ export const getLibrary = async (
   const response = await fetch(url.toString())
   return response.json()
 }
+
+type CreateLibraryQuery = Pick<Library, 'name'>
+type CreateLibraryResponse = Promise<ResSingle<Pick<Library, 'id'>>>
+export const createLibrary = async (
+  query: CreateLibraryQuery
+): CreateLibraryResponse => {
+  const response = await fetch(LIBRARIES_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(query),
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}

@@ -58,7 +58,7 @@ export default async function Staffs({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Books</h1>
+      <h1 className="text-2xl font-semibold">Staffs</h1>
       <div className="flex justify-between items-center">
         <Breadcrumb>
           <BreadcrumbList>
@@ -75,7 +75,7 @@ export default async function Staffs({
           </BreadcrumbList>
         </Breadcrumb>
         <Button asChild>
-          <Link href="/staffs/new">Register a Staff</Link>
+          <Link href="/staffs/new">Assign a Staff</Link>
         </Button>
       </div>
 

@@ -27,3 +27,22 @@ export const getStaff = async (query: GetStaffQuery): GetStaffResponse => {
   const response = await fetch(url.toString())
   return response.json()
 }
+
+type CreateStaffData = Pick<Staff, 'name' | 'library_id' | 'user_id'>
+type CreateStaffResponse = Promise<ResSingle<Staff>>
+export const createStaff = async (
+  data: CreateStaffData
+): CreateStaffResponse => {
+  const response = await fetch(STAFF_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}
