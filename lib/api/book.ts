@@ -28,3 +28,25 @@ export const getBook = async (query: GetBookQuery): GetBookResponse => {
   const response = await fetch(url.toString());
   return response.json();
 };
+
+type CreateBookQuery = Pick<
+  Book,
+  "title" | "author" | "year" | "code" | "library_id"
+>;
+type CreateBookResponse = Promise<ResSingle<Pick<Book, "id">>>;
+export const createBook = async (
+  query: CreateBookQuery
+): CreateBookResponse => {
+  const response = await fetch(BOOKS_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(query),
+  });
+  if (!response.ok) {
+    const e = await response.json();
+    throw e;
+  }
+  return response.json();
+};

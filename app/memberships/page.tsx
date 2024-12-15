@@ -22,10 +22,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getListBooks } from "@/lib/api/book";
+import { getListMemberships } from "@/lib/api/membership";
 import Link from "next/link";
 
-export default async function Borrows({
+export default async function Memberships({
   searchParams,
 }: {
   searchParams: Promise<{
@@ -38,7 +38,7 @@ export default async function Borrows({
   const skip = Number(sp?.skip ?? 0);
   const limit = Number(sp?.limit ?? 20);
   const library_id = sp?.library_id;
-  const res = await getListBooks({
+  const res = await getListMemberships({
     sort_by: "created_at",
     sort_in: "desc",
     limit: limit,
@@ -53,12 +53,12 @@ export default async function Borrows({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0;
 
-  const nextURL = `/books?skip=${skip + limit}&limit=${limit}`;
-  const prevURL = `/books?skip=${prevSkip}&limit=${limit}`;
+  const nextURL = `/memberships?skip=${skip + limit}&limit=${limit}`;
+  const prevURL = `/memberships?skip=${prevSkip}&limit=${limit}`;
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">Books</h1>
+    <div className="space-y-4">
+      <h1 className="text-2xl font-semibold">Memberships</h1>
       <div className="flex justify-between items-center">
         <Breadcrumb>
           <BreadcrumbList>
@@ -70,12 +70,12 @@ export default async function Borrows({
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbPage>Books</BreadcrumbPage>
+              <BreadcrumbPage>Memberships</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <Button asChild>
-          <Link href="/books/new">Register New Book</Link>
+          <Link href="/memberships/new">New Membership</Link>
         </Button>
       </div>
 
@@ -83,21 +83,23 @@ export default async function Borrows({
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead>Code</TableHead>
-            <TableHead>Title</TableHead>
+            <TableHead>Name</TableHead>
             <TableHead>Library</TableHead>
-            <TableHead>Author</TableHead>
-            <TableHead>Year</TableHead>
+            <TableHead>Duration</TableHead>
+            <TableHead>Borrow Limit</TableHead>
+            <TableHead>Borrow Period</TableHead>
+            <TableHead>Fine per Day</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {res.data.map((b) => (
-            <TableRow key={b.id}>
-              <TableCell>{b.code}</TableCell>
-              <TableCell>{b.title}</TableCell>
-              <TableCell>{b.library?.name}</TableCell>
-              <TableCell>{b.author}</TableCell>
-              <TableCell>{b.year}</TableCell>
+          {res.data.map((m) => (
+            <TableRow key={m.id}>
+              <TableCell>{m.name}</TableCell>
+              <TableCell>{m.library.name}</TableCell>
+              <TableCell>{m.duration} D</TableCell>
+              <TableCell>{m.active_loan_limit}</TableCell>
+              <TableCell>{m.loan_period} D</TableCell>
+              <TableCell>{m.fine_per_day ?? "-"} Pts</TableCell>
             </TableRow>
           ))}
         </TableBody>

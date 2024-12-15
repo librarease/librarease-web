@@ -10,6 +10,7 @@ export type Subscription = WithCommon<{
   active_loan_limit: number;
   user: Pick<User, "id" | "name">;
   membership: Pick<Membership, "id" | "name" | "library_id" | "library">;
+  fine_per_day: number;
 }>;
 
 export type SubscriptionDetail = Omit<Subscription, "user" | "membership"> & {
