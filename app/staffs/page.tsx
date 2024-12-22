@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -86,6 +87,7 @@ export default async function Staffs({
             <TableHead>Name</TableHead>
             <TableHead>User</TableHead>
             <TableHead>Library</TableHead>
+            <TableHead>Role</TableHead>
             <TableHead>Registered At</TableHead>
           </TableRow>
         </TableHeader>
@@ -95,6 +97,9 @@ export default async function Staffs({
               <TableCell>{s.name}</TableCell>
               <TableCell>{s.user?.name}</TableCell>
               <TableCell>{s.library?.name}</TableCell>
+              <TableCell>
+                <Badge variant="outline">{s.role}</Badge>
+              </TableCell>
               <TableCell>{s.created_at}</TableCell>
             </TableRow>
           ))}

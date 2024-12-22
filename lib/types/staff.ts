@@ -6,6 +6,7 @@ export type Staff = WithCommon<{
   name: string
   library_id: string
   user_id: string
+  role: 'ADMIN' | 'STAFF'
   library?: Pick<Library, 'id' | 'name'>
   user?: Pick<User, 'id' | 'name'>
 }>

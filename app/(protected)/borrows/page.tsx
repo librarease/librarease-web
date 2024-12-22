@@ -24,6 +24,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListBorrows } from '@/lib/api/borrow'
+import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 export default async function Borrows({
@@ -39,17 +40,27 @@ export default async function Borrows({
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
-  const res = await getListBorrows({
-    sort_by: 'created_at',
-    sort_in: 'desc',
-    limit: limit,
-    skip: skip,
-    ...(library_id ? { library_id } : {}),
-  })
+
+  const cookieStore = await cookies()
+  const token = cookieStore.get('auth')?.value
+
+  const res = await getListBorrows(
+    {
+      sort_by: 'created_at',
+      sort_in: 'desc',
+      limit: limit,
+      skip: skip,
+      ...(library_id ? { library_id } : {}),
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
 
   if ('error' in res) {
-    console.log(res)
-    return <div>{JSON.stringify(res.message)}</div>
+    return <div>{JSON.stringify(res.error)}</div>
   }
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0

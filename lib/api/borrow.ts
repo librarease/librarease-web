@@ -14,7 +14,8 @@ type GetListBorrowsQuery = QueryParams<
 type GetListBorrowsResponse = Promise<ResList<Borrow>>
 
 export const getListBorrows = async (
-  query: GetListBorrowsQuery
+  query: GetListBorrowsQuery,
+  init?: RequestInit
 ): GetListBorrowsResponse => {
   const url = new URL(BORROW_URL)
   Object.entries(query).forEach(([key, value]) => {
@@ -23,7 +24,13 @@ export const getListBorrows = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
+  if (!response.ok) {
+    // FIXME: handle token expired error
+    const e = await response.json()
+    throw e
+  }
+
   return response.json()
 }
 

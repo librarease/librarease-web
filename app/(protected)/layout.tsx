@@ -9,7 +9,6 @@ export default async function ProtectedLayout({
   // REF: https://nextjs.org/docs/app/api-reference/functions/cookies
   const c = await cookies()
   const token = c.get('auth')
-  console.log({ token })
   if (!token) {
     redirect('/login')
   }
