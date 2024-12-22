@@ -40,3 +40,22 @@ export const getUser = async (query: GetUserQuery): GetUserResponse => {
   const response = await fetch(url.toString())
   return response.json()
 }
+
+type CreateSubscription = Pick<Subscription, 'user_id' | 'membership_id'>
+type CreateSubscriptionResponse = Promise<ResSingle<Pick<Subscription, 'id'>>>
+export const createSubscription = async (
+  body: CreateSubscription
+): CreateSubscriptionResponse => {
+  const res = await fetch(SUBSCRIPTIONS_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    const e = await res.json()
+    throw e
+  }
+  return res.json()
+}

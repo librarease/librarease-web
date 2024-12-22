@@ -4,7 +4,9 @@ import { BASE_URL } from './common'
 
 const MEMBERSHIPS_URL = `${BASE_URL}/memberships`
 
-type GetListMembershipsQuery = QueryParams<Membership>
+type GetListMembershipsQuery = QueryParams<Membership> & {
+  library_ids?: string
+}
 type GetListMembershipsResponse = Promise<ResList<Membership>>
 
 export const getListMemberships = async (
