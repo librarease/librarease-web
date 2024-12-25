@@ -80,9 +80,6 @@ export function SignUpForm({
               <Button type="submit" className="w-full" disabled={isPending}>
                 Sign Up
               </Button>
-              {/* <Button variant="outline" className="w-full">
-                Login with Google
-              </Button> */}
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{' '}
