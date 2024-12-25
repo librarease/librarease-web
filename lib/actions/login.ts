@@ -1,6 +1,6 @@
 'use server'
 
-import { app } from '@/firebase.config'
+import { app } from '../firebase/client'
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -15,10 +15,11 @@ type formState = {
   error: string
   email: string
   password: string
+  from: string
 }
 
 export async function login(
-  _: formState,
+  formState: formState,
   formData: FormData
 ): Promise<formState> {
   const email = formData.get('email') as string
@@ -33,16 +34,18 @@ export async function login(
       error: 'Something went wrong',
       email,
       password,
+      from: formState.from,
     }
   }
 
   const user = userCredentials.user
+  const sessionName = process.env.SESSION_COOKIE_NAME as string
   const token = await user.getIdToken()
-
   const cookieStore = await cookies()
-  cookieStore.set('auth', token, {
+  cookieStore.delete(sessionName)
+  cookieStore.set(sessionName, token, {
     maxAge: 60 * 60 * 24 * 7,
   })
 
-  redirect('/', RedirectType.replace)
+  redirect(formState.from, RedirectType.replace)
 }

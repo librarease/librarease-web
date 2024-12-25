@@ -18,13 +18,21 @@ import Link from 'next/link'
 export function LoginForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<'div'> & { email?: string }) {
+}: React.ComponentPropsWithoutRef<'div'> & { email?: string; from: string }) {
   const initialState = {
     error: '',
     email: props.email ?? '',
     password: '',
+    // to pass "from" to login form for redirecting after login
+    from: props.from,
   }
-  const [state, action, isPending] = useActionState(login, initialState, '/')
+
+  const [state, action, isPending] = useActionState(
+    login,
+    initialState,
+    props.from
+  )
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
@@ -78,7 +86,11 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline underline-offset-4">
+              <Link
+                href="/signup"
+                className="underline underline-offset-4"
+                replace
+              >
                 Sign up
               </Link>
             </div>

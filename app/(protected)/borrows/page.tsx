@@ -25,9 +25,9 @@ import {
 } from '@/components/ui/pagination'
 
 import { getListBorrows } from '@/lib/api/borrow'
+import { Verify } from '@/lib/firebase/firebase'
 import { Borrow } from '@/lib/types/borrow'
 import { Book, Calendar, LibraryIcon, User } from 'lucide-react'
-import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 const formatDate = (date: string): string => {
@@ -60,8 +60,9 @@ export default async function Borrows({
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
 
-  const cookieStore = await cookies()
-  const token = cookieStore.get('auth')?.value
+  const headers = await Verify({
+    from: '/borrows',
+  })
 
   const res = await getListBorrows(
     {
@@ -72,9 +73,7 @@ export default async function Borrows({
       ...(library_id ? { library_id } : {}),
     },
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
     }
   )
 
