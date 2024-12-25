@@ -11,7 +11,7 @@ export async function Verify({ from }: { from: string }) {
       .auth()
       .verifyIdToken(session?.value as string)
 
-    const headers = new Headers({})
+    const headers = new Headers()
     headers.set('X-Client-Id', process.env.CLIENT_ID as string)
     headers.set('X-Uid', decoded.uid)
 
@@ -35,5 +35,6 @@ export async function Verify({ from }: { from: string }) {
 
       redirect(`login?from=${encodeURIComponent(from)}`, RedirectType.replace)
     }
+    throw error
   }
 }
