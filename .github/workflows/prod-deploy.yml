@@ -86,4 +86,4 @@ jobs:
             eval "$(ssh-agent -s)"
             ssh-add ~/.ssh/action
             cd /home/ubuntu/deploy
-            bash deploy.sh 
+            bash deploy.sh

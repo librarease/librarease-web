@@ -1,3 +1,4 @@
+import { BtnReturnBook } from '@/components/borrows/BtnReturnBook'
 import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
@@ -160,13 +161,13 @@ export default async function Borrows({
               </div>
             </CardContent>
             <CardFooter>
-              <Button
+              <BtnReturnBook
                 variant="outline"
                 className="w-full"
-                // onClick={() => alert(`Return book: ${borrow.book_id}`)}
+                borrow={borrow}
               >
                 Return Book
-              </Button>
+              </BtnReturnBook>
             </CardFooter>
           </Card>
         ))}

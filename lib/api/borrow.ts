@@ -26,7 +26,6 @@ export const getListBorrows = async (
 
   const response = await fetch(url.toString(), init)
   if (!response.ok) {
-    // FIXME: handle token expired error
     const e = await response.json()
     throw e
   }
@@ -53,6 +52,26 @@ export const createBorrow = async (
     body: JSON.stringify(data),
   })
 
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}
+
+export const returnBorrow = async (
+  data: Pick<Borrow, 'id' | 'staff_id' | 'returned_at'>,
+  init?: RequestInit
+): GetBookResponse => {
+  const response = await fetch(`${BORROW_URL}/${data.id}`, {
+    ...init,
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
   if (!response.ok) {
     const e = await response.json()
     throw e

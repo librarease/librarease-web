@@ -10,6 +10,5 @@ const adminApp = !admin.apps.length
       'admin'
     )
   : admin.app('admin')
-// }
 
 export { adminApp }
