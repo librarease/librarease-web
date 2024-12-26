@@ -3,7 +3,8 @@ import { revalidatePath } from 'next/cache'
 import { returnBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 
-export async function Return(id: string, init?: RequestInit) {
+// server action to return a borrow
+export async function ReturnBorrow(id: string) {
   const headers = await Verify({
     from: '/borrows',
   })
@@ -12,12 +13,9 @@ export async function Return(id: string, init?: RequestInit) {
     {
       id,
       returned_at: new Date().toISOString(),
-      // FIXME: accept staff_id in api
-      staff_id: '',
     },
     {
       headers,
-      ...init,
     }
   )
 

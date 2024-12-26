@@ -61,7 +61,7 @@ export const createBorrow = async (
 }
 
 export const returnBorrow = async (
-  data: Pick<Borrow, 'id' | 'staff_id' | 'returned_at'>,
+  data: Pick<Borrow, 'id' | 'returned_at'>,
   init?: RequestInit
 ): GetBookResponse => {
   const response = await fetch(`${BORROW_URL}/${data.id}`, {

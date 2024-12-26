@@ -8,6 +8,15 @@ const nextConfig: NextConfig = {
     API_URL: process.env.API_URL,
     SESSION_COOKIE_NAME: process.env.SESSION_COOKIE_NAME,
   },
+
+  rewrites: async () => {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.API_URL}/api/:path*`,
+      },
+    ]
+  },
 }
 
 export default nextConfig

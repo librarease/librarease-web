@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { login } from '@/lib/actions/login'
 import Link from 'next/link'
+import { Checkbox } from './ui/checkbox'
 
 export function LoginForm({
   className,
@@ -32,6 +33,9 @@ export function LoginForm({
     initialState,
     props.from
   )
+
+  const [showPassword, setShowPassword] = useState(false)
+  const toggleShowPassword = setShowPassword.bind(null, !showPassword)
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
@@ -60,22 +64,31 @@ export function LoginForm({
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   // defaultValue={state.password}
                   required
                 />
+              </div>
+
+              <div className="flex items-center">
+                <Checkbox
+                  id="show-password"
+                  checked={showPassword}
+                  onCheckedChange={toggleShowPassword}
+                />
+                <Label htmlFor="show-password" className="ml-2">
+                  Show Password
+                </Label>
+                <Link
+                  href="/forgot-password"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </Link>
               </div>
               <Button type="submit" className="w-full" disabled={isPending}>
                 Login

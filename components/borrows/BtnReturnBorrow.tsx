@@ -4,7 +4,8 @@ import { Borrow } from '@/lib/types/borrow'
 import { useState } from 'react'
 import { Button, ButtonProps } from '../ui/button'
 import { Lock, Unlock } from 'lucide-react'
-import { Return } from '@/lib/actions/return-borrow'
+import { ReturnBorrow } from '@/lib/actions/return-borrow'
+import { formatDate } from '@/lib/utils'
 
 export const BtnReturnBook: React.FC<
   ButtonProps & {
@@ -14,7 +15,6 @@ export const BtnReturnBook: React.FC<
   const [confirm, setConfirm] = useState<NodeJS.Timeout>()
 
   const onUnlock = () => {
-    console.log('unlock')
     const timerId = setTimeout(() => {
       setConfirm(undefined)
     }, 3_000)
@@ -22,15 +22,14 @@ export const BtnReturnBook: React.FC<
   }
 
   const onClick = () => {
-    console.log('return book', borrow.id)
-    Return(borrow.id)
+    ReturnBorrow(borrow.id)
     if (confirm) clearTimeout(confirm)
   }
 
   if (borrow.returned_at)
     return (
       <Button {...props} variant="secondary" disabled>
-        {borrow.returned_at}
+        {formatDate(borrow.returned_at)}
       </Button>
     )
 

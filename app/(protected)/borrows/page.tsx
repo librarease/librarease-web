@@ -1,4 +1,4 @@
-import { BtnReturnBook } from '@/components/borrows/BtnReturnBook'
+import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
@@ -28,17 +28,9 @@ import {
 import { getListBorrows } from '@/lib/api/borrow'
 import { Verify } from '@/lib/firebase/firebase'
 import { Borrow } from '@/lib/types/borrow'
+import { formatDate } from '@/lib/utils'
 import { Book, Calendar, LibraryIcon, User } from 'lucide-react'
 import Link from 'next/link'
-
-const formatDate = (date: string): string => {
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
-  return formatter.format(new Date(date))
-}
 
 const getBorrowStatus = (borrow: Borrow) => {
   const now = new Date()
