@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { login } from '@/lib/actions/login'
 import Link from 'next/link'
 import { Checkbox } from './ui/checkbox'
@@ -36,6 +36,12 @@ export function LoginForm({
 
   const [showPassword, setShowPassword] = useState(false)
   const toggleShowPassword = setShowPassword.bind(null, !showPassword)
+
+  // clear session cookie
+  useEffect(() => {
+    const sessionName = process.env.SESSION_COOKIE_NAME as string
+    document.cookie = `${sessionName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+  }, [])
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>

@@ -1,6 +1,6 @@
 export default async function ProtectedLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  console.log('insice (protected) layout: ')
+  console.log('under (protected) layout: ')
   return <>{children}</>
 }

@@ -31,7 +31,7 @@ export async function login(
   } catch (error) {
     console.log(error)
     return {
-      error: 'Something went wrong',
+      error: 'Invalid email or password',
       email,
       password,
       from: formState.from,
@@ -42,9 +42,9 @@ export async function login(
   const sessionName = process.env.SESSION_COOKIE_NAME as string
   const token = await user.getIdToken()
   const cookieStore = await cookies()
-  cookieStore.delete(sessionName)
   cookieStore.set(sessionName, token, {
     maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true,
   })
 
   redirect(formState.from, RedirectType.replace)
