@@ -23,6 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListSubs } from '@/lib/api/subscription'
+import { Verify } from '@/lib/firebase/firebase'
 import Link from 'next/link'
 
 export default async function Subscriptions({
@@ -38,13 +39,23 @@ export default async function Subscriptions({
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
-  const res = await getListSubs({
-    sort_by: 'created_at',
-    sort_in: 'desc',
-    limit: limit,
-    skip: skip,
-    ...(library_id ? { library_id } : {}),
+
+  const headers = await Verify({
+    from: '/borrows',
   })
+
+  const res = await getListSubs(
+    {
+      sort_by: 'created_at',
+      sort_in: 'desc',
+      limit: limit,
+      skip: skip,
+      ...(library_id ? { library_id } : {}),
+    },
+    {
+      headers,
+    }
+  )
 
   if ('error' in res) {
     console.log(res)

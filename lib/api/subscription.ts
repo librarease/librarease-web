@@ -13,7 +13,8 @@ type GetListSubsQuery = QueryParams<
 type GetListSubsResponse = Promise<ResList<Subscription>>
 
 export const getListSubs = async (
-  query: GetListSubsQuery
+  query: GetListSubsQuery,
+  init?: RequestInit
 ): GetListSubsResponse => {
   const url = new URL(SUBSCRIPTIONS_URL)
   Object.entries(query).forEach(([key, value]) => {
@@ -22,7 +23,11 @@ export const getListSubs = async (
     }
   })
   try {
-    const response = await fetch(url.toString())
+    const response = await fetch(url.toString(), init)
+    if (!response.ok) {
+      const e = await response.json()
+      throw e
+    }
     return response.json()
   } catch (error) {
     return {
