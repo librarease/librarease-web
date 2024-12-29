@@ -1,5 +1,4 @@
-import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
-import { Badge } from '@/components/ui/badge'
+import { CardBorrow } from '@/components/borrows/CardBorrow'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,14 +9,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -27,17 +18,8 @@ import {
 
 import { getListBorrows } from '@/lib/api/borrow'
 import { Verify } from '@/lib/firebase/firebase'
-import { Borrow } from '@/lib/types/borrow'
-import { formatDate } from '@/lib/utils'
-import { Book, Calendar, LibraryIcon, User } from 'lucide-react'
+import { Book } from 'lucide-react'
 import Link from 'next/link'
-
-const getBorrowStatus = (borrow: Borrow) => {
-  const now = new Date()
-  const due = new Date(borrow.due_at)
-  if (borrow.returned_at) return 'returned'
-  return now > due ? 'overdue' : 'active'
-}
 
 export default async function Borrows({
   searchParams,
@@ -106,62 +88,7 @@ export default async function Borrows({
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow) => (
-          <Card key={borrow.id} className="relative">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-lg">{borrow.book.title}</CardTitle>
-                  <CardDescription>{borrow.book.code}</CardDescription>
-                </div>
-                <Badge
-                  variant={
-                    getBorrowStatus(borrow) === 'overdue'
-                      ? 'destructive'
-                      : getBorrowStatus(borrow) === 'returned'
-                        ? 'secondary'
-                        : 'default'
-                  }
-                  className="capitalize"
-                >
-                  {getBorrowStatus(borrow)}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center gap-2 text-sm">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span>{borrow.subscription.user.name}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <LibraryIcon className="h-4 w-4 text-muted-foreground" />
-                <span>{borrow.subscription.membership.library.name}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col">
-                  <span>Borrowed: {formatDate(borrow.borrowed_at)}</span>
-                  <span
-                    className={`${
-                      getBorrowStatus(borrow) === 'overdue'
-                        ? 'text-destructive'
-                        : ''
-                    }`}
-                  >
-                    Due: {formatDate(borrow.due_at)}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <BtnReturnBook
-                variant="outline"
-                className="w-full"
-                borrow={borrow}
-              >
-                Return Book
-              </BtnReturnBook>
-            </CardFooter>
-          </Card>
+          <CardBorrow key={borrow.id} borrow={borrow} />
         ))}
       </div>
 
