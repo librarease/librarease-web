@@ -6,6 +6,7 @@ export type Subscription = WithCommon<{
   user_id: string
   membership_id: string
   expires_at: string
+  amount: number
   loan_period: number
   active_loan_limit: number
   user: Pick<User, 'id' | 'name'>

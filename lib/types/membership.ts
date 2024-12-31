@@ -9,6 +9,7 @@ export type Membership = WithCommon<{
   loan_period: number
   library: Pick<Library, 'id' | 'name'>
   fine_per_day: number
+  price: number
 }>
 
 export type MembershipDetail = Omit<Membership, 'library'> & {
