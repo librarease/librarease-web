@@ -18,7 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useMemo } from 'react'
 import clsx from 'clsx'
 
 const checkIsDue = (borrow: Borrow) => {
@@ -34,7 +33,7 @@ const getBorrowStatus = (borrow: Borrow) => {
 }
 
 export const CardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
-  const isDue = useMemo(() => checkIsDue(borrow), [borrow])
+  const isDue = checkIsDue(borrow)
 
   return (
     <Card
