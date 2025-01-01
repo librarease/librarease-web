@@ -6,16 +6,15 @@ export async function Verify({ from }: { from: string }) {
   const cookieStore = await cookies()
   const sessionName = process.env.SESSION_COOKIE_NAME as string
   const session = cookieStore.get(sessionName)
+  const headers = new Headers()
+
   try {
     const decoded = await adminApp
       .auth()
       .verifyIdToken(session?.value as string)
 
-    const headers = new Headers()
     headers.set('X-Client-Id', process.env.CLIENT_ID as string)
     headers.set('X-Uid', decoded.uid)
-
-    return headers
   } catch (error) {
     if (error instanceof Error && 'code' in error) {
       switch (error.code) {
@@ -32,9 +31,12 @@ export async function Verify({ from }: { from: string }) {
           console.log('Something went wrong')
           break
       }
-
-      redirect(`login?from=${encodeURIComponent(from)}`, RedirectType.replace)
     }
-    throw error
   }
+
+  if (!headers.has('X-Uid') || !headers.has('X-Client-Id')) {
+    redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
+  }
+
+  return headers
 }

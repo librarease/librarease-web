@@ -1,3 +1,4 @@
+import { LibraryEditForm } from '@/components/libraries/lib-edit-form'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,26 +7,39 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
-import { LibraryCreateForm } from '@/components/libraries/lib-create-form'
+import { getLibrary } from '@/lib/api/library'
 import { Verify } from '@/lib/firebase/firebase'
 import { cookies } from 'next/headers'
+import Link from 'next/link'
 
-export default async function NewLibrary() {
-  await Verify({ from: '/libraries/new' })
+export default async function EditPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+
+  await Verify({ from: `/libraries/${id}/edit` })
+
+  const [libRes] = await Promise.all([getLibrary({ id })])
+
+  if ('error' in libRes) {
+    console.log({ libRes })
+    return <div>{JSON.stringify(libRes.message)}</div>
+  }
 
   const cookieStore = await cookies()
   const sessionName = process.env.SESSION_COOKIE_NAME as string
   const session = cookieStore.get(sessionName)
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Create Library</h1>
+    <div>
+      <h1 className="text-2xl font-semibold">{libRes.data.name}</h1>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -35,13 +49,14 @@ export default async function NewLibrary() {
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
+
           <BreadcrumbItem>
-            <BreadcrumbPage>Create a Library</BreadcrumbPage>
+            <BreadcrumbPage>{libRes.data.name}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <LibraryCreateForm token={session?.value as string} />
+      <LibraryEditForm library={libRes.data} token={session?.value as string} />
     </div>
   )
 }

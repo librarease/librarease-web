@@ -10,5 +10,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config: MiddlewareConfig = {
-  matcher: ['/subscriptions/:path*', '/borrows/:path*'],
+  matcher: [
+    '/subscriptions/:path*',
+    '/borrows/:path*',
+    '/libraries/([0-9a-fA-F-]{36})/edit',
+  ],
 }

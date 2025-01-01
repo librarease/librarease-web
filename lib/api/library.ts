@@ -38,17 +38,50 @@ export const getLibrary = async (
   return response.json()
 }
 
-type CreateLibraryQuery = Pick<Library, 'name'>
+type CreateLibraryQuery = Pick<
+  Library,
+  'name' | 'logo' | 'address' | 'phone' | 'email' | 'description'
+>
 type CreateLibraryResponse = Promise<ResSingle<Pick<Library, 'id'>>>
 export const createLibrary = async (
-  query: CreateLibraryQuery
+  query: CreateLibraryQuery,
+  init?: RequestInit
 ): CreateLibraryResponse => {
   const response = await fetch(LIBRARIES_URL, {
+    ...init,
     method: 'POST',
     headers: {
+      ...init?.headers,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(query),
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}
+
+type UpdateLibraryData = Pick<
+  Library,
+  'name' | 'logo' | 'address' | 'phone' | 'email' | 'description'
+>
+type UpdateLibraryResponse = Promise<ResSingle<Library>>
+export const updateLibrary = async (
+  id: Library['id'],
+  data: UpdateLibraryData,
+  init?: RequestInit
+): UpdateLibraryResponse => {
+  const url = new URL(`${LIBRARIES_URL}/${id}`)
+  const response = await fetch(url.toString(), {
+    ...init,
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      ...init?.headers,
+      'Content-Type': 'application/json',
+    },
   })
   if (!response.ok) {
     const e = await response.json()
