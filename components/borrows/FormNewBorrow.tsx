@@ -170,10 +170,15 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
   const [staffs, setStaffs] = useState<Staff[]>([])
 
   useEffect(() => {
-    getListStaffs({
-      limit: 20,
-      name: staffQ,
-    }).then((res) => {
+    getListStaffs(
+      {
+        limit: 20,
+        name: staffQ,
+      },
+      {
+        headers,
+      }
+    ).then((res) => {
       if ('error' in res) {
         toast({
           title: 'Error',

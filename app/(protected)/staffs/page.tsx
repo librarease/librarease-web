@@ -24,6 +24,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListStaffs } from '@/lib/api/staff'
+import { Verify } from '@/lib/firebase/firebase'
 import Link from 'next/link'
 
 export default async function Staffs({
@@ -39,13 +40,23 @@ export default async function Staffs({
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
-  const res = await getListStaffs({
-    sort_by: 'created_at',
-    sort_in: 'desc',
-    limit: limit,
-    skip: skip,
-    ...(library_id ? { library_id } : {}),
+
+  const headers = await Verify({
+    from: '/staffs',
   })
+
+  const res = await getListStaffs(
+    {
+      sort_by: 'created_at',
+      sort_in: 'desc',
+      limit: limit,
+      skip: skip,
+      ...(library_id ? { library_id } : {}),
+    },
+    {
+      headers,
+    }
+  )
 
   if ('error' in res) {
     console.log(res)

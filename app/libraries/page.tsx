@@ -23,6 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListLibraries } from '@/lib/api/library'
+import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 
 export default async function Libraries({
@@ -94,8 +95,8 @@ export default async function Libraries({
               <TableCell>
                 <Link href={`libraries/${lib.id}`}>{lib.name}</Link>
               </TableCell>
-              <TableCell>{lib.created_at}</TableCell>
-              <TableCell>{lib.updated_at}</TableCell>
+              <TableCell>{formatDate(lib.created_at)}</TableCell>
+              <TableCell>{formatDate(lib.updated_at)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

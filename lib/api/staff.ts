@@ -7,7 +7,8 @@ const STAFF_URL = `${BASE_URL}/staffs`
 type GetListStaffsQuery = QueryParams<Staff>
 type GetListStaffsResponse = Promise<ResList<Staff>>
 export const getListStaffs = async (
-  query: GetListStaffsQuery
+  query: GetListStaffsQuery,
+  init?: RequestInit
 ): GetListStaffsResponse => {
   const url = new URL(STAFF_URL)
   Object.entries(query).forEach(([key, value]) => {
@@ -16,7 +17,7 @@ export const getListStaffs = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
   return response.json()
 }
 

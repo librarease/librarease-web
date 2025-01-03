@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/table'
 import { getListSubs } from '@/lib/api/subscription'
 import { Verify } from '@/lib/firebase/firebase'
+import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 
 export default async function Subscriptions({
@@ -111,10 +112,10 @@ export default async function Subscriptions({
               <TableCell>{s.membership?.name}</TableCell>
               <TableCell>{s.membership?.library?.name}</TableCell>
               <TableCell>
-                <time dateTime={s.expires_at}>{s.expires_at}</time>
+                <time dateTime={s.expires_at}>{formatDate(s.expires_at)}</time>
               </TableCell>
               <TableCell>
-                <time dateTime={s.created_at}>{s.created_at}</time>
+                <time dateTime={s.created_at}>{formatDate(s.created_at)}</time>
               </TableCell>
               <TableCell>{s.active_loan_limit}</TableCell>
               <TableCell>{s.loan_period} D</TableCell>

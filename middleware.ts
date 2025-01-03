@@ -13,6 +13,7 @@ export const config: MiddlewareConfig = {
   matcher: [
     '/subscriptions/:path*',
     '/borrows/:path*',
+    '/staffs/:path*',
     '/libraries/([0-9a-fA-F-]{36})/edit',
   ],
 }

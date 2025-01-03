@@ -23,6 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListUsers } from '@/lib/api/user'
+import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 
 export default async function Users({
@@ -92,7 +93,7 @@ export default async function Users({
               <TableCell>{u.id}</TableCell>
               <TableCell>{u.name}</TableCell>
               <TableCell>{u.email}</TableCell>
-              <TableCell>{u.created_at}</TableCell>
+              <TableCell>{formatDate(u.created_at)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
