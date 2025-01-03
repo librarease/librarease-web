@@ -26,6 +26,12 @@ import { getListSubs } from '@/lib/api/subscription'
 import { Verify } from '@/lib/firebase/firebase'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { SITE_NAME } from '@/lib/consts'
+
+export const metadata: Metadata = {
+  title: `Subscriptions · ${SITE_NAME}`,
+}
 
 export default async function Subscriptions({
   searchParams,

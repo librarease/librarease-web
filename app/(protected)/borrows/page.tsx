@@ -20,6 +20,12 @@ import { getListBorrows } from '@/lib/api/borrow'
 import { Verify } from '@/lib/firebase/firebase'
 import { Book } from 'lucide-react'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { SITE_NAME } from '@/lib/consts'
+
+export const metadata: Metadata = {
+  title: `Borrows · ${SITE_NAME}`,
+}
 
 export default async function Borrows({
   searchParams,

@@ -25,6 +25,12 @@ import {
 import { getListUsers } from '@/lib/api/user'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { SITE_NAME } from '@/lib/consts'
+
+export const metadata: Metadata = {
+  title: `Users · ${SITE_NAME}`,
+}
 
 export default async function Users({
   searchParams,

@@ -24,6 +24,12 @@ import {
 } from '@/components/ui/table'
 import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { SITE_NAME } from '@/lib/consts'
+
+export const metadata: Metadata = {
+  title: `Books · ${SITE_NAME}`,
+}
 
 export default async function Books({
   searchParams,

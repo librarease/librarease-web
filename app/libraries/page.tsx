@@ -23,8 +23,14 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListLibraries } from '@/lib/api/library'
+import { SITE_NAME } from '@/lib/consts'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: `Libraries · ${SITE_NAME}`,
+}
 
 export default async function Libraries({
   searchParams,

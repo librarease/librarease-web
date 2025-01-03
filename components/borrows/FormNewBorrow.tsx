@@ -188,7 +188,7 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
       }
       setStaffs(res.data)
     })
-  }, [staffQ])
+  }, [staffQ, headers])
 
   return (
     <div className="grid place-items-center">

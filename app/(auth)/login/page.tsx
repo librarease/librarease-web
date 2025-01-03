@@ -1,4 +1,10 @@
 import { LoginForm } from '@/components/login-form'
+import type { Metadata } from 'next'
+import { SITE_NAME } from '@/lib/consts'
+
+export const metadata: Metadata = {
+  title: `Login · ${SITE_NAME}`,
+}
 
 export default async function Page({
   searchParams,
