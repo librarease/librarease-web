@@ -1,8 +1,14 @@
 import { cookies } from 'next/headers'
 import { adminApp } from './admin'
 import { redirect, RedirectType } from 'next/navigation'
+import type { DecodedIdToken } from 'firebase-admin/auth'
 
-export async function Verify({ from }: { from: string }) {
+/**
+ * Verify checks if the cookie
+ * is valid and returns the uid & internal client id headers
+ * redirect to login page if the cookie is invalid
+ */
+export async function Verify({ from }: { from: string }): Promise<Headers> {
   const cookieStore = await cookies()
   const sessionName = process.env.SESSION_COOKIE_NAME as string
   const session = cookieStore.get(sessionName)
@@ -39,4 +45,45 @@ export async function Verify({ from }: { from: string }) {
   }
 
   return headers
+}
+
+/**
+ * IsLoggedIn checks if the user is logged in
+ * and returns a token claims if the user is logged in
+ */
+export async function IsLoggedIn(): Promise<
+  | (DecodedIdToken & {
+      librarease: {
+        id: string
+        role: string
+        admin_libs: string[]
+        staff_libs: string[]
+      }
+    })
+  | null
+> {
+  const cookieStore = await cookies()
+  const sessionName = process.env.SESSION_COOKIE_NAME as string
+  const session = cookieStore.get(sessionName)
+
+  // return early if the session is not found
+  if (!session) {
+    return null
+  }
+
+  try {
+    const claims = await adminApp.auth().verifyIdToken(session?.value as string)
+    return {
+      librarease: {
+        id: '',
+        role: '',
+        admin_libs: [],
+        staff_libs: [],
+      },
+      ...claims,
+    }
+  } catch (error) {
+    console.log(error)
+    return null
+  }
 }

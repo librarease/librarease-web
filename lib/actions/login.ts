@@ -40,10 +40,13 @@ export async function login(
 
   const user = userCredentials.user
   const sessionName = process.env.SESSION_COOKIE_NAME as string
-  const token = await user.getIdToken()
+  const result = await user.getIdTokenResult()
+  const token = result.token
+  const maxAge =
+    new Date(result.expirationTime).getTime() - new Date().getTime()
   const cookieStore = await cookies()
   cookieStore.set(sessionName, token, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge,
     httpOnly: true,
   })
 

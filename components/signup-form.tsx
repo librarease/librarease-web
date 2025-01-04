@@ -52,6 +52,7 @@ export function SignUpForm({
                   id="name"
                   type="name"
                   name="name"
+                  placeholder="e.g. Mg Mg"
                   defaultValue={state.name}
                   required
                 />
@@ -62,7 +63,7 @@ export function SignUpForm({
                   id="email"
                   type="email"
                   name="email"
-                  // placeholder="m@example.com"
+                  placeholder="e.g. mgmg@example.com"
                   defaultValue={state.email}
                   required
                 />
@@ -73,6 +74,7 @@ export function SignUpForm({
                   id="password"
                   name="password"
                   type="password"
+                  placeholder="Set a password"
                   // defaultValue={state.password}
                   required
                 />

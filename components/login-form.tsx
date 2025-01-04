@@ -64,7 +64,7 @@ export function LoginForm({
                   id="email"
                   type="email"
                   name="email"
-                  // placeholder="m@example.com"
+                  placeholder="e.g. mgmg@example.com"
                   defaultValue={state.email}
                   required
                 />
@@ -75,6 +75,7 @@ export function LoginForm({
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
+                  placeholder="e.g. mypassword"
                   // defaultValue={state.password}
                   required
                 />
