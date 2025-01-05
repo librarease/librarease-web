@@ -64,26 +64,28 @@ export default async function Books({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Books</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
+      <nav className="backdrop-blur sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">Books</h1>
+        <div className="flex justify-between items-center">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link href="/" passHref legacyBehavior>
+                  <BreadcrumbLink>Home</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbPage>Books</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Button asChild>
-          <Link href="/books/new">Register New Book</Link>
-        </Button>
-      </div>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Books</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <Button asChild>
+            <Link href="/books/new">Register New Book</Link>
+          </Button>
+        </div>
+      </nav>
 
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}

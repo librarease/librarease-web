@@ -61,7 +61,7 @@ export default async function LibraryDashboard() {
   return (
     <main className="min-h-screen bg-white p-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-8">Library Management</h1>
+        <h1 className="text-2xl font-bold mb-8">Librarease</h1>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {menuItems.map((item) => {
             if (item.level > userLvl) return null
@@ -70,7 +70,7 @@ export default async function LibraryDashboard() {
               <Link key={item.href} href={item.href}>
                 <Button
                   variant="outline"
-                  className="w-full h-24 flex flex-col items-center justify-center gap-2 hover:bg-slate-50"
+                  className="w-full h-24 flex flex-col items-center justify-center gap-2 hover:bg-slate-50 hover:text-primary"
                 >
                   <Icon className="w-6 h-6" />
                   <span>{item.title}</span>
