@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import Link from 'next/link'
-import { CreateBookForm } from '@/components/books/CreateBookForm'
+import { BookCreateForm } from '@/components/books/book-create-form'
 
 export default function NewBook() {
   return (
@@ -32,7 +32,7 @@ export default function NewBook() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <CreateBookForm />
+      <BookCreateForm token="" />
     </div>
   )
 }

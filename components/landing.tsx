@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import {
   ArrowRight,
-  BookUser,
   Users,
   BookCheck,
   TicketPlus,
@@ -56,7 +55,6 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center border-b justify-between">
         <Link className="flex items-center justify-center" href="/">
-          <BookUser className="h-6 w-6" />
           <span className="ml-2 text-lg font-bold">Librarease</span>
         </Link>
         <nav className="flex gap-4 sm:gap-6">
@@ -84,7 +82,7 @@ export default function LandingPage() {
               </div>
               <div className="space-y-2 md:space-x-4">
                 <Button size="lg" asChild>
-                  <Link href="/signup">
+                  <Link href="/login">
                     Start Borrowing Today
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

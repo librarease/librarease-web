@@ -65,6 +65,7 @@ export function LoginForm({
                   type="email"
                   name="email"
                   placeholder="e.g. mgmg@example.com"
+                  autoFocus
                   defaultValue={state.email}
                   required
                 />

@@ -33,9 +33,9 @@ export const getListBorrows = async (
   return response.json()
 }
 
-type GetBookQuery = Pick<Borrow, 'id'>
-type GetBookResponse = Promise<ResSingle<Borrow>>
-export const getBook = async (query: GetBookQuery): GetBookResponse => {
+type GetBorrowQuery = Pick<Borrow, 'id'>
+type GetBorrowResponse = Promise<ResSingle<Borrow>>
+export const getBorrow = async (query: GetBorrowQuery): GetBorrowResponse => {
   const url = new URL(`${BORROW_URL}/${query.id}`)
   const response = await fetch(url.toString())
   return response.json()
@@ -43,7 +43,7 @@ export const getBook = async (query: GetBookQuery): GetBookResponse => {
 
 export const createBorrow = async (
   data: Pick<Borrow, 'book_id' | 'subscription_id' | 'staff_id'>
-): GetBookResponse => {
+): GetBorrowResponse => {
   const response = await fetch(BORROW_URL, {
     method: 'POST',
     headers: {
@@ -63,7 +63,7 @@ export const createBorrow = async (
 export const returnBorrow = async (
   data: Pick<Borrow, 'id' | 'returned_at'>,
   init?: RequestInit
-): GetBookResponse => {
+): GetBorrowResponse => {
   const response = await fetch(`${BORROW_URL}/${data.id}`, {
     ...init,
     method: 'PUT',

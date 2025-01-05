@@ -1,4 +1,4 @@
-import { Book } from '../types/book'
+import { Book, BookDetail } from '../types/book'
 import { QueryParams, ResList, ResSingle } from '../types/common'
 import { BASE_URL } from './common'
 
@@ -22,7 +22,7 @@ export const getListBooks = async (
 }
 
 type GetBookQuery = Pick<Book, 'id'>
-type GetBookResponse = Promise<ResSingle<Book>>
+type GetBookResponse = Promise<ResSingle<BookDetail>>
 export const getBook = async (query: GetBookQuery): GetBookResponse => {
   const url = new URL(`${BOOKS_URL}/${query.id}`)
   const response = await fetch(url.toString())

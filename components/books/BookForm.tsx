@@ -28,12 +28,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useRouter } from 'next/navigation'
 import { getListLibraries } from '@/lib/api/library'
 import { Library } from '@/lib/types/library'
 import { useState, useEffect, useCallback } from 'react'
-import { Input } from '../ui/input'
-import { createBook } from '@/lib/api/book'
+import { Input } from '@/components/ui/input'
+import { Book } from '@/lib/types/book'
+
+export type BookFormValues = Pick<
+  Book,
+  'title' | 'author' | 'year' | 'code' | 'library_id'
+>
+
+type BookFormProps = {
+  initialData: BookFormValues
+  onSubmit(data: BookFormValues): void
+}
 
 const FormSchema = z.object({
   title: z
@@ -63,18 +72,13 @@ const FormSchema = z.object({
     .uuid(),
 })
 
-export const CreateBookForm: React.FC = () => {
-  const router = useRouter()
-
+export const BookForm: React.FC<BookFormProps> = ({
+  initialData,
+  onSubmit,
+}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      title: '',
-      author: '',
-      code: '',
-      year: 0,
-      library_id: '',
-    },
+    defaultValues: initialData,
   })
 
   const [libQ, setLibQ] = useState('')
@@ -95,24 +99,6 @@ export const CreateBookForm: React.FC = () => {
       setLibs(res.data)
     })
   }, [libQ])
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    createBook(data)
-      .then(console.log)
-      .then(() => {
-        toast({
-          title: 'Book Registered',
-        })
-        router.push('/books')
-      })
-      .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
-      })
-  }
 
   const onReset = useCallback(() => {
     form.reset()
