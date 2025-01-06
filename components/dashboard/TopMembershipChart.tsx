@@ -1,6 +1,6 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
+// import { TrendingUp } from 'lucide-react'
 import { Pie, PieChart } from 'recharts'
 
 import {
@@ -52,11 +52,11 @@ export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
+        {/* <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
+        </div> */}
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing top most purchased membership
         </div>
       </CardFooter>
     </Card>

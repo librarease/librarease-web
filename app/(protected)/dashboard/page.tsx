@@ -20,13 +20,30 @@ export const metadata: Metadata = {
   title: `Dashboard · ${SITE_NAME}`,
 }
 
-export default async function Dashboard() {
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    library_id: string
+    from: string
+    to: string
+    limit: number
+    skip: number
+  }>
+}) {
+  const {
+    library_id = 'a32af9bd-74b0-4ef2-8974-4570e2bfb4bb',
+    from = '2024-01-05T17:00:47.680Z',
+    to = new Date().toJSON(),
+    limit = 5,
+    skip,
+  } = await searchParams
   const res = await getAnalysis({
-    limit: 50,
-    skip: 0,
-    from: '2024-01-05T17:00:47.680Z',
-    to: '2025-06-05T17:00:47.680Z',
-    library_id: 'd7385c3e-05f7-4d0d-88c8-74fdc830ec87',
+    limit,
+    skip,
+    from,
+    to,
+    library_id,
   })
   console.log(res)
 
