@@ -1,6 +1,6 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
+// import { TrendingUp } from 'lucide-react'
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 
 import {
@@ -17,27 +17,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
-]
+import { Analysis } from '@/lib/types/analysis'
+import { formatDate } from '@/lib/utils'
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  count: {
+    label: 'Borrowing',
     color: 'hsl(var(--chart-1))',
-  },
-  mobile: {
-    label: 'Mobile',
-    color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig
 
-export function Component() {
+export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
   return (
     <Card>
       <CardHeader>
@@ -48,7 +38,7 @@ export function Component() {
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -56,23 +46,23 @@ export function Component() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={formatDate}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="count"
               type="natural"
-              stroke="var(--color-desktop)"
+              stroke="var(--color-count)"
               strokeWidth={2}
               dot={{
-                fill: 'var(--color-desktop)',
+                fill: 'var(--color-count)',
               }}
               activeDot={{
                 r: 6,
@@ -82,11 +72,11 @@ export function Component() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
+        {/* <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
+        </div> */}
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing total borrows per month
         </div>
       </CardFooter>
     </Card>

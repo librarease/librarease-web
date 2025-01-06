@@ -17,7 +17,6 @@ type RevenueAnalysis = {
 }
 
 type BookAnalysis = {
-  timestamp: string
   count: number
   title: string
 }

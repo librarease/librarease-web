@@ -17,40 +17,34 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
-]
+import { Analysis } from '@/lib/types/analysis'
+import { formatDate } from '@/lib/utils'
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  subscription: {
+    label: 'Subscription',
     color: 'hsl(var(--chart-1))',
   },
-  mobile: {
-    label: 'Mobile',
+  fine: {
+    label: 'Fine',
     color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig
 
-export function Component() {
+export function MonthlyRevenueChart({ data }: { data: Analysis['revenue'] }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Monthly Revenue</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing total revenue from subscriptions and fines
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -58,53 +52,53 @@ export function Component() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={formatDate}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillSubscription" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-subscription)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-subscription)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillFine" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-fine)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-fine)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey="mobile"
+              dataKey="fine"
               type="natural"
-              fill="url(#fillMobile)"
+              fill="url(#fillFine)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="var(--color-fine)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="subscription"
               type="natural"
-              fill="url(#fillDesktop)"
+              fill="url(#fillSubscription)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-subscription)"
               stackId="a"
             />
           </AreaChart>

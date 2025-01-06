@@ -7,10 +7,10 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
-import { Component as AC } from '@/components/dashboard/AreaChart'
-import { Component as BC } from '@/components/dashboard/BarChart'
-import { Component as LC } from '@/components/dashboard/LineChart'
-import { Component as PC } from '@/components/dashboard/PineChart'
+import { MonthlyRevenueChart } from '@/components/dashboard/MonthlyRevenueChart'
+import { MostBorrowedBookChart } from '@/components/dashboard/MostBorrowedBookChart'
+import { MontlyBorrowChart } from '@/components/dashboard/MontlyBorrowChart'
+import { TopMembershipChart } from '@/components/dashboard/TopMembershipChart'
 import { getAnalysis } from '@/lib/api/analysis'
 import { SITE_NAME } from '@/lib/consts'
 import type { Metadata } from 'next'
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
   const res = await getAnalysis({
-    limit: 5,
+    limit: 50,
     skip: 0,
     from: '2024-01-05T17:00:47.680Z',
     to: '2025-06-05T17:00:47.680Z',
@@ -54,10 +54,10 @@ export default async function Dashboard() {
       </Breadcrumb>
 
       <div className="grid my-4 grid-cols-1 gap-4 md:grid-cols-2">
-        <LC />
-        <AC />
-        <BC />
-        <PC />
+        <MontlyBorrowChart data={res.data.borrowing} />
+        <MonthlyRevenueChart data={res.data.revenue} />
+        <MostBorrowedBookChart data={res.data.book} />
+        <TopMembershipChart data={res.data.membership} />
       </div>
     </div>
   )

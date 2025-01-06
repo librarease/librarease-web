@@ -1,7 +1,7 @@
 'use client'
 
 import { TrendingUp } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
+import { Bar, BarChart, XAxis, YAxis } from 'recharts'
 
 import {
   Card,
@@ -17,23 +17,22 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-const chartData = [
-  { month: 'January', desktop: 186 },
-  { month: 'February', desktop: 305 },
-  { month: 'March', desktop: 237 },
-  { month: 'April', desktop: 73 },
-  { month: 'May', desktop: 209 },
-  { month: 'June', desktop: 214 },
-]
+import { Analysis } from '@/lib/types/analysis'
 
-const chartConfig = {
-  desktop: {
-    label: 'Desktop',
-    color: 'hsl(var(--chart-1))',
-  },
-} satisfies ChartConfig
+export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
+  const chartConfig = data.reduce((acc, { title }, index) => {
+    acc[title] = {
+      label: title,
+      color: `hsl(var(--chart-${index + 1}))`,
+    }
+    return acc
+  }, {} as ChartConfig)
+  const chartData = data.map(({ title, count }) => ({
+    browser: title,
+    total: count,
+    fill: chartConfig[title].color,
+  }))
 
-export function Component() {
   return (
     <Card>
       <CardHeader>
@@ -45,30 +44,27 @@ export function Component() {
           <BarChart
             accessibilityLayer
             data={chartData}
+            layout="vertical"
             margin={{
-              top: 20,
+              left: 0,
             }}
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
+            <YAxis
+              dataKey="browser"
+              type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) =>
+                chartConfig[value as keyof typeof chartConfig].label as string
+              }
             />
+            <XAxis dataKey="total" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8}>
-              <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-            </Bar>
+            <Bar dataKey="total" layout="vertical" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>

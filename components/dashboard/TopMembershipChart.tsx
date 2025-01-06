@@ -17,41 +17,23 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-const chartData = [
-  { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-  { browser: 'firefox', visitors: 187, fill: 'var(--color-firefox)' },
-  { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
-]
+import { Analysis } from '@/lib/types/analysis'
 
-const chartConfig = {
-  visitors: {
-    label: 'Visitors',
-  },
-  chrome: {
-    label: 'Chrome',
-    color: 'hsl(var(--chart-1))',
-  },
-  safari: {
-    label: 'Safari',
-    color: 'hsl(var(--chart-2))',
-  },
-  firefox: {
-    label: 'Firefox',
-    color: 'hsl(var(--chart-3))',
-  },
-  edge: {
-    label: 'Edge',
-    color: 'hsl(var(--chart-4))',
-  },
-  other: {
-    label: 'Other',
-    color: 'hsl(var(--chart-5))',
-  },
-} satisfies ChartConfig
+export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
+  const chartConfig = data.reduce((acc, { name }, index) => {
+    acc[name] = {
+      label: name,
+      color: `hsl(var(--chart-${index + 1}))`,
+    }
+    return acc
+  }, {} as ChartConfig)
 
-export function Component() {
+  const chartData = data.map(({ name, count }) => ({
+    browser: name,
+    visitors: count,
+    fill: chartConfig[name].color,
+  }))
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
