@@ -1,4 +1,4 @@
-import { StaffCreateForm } from '@/components/staffs/staff-create-form'
+import { StaffEditForm } from '@/components/staffs/staff-edit-form'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,12 +7,26 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { getStaff } from '@/lib/api/staff'
 import { Verify } from '@/lib/firebase/firebase'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 
-export default async function CreateStaffPage() {
-  await Verify({ from: '/staffs/new' })
+export default async function EditStaffPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+
+  const [staffRes] = await Promise.all([getStaff({ id })])
+
+  if ('error' in staffRes) {
+    console.log({ libRes: staffRes })
+    return <div>{JSON.stringify(staffRes.message)}</div>
+  }
+
+  await Verify({ from: `/staffs/${id}/edit` })
 
   const cookieStore = await cookies()
   const sessionName = process.env.SESSION_COOKIE_NAME as string
@@ -20,7 +34,7 @@ export default async function CreateStaffPage() {
 
   return (
     <div className="grid grid-rows-2">
-      <h1 className="text-2xl font-semibold">Assign a Staff</h1>
+      <h1 className="text-2xl font-semibold">{staffRes.data.name}</h1>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -37,12 +51,12 @@ export default async function CreateStaffPage() {
           <BreadcrumbSeparator />
 
           <BreadcrumbItem>
-            <BreadcrumbPage>New</BreadcrumbPage>
+            <BreadcrumbPage>Edit Staff</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <StaffCreateForm token={session?.value as string} />
+      <StaffEditForm staff={staffRes.data} token={session?.value as string} />
     </div>
   )
 }

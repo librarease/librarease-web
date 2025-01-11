@@ -32,14 +32,41 @@ export const getStaff = async (query: GetStaffQuery): GetStaffResponse => {
 type CreateStaffData = Pick<Staff, 'name' | 'library_id' | 'user_id'>
 type CreateStaffResponse = Promise<ResSingle<Staff>>
 export const createStaff = async (
-  data: CreateStaffData
+  data: CreateStaffData,
+  init?: RequestInit
 ): CreateStaffResponse => {
   const response = await fetch(STAFF_URL, {
+    ...init,
     method: 'POST',
     headers: {
+      ...init?.headers,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}
+
+type UpdateStaffData = Pick<Staff, 'name' | 'role'>
+type UpdateStaffResponse = Promise<ResSingle<Staff>>
+export const updateStaff = async (
+  id: Staff['id'],
+  data: UpdateStaffData,
+  init?: RequestInit
+): UpdateStaffResponse => {
+  const url = new URL(`${STAFF_URL}/${id}`)
+  const response = await fetch(url.toString(), {
+    ...init,
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      ...init?.headers,
+      'Content-Type': 'application/json',
+    },
   })
   if (!response.ok) {
     const e = await response.json()
