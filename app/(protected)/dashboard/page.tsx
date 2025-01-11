@@ -15,6 +15,8 @@ import { getAnalysis } from '@/lib/api/analysis'
 import { SITE_NAME } from '@/lib/consts'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
+import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 
 export const metadata: Metadata = {
   title: `Dashboard · ${SITE_NAME}`,
@@ -71,10 +73,12 @@ export default async function Dashboard({
       </Breadcrumb>
 
       <div className="grid my-4 grid-cols-1 gap-4 md:grid-cols-2">
-        <MontlyBorrowChart data={res.data.borrowing} />
-        <MonthlyRevenueChart data={res.data.revenue} />
+        <LibrarySelector />
+        <DateRangeSelector />
         <MostBorrowedBookChart data={res.data.book} />
         <TopMembershipChart data={res.data.membership} />
+        <MontlyBorrowChart data={res.data.borrowing} />
+        <MonthlyRevenueChart data={res.data.revenue} />
       </div>
     </div>
   )
