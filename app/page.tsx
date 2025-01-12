@@ -7,12 +7,14 @@ import {
   CreditCard,
   ScrollText,
   BookCopy,
+  ChartSpline,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import Landing from '@/components/landing'
 
 const menuItems = [
+  { title: 'Dashboard', icon: ChartSpline, href: '/dashboard', level: 3 },
   { title: 'Libraries', icon: Library, href: '/libraries', level: 1 },
   { title: 'Books', icon: Book, href: '/books', level: 1 },
   { title: 'Users', icon: Users, href: '/users', level: 3 },
@@ -25,19 +27,19 @@ const menuItems = [
     level: 3,
   },
   { title: 'Borrows', icon: BookCopy, href: '/borrows', level: 3 },
-  {
-    title: 'My Memberships',
-    icon: CreditCard,
-    href: '/memberships/me',
-    level: 2,
-  },
-  {
-    title: 'My Subscriptions',
-    icon: ScrollText,
-    href: '/subscriptions/me',
-    level: 2,
-  },
-  { title: 'My Borrows', icon: BookCopy, href: '/borrows/me', level: 2 },
+  // {
+  //   title: 'My Memberships',
+  //   icon: CreditCard,
+  //   href: '/memberships/me',
+  //   level: 2,
+  // },
+  // {
+  //   title: 'My Subscriptions',
+  //   icon: ScrollText,
+  //   href: '/subscriptions/me',
+  //   level: 2,
+  // },
+  // { title: 'My Borrows', icon: BookCopy, href: '/borrows/me', level: 2 },
 ]
 
 export default async function LibraryDashboard() {
