@@ -1,4 +1,3 @@
-import { headers } from 'next/headers'
 import { Borrow } from '../types/borrow'
 import { QueryParams, ResList, ResSingle } from '../types/common'
 import { BASE_URL } from './common'
@@ -72,7 +71,7 @@ export const returnBorrow = async (
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
-      ...headers,
+      ...init?.headers,
       'Content-Type': 'application/json',
     },
   })
