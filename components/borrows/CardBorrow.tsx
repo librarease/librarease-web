@@ -27,7 +27,7 @@ const checkIsDue = (borrow: Borrow) => {
 }
 
 const getBorrowStatus = (borrow: Borrow) => {
-  if (borrow.returned_at) return 'returned'
+  if (borrow.returning?.returned_at) return 'returned'
 
   return checkIsDue(borrow) ? 'overdue' : 'active'
 }
@@ -39,7 +39,7 @@ export const CardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
     <Card
       key={borrow.id}
       className={clsx('relative', {
-        'bg-destructive/5': isDue && !borrow.returned_at,
+        'bg-destructive/5': isDue && !borrow.returning?.returned_at,
       })}
     >
       <CardHeader>

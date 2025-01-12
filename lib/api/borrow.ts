@@ -61,10 +61,12 @@ export const createBorrow = async (
 }
 
 export const returnBorrow = async (
-  data: Pick<Borrow, 'id' | 'returned_at'>,
+  data: Pick<Borrow, 'id'> & {
+    returned_at: string
+  },
   init?: RequestInit
 ): GetBorrowResponse => {
-  const response = await fetch(`${BORROW_URL}/${data.id}`, {
+  const response = await fetch(`${BORROW_URL}/${data.id}/return`, {
     ...init,
     method: 'PUT',
     body: JSON.stringify(data),

@@ -26,10 +26,10 @@ export const BtnReturnBook: React.FC<
     if (confirm) clearTimeout(confirm)
   }
 
-  if (borrow.returned_at)
+  if (borrow.returning)
     return (
       <Button {...props} variant="secondary" disabled>
-        {formatDate(borrow.returned_at)}
+        {formatDate(borrow.returning.returned_at)}
       </Button>
     )
 

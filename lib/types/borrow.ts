@@ -9,7 +9,7 @@ export type Borrow = WithCommon<{
   staff_id: string
   borrowed_at: string
   due_at: string
-  returned_at?: string
+  returning?: Return
   book: Pick<Book, 'id' | 'title' | 'code'>
   subscription: Pick<
     Subscription,
@@ -23,3 +23,9 @@ export type BorrowDetail = Omit<Borrow, 'book' | 'subscription' | 'staff'> & {
   subscription: SubscriptionDetail
   staff: Staff
 }
+
+type Return = WithCommon<{
+  borrowing_id: string
+  returned_at: string
+  staff: Pick<Staff, 'id' | 'name'>
+}>
