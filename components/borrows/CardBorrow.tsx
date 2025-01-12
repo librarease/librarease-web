@@ -23,7 +23,7 @@ import clsx from 'clsx'
 const checkIsDue = (borrow: Borrow) => {
   const now = new Date()
   const due = new Date(borrow.due_at)
-  return now > due
+  return now > due && !borrow.returning
 }
 
 const getBorrowStatus = (borrow: Borrow) => {
@@ -39,7 +39,7 @@ export const CardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
     <Card
       key={borrow.id}
       className={clsx('relative', {
-        'bg-destructive/5': isDue && !borrow.returning?.returned_at,
+        'bg-destructive/5': isDue,
       })}
     >
       <CardHeader>

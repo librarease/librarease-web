@@ -68,7 +68,7 @@ export const returnBorrow = async (
 ): GetBorrowResponse => {
   const response = await fetch(`${BORROW_URL}/${data.id}/return`, {
     ...init,
-    method: 'PUT',
+    method: 'POST',
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
