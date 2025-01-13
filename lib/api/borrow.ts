@@ -66,14 +66,14 @@ export const returnBorrow = async (
   },
   init?: RequestInit
 ): GetBorrowResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
   const response = await fetch(`${BORROW_URL}/${data.id}/return`, {
     ...init,
     method: 'POST',
     body: JSON.stringify(data),
-    headers: {
-      ...init?.headers,
-      'Content-Type': 'application/json',
-    },
+    headers,
   })
   if (!response.ok) {
     const e = await response.json()
