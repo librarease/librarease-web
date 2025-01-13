@@ -18,7 +18,7 @@ import Link from 'next/link'
 import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
 import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
-import { redirect } from 'next/navigation'
+import { redirect, RedirectType } from 'next/navigation'
 import { format, subMonths, parse } from 'date-fns'
 import { getListLibraries } from '@/lib/api/library'
 import { DateRange } from 'react-day-picker'
@@ -49,7 +49,15 @@ export default async function DashboardPage({
     // skip,
   } = await searchParams
 
-  if (claims.librarease.role != 'USER' && (!to || !from || !library_id)) {
+  if (
+    claims.librarease.role === 'USER' &&
+    !claims.librarease.admin_libs.length &&
+    !claims.librarease.staff_libs.length
+  ) {
+    redirect('/', RedirectType.replace)
+  }
+
+  if (!to || !from) {
     const now = new Date()
     const to = format(now, 'dd-MM-yyyy')
     const from = format(subMonths(now, 4), 'dd-MM-yyyy')
@@ -59,7 +67,9 @@ export default async function DashboardPage({
     const sp = new URLSearchParams()
     sp.set('from', from)
     sp.set('to', to)
-    sp.set('library_id', libID[0])
+    if (claims.librarease.role === 'USER') {
+      sp.set('library_id', libID[0])
+    }
 
     redirect('?' + sp.toString())
   }
