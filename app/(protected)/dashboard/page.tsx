@@ -71,7 +71,7 @@ export default async function DashboardPage({
       sp.set('library_id', libID[0])
     }
 
-    redirect('?' + sp.toString())
+    redirect('?' + sp.toString(), RedirectType.replace)
   }
 
   const [res, libsRes] = await Promise.all([
@@ -100,7 +100,7 @@ export default async function DashboardPage({
     const sp = new URLSearchParams(p)
     sp.set('library_id', libraryID)
 
-    redirect('/dashboard?' + sp.toString())
+    redirect('/dashboard?' + sp.toString(), RedirectType.replace)
   }
 
   const fromDate = parse(from, 'dd-MM-yyyy', new Date())
@@ -116,7 +116,7 @@ export default async function DashboardPage({
     if (range.from) sp.set('from', format(range.from, 'dd-MM-yyyy'))
     if (range.to) sp.set('to', format(range.to, 'dd-MM-yyyy'))
 
-    redirect('/dashboard?' + sp.toString())
+    redirect('/dashboard?' + sp.toString(), RedirectType.replace)
   }
 
   return (
