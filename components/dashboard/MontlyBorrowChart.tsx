@@ -19,6 +19,9 @@ import {
 } from '@/components/ui/chart'
 import { Analysis } from '@/lib/types/analysis'
 import { formatDate } from '@/lib/utils'
+import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
+import { format, parse } from 'date-fns'
 
 const chartConfig = {
   count: {
@@ -28,11 +31,26 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
+  const params = useSearchParams()
+  const paramFrom = params.get('from') as string
+  const paramTo = params.get('to') as string
+
+  const [from, to] = useMemo(() => {
+    const from = format(
+      parse(paramFrom, 'dd-MM-yyyy', new Date()),
+      'LLL dd, yyyy'
+    )
+    const to = format(parse(paramTo, 'dd-MM-yyyy', new Date()), 'LLL dd, yyyy')
+    return [from, to]
+  }, [paramFrom, paramTo])
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Monthly Borrows</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {from} - {to}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -76,7 +94,7 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div> */}
         <div className="leading-none text-muted-foreground">
-          Showing total borrows per month
+          Showing total borrows
         </div>
       </CardFooter>
     </Card>

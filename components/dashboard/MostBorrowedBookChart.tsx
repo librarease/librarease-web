@@ -18,6 +18,9 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Analysis } from '@/lib/types/analysis'
+import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
+import { format, parse } from 'date-fns'
 
 export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
   const chartConfig = data.reduce((acc, { title }, index) => {
@@ -33,11 +36,26 @@ export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
     fill: chartConfig[title].color,
   }))
 
+  const params = useSearchParams()
+  const paramFrom = params.get('from') as string
+  const paramTo = params.get('to') as string
+
+  const [from, to] = useMemo(() => {
+    const from = format(
+      parse(paramFrom, 'dd-MM-yyyy', new Date()),
+      'LLL dd, yyyy'
+    )
+    const to = format(parse(paramTo, 'dd-MM-yyyy', new Date()), 'LLL dd, yyyy')
+    return [from, to]
+  }, [paramFrom, paramTo])
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Most Borrowed Books</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {from} - {to}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

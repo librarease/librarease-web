@@ -1,7 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns'
+import {
+  format,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+} from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { DateRange } from 'react-day-picker'
 
@@ -101,6 +108,20 @@ export function DateRangeSelector({
 }
 
 const rangePresets: { label: string; date: DateRange }[] = [
+  {
+    label: 'This Week',
+    date: {
+      from: startOfWeek(new Date()),
+      to: endOfWeek(new Date()),
+    },
+  },
+  {
+    label: 'This Month',
+    date: {
+      from: startOfMonth(new Date()),
+      to: endOfMonth(new Date()),
+    },
+  },
   {
     label: 'Last Month',
     date: {
