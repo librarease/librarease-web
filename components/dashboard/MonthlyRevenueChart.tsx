@@ -51,7 +51,7 @@ export function MonthlyRevenueChart({ data }: { data: Analysis['revenue'] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monthly Revenue</CardTitle>
+        <CardTitle>Total Revenue</CardTitle>
         <CardDescription>
           {from} - {to}
         </CardDescription>

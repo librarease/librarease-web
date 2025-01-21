@@ -19,7 +19,7 @@ import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
 import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import { redirect, RedirectType } from 'next/navigation'
-import { format, subMonths, parse } from 'date-fns'
+import { format, subMonths, parse, startOfDay, endOfDay } from 'date-fns'
 import { getListLibraries } from '@/lib/api/library'
 import { DateRange } from 'react-day-picker'
 
@@ -41,14 +41,6 @@ export default async function DashboardPage({
   const claims = await IsLoggedIn()
   if (!claims) redirect('/login?from=/dashboard')
 
-  const {
-    library_id,
-    from,
-    to,
-    // limit = 5,
-    // skip,
-  } = await searchParams
-
   if (
     claims.librarease.role === 'USER' &&
     !claims.librarease.admin_libs.length &&
@@ -57,10 +49,12 @@ export default async function DashboardPage({
     redirect('/', RedirectType.replace)
   }
 
+  const { library_id, from, to, limit = 5, skip = 0 } = await searchParams
+
   if (!to || !from) {
     const now = new Date()
     const to = format(now, 'dd-MM-yyyy')
-    const from = format(subMonths(now, 4), 'dd-MM-yyyy')
+    const from = format(subMonths(now, 1), 'dd-MM-yyyy')
     const libID = claims.librarease.admin_libs.concat(
       claims.librarease.staff_libs
     )
@@ -76,10 +70,10 @@ export default async function DashboardPage({
 
   const [res, libsRes] = await Promise.all([
     getAnalysis({
-      skip: 0,
-      limit: 5,
-      from: parse(from, 'dd-MM-yyyy', new Date()).toJSON(),
-      to: parse(to, 'dd-MM-yyyy', new Date()).toJSON(),
+      skip,
+      limit,
+      from: startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON(),
+      to: endOfDay(parse(to, 'dd-MM-yyyy', new Date())).toJSON(),
       library_id,
     }),
     getListLibraries({ limit: 5 }),

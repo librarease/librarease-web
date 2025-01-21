@@ -47,7 +47,7 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monthly Borrows</CardTitle>
+        <CardTitle>Total Borrows</CardTitle>
         <CardDescription>
           {from} - {to}
         </CardDescription>
