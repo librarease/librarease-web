@@ -107,8 +107,10 @@ export default async function Subscriptions({
             <TableHead>Expires At</TableHead>
             <TableHead>Active Since</TableHead>
             <TableHead>Borrow Limit</TableHead>
+            <TableHead>Usage Limit</TableHead>
             <TableHead>Borrow Period</TableHead>
             <TableHead>Fine per Day</TableHead>
+            <TableHead>Amount</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -124,8 +126,10 @@ export default async function Subscriptions({
                 <time dateTime={s.created_at}>{formatDate(s.created_at)}</time>
               </TableCell>
               <TableCell>{s.active_loan_limit}</TableCell>
+              <TableCell>{s.usage_limit ?? '-'}</TableCell>
               <TableCell>{s.loan_period} D</TableCell>
               <TableCell>{s.fine_per_day ?? '-'} Pts</TableCell>
+              <TableCell>{s.amount ?? '-'} Pts</TableCell>
             </TableRow>
           ))}
         </TableBody>

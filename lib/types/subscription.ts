@@ -9,6 +9,7 @@ export type Subscription = WithCommon<{
   amount: number
   loan_period: number
   active_loan_limit: number
+  usage_limit: number
   user: Pick<User, 'id' | 'name'>
   membership: Pick<Membership, 'id' | 'name' | 'library_id' | 'library'>
   fine_per_day: number

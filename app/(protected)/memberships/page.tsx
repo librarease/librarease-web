@@ -94,7 +94,9 @@ export default async function Memberships({
             <TableHead>Duration</TableHead>
             <TableHead>Borrow Limit</TableHead>
             <TableHead>Borrow Period</TableHead>
+            <TableHead>Active Limit</TableHead>
             <TableHead>Fine per Day</TableHead>
+            <TableHead>Price</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -103,9 +105,11 @@ export default async function Memberships({
               <TableCell>{m.name}</TableCell>
               <TableCell>{m.library.name}</TableCell>
               <TableCell>{m.duration} D</TableCell>
-              <TableCell>{m.active_loan_limit}</TableCell>
+              <TableCell>{m.usage_limit ?? '-'}</TableCell>
               <TableCell>{m.loan_period} D</TableCell>
+              <TableCell>{m.active_loan_limit}</TableCell>
               <TableCell>{m.fine_per_day ?? '-'} Pts</TableCell>
+              <TableCell>{m.price ?? '-'}</TableCell>
             </TableRow>
           ))}
         </TableBody>

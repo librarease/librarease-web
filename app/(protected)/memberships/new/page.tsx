@@ -76,6 +76,8 @@ const FormSchema = z.object({
   fine_per_day: z.coerce.number({
     required_error: 'Fine per day is required.',
   }),
+  price: z.coerce.number(),
+  usage_limit: z.coerce.number(),
 })
 
 export default function ComboboxForm() {
@@ -89,12 +91,13 @@ export default function ComboboxForm() {
       duration: 1,
       active_loan_limit: 1,
       fine_per_day: 0,
+      price: 0,
+      usage_limit: 0,
     },
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     createMembership(data)
-      .then(console.log)
       .then(() => {
         toast({
           title: 'Membership Created',
@@ -310,6 +313,46 @@ export default function ComboboxForm() {
                   />
                   <FormDescription>
                     How much is the fine per day?
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="usage_limit"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Usage Limit</FormLabel>
+                  <Input
+                    placeholder="Times"
+                    type="number"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                  <FormDescription>
+                    How many times can a membership be used?
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Price</FormLabel>
+                  <Input
+                    placeholder="Pts"
+                    type="number"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                  <FormDescription>
+                    How much does the membership cost?
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

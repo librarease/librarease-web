@@ -6,6 +6,7 @@ export type Membership = WithCommon<{
   library_id: string
   duration: number
   active_loan_limit: number
+  usage_limit: number
   loan_period: number
   library: Pick<Library, 'id' | 'name'>
   fine_per_day: number
