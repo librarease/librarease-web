@@ -1,100 +1,65 @@
-import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
-import { Badge } from '@/components/ui/badge'
-import { Borrow } from '@/lib/types/borrow'
-import { formatDate } from '@/lib/utils'
-import {
-  Calendar,
-  CalendarClock,
-  CalendarX,
-  LibraryIcon,
-  User,
-} from 'lucide-react'
+import { BorrowDetail } from '@/lib/types/borrow'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { formatDate, isBorrowDue } from '@/lib/utils'
+import { differenceInDays, formatDistanceToNowStrict } from 'date-fns'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import clsx from 'clsx'
+export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
+  const overduedDays = differenceInDays(
+    borrow.returning ? new Date(borrow.returning.returned_at) : new Date(),
+    new Date(borrow.due_at)
+  )
+  const finePerDay = borrow.subscription.membership.fine_per_day ?? 0
 
-const checkIsDue = (borrow: Borrow) => {
-  const now = new Date()
-  const due = new Date(borrow.due_at)
-  return now > due && !borrow.returning
-}
-
-const getBorrowStatus = (borrow: Borrow) => {
-  if (borrow.returning?.returned_at) return 'returned'
-
-  return checkIsDue(borrow) ? 'overdue' : 'active'
-}
-
-export const CardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
-  const isDue = checkIsDue(borrow)
+  const fine = overduedDays * finePerDay
 
   return (
-    <Card
-      key={borrow.id}
-      className={clsx('relative', {
-        'bg-destructive/5': isDue,
-      })}
-    >
+    <Card>
       <CardHeader>
-        <div className="flex justify-between items-start min-h-20">
-          <div>
-            <CardTitle className="text-lg line-clamp-2">
-              <abbr title={borrow.book.title} className="no-underline">
-                {borrow.book.title}
-              </abbr>
-            </CardTitle>
-            <CardDescription>{borrow.book.code}</CardDescription>
-          </div>
-          <Badge
-            variant={
-              getBorrowStatus(borrow) === 'overdue'
-                ? 'destructive'
-                : getBorrowStatus(borrow) === 'returned'
-                  ? 'secondary'
-                  : 'default'
-            }
-            className="capitalize"
-          >
-            {getBorrowStatus(borrow)}
-          </Badge>
-        </div>
+        <CardTitle className="text-lg line-clamp-2">Borrow</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex items-center gap-2 text-sm">
-          <User className="h-4 w-4 text-muted-foreground" />
-          <span>{borrow.subscription.user.name}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <LibraryIcon className="h-4 w-4 text-muted-foreground" />
-          <span>{borrow.subscription.membership.library.name}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <Calendar className="h-4 w-4 text-muted-foreground" />
-          <span>Borrowed: {formatDate(borrow.borrowed_at)}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          {isDue ? (
-            <CalendarX className="h-4 w-4 text-destructive" />
-          ) : (
-            <CalendarClock className="h-4 w-4 text-muted-foreground" />
+      <CardContent>
+        <dl className="grid gap-2">
+          <div className="grid grid-cols-3">
+            <dt className="font-medium">Borrowed At:</dt>
+            <dd className="col-span-2">
+              {formatDate(borrow.borrowed_at)}
+              {!borrow.returning &&
+                ` (${formatDistanceToNowStrict(new Date(borrow.borrowed_at), { addSuffix: true })})`}
+            </dd>
+          </div>
+          <div className="grid grid-cols-3">
+            <dt className="font-medium">Due At:</dt>
+            <dd className="col-span-2">
+              {formatDate(borrow.due_at)}
+              {!borrow.returning &&
+                ` (${formatDistanceToNowStrict(new Date(borrow.due_at), { addSuffix: true })})`}
+            </dd>
+          </div>
+
+          {borrow.returning && (
+            <>
+              <div className="grid grid-cols-3">
+                <dt className="font-medium">Returned At:</dt>
+                <dd className="col-span-2">
+                  {formatDate(borrow.returning.returned_at)}
+                </dd>
+              </div>
+              <div className="grid grid-cols-3">
+                <dt className="font-medium">Fine Received:</dt>
+                <dd className="col-span-2">
+                  {borrow.returning.fine ?? '-'} Pts
+                </dd>
+              </div>
+            </>
           )}
-          <span className={`${isDue ? 'text-destructive' : ''}`}>
-            Due: {formatDate(borrow.due_at)}
-          </span>
-        </div>
+          {isBorrowDue(borrow) && (
+            <div className="grid grid-cols-3">
+              <dt className="font-medium">Fine:</dt>
+              <dd className="col-span-2">{fine ?? '-'} Pts</dd>
+            </div>
+          )}
+        </dl>
       </CardContent>
-      <CardFooter>
-        <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
-          Return Book
-        </BtnReturnBook>
-      </CardFooter>
     </Card>
   )
 }

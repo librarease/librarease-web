@@ -1,4 +1,4 @@
-import { Borrow } from '../types/borrow'
+import { Borrow, BorrowDetail } from '../types/borrow'
 import { QueryParams, ResList, ResSingle } from '../types/common'
 import { BASE_URL } from './common'
 
@@ -34,7 +34,7 @@ export const getListBorrows = async (
 }
 
 type GetBorrowQuery = Pick<Borrow, 'id'>
-type GetBorrowResponse = Promise<ResSingle<Borrow>>
+type GetBorrowResponse = Promise<ResSingle<BorrowDetail>>
 export const getBorrow = async (query: GetBorrowQuery): GetBorrowResponse => {
   const url = new URL(`${BORROW_URL}/${query.id}`)
   const response = await fetch(url.toString())

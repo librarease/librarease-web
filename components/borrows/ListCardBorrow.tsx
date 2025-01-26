@@ -1,0 +1,92 @@
+import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
+import { Badge } from '@/components/ui/badge'
+import { Borrow } from '@/lib/types/borrow'
+import { isBorrowDue, formatDate, getBorrowStatus } from '@/lib/utils'
+import {
+  Calendar,
+  CalendarClock,
+  CalendarX,
+  LibraryIcon,
+  User,
+} from 'lucide-react'
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import clsx from 'clsx'
+import Link from 'next/link'
+
+export const ListCardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
+  const isDue = isBorrowDue(borrow)
+
+  return (
+    <Card
+      key={borrow.id}
+      className={clsx('relative', {
+        'bg-destructive/5': isDue,
+      })}
+    >
+      <CardHeader>
+        <Link
+          href={`/borrows/${borrow.id}`}
+          className="flex justify-between items-start min-h-20"
+        >
+          <div>
+            <CardTitle className="text-lg line-clamp-2">
+              <abbr title={borrow.book.title} className="no-underline">
+                {borrow.book.title}
+              </abbr>
+            </CardTitle>
+            <CardDescription>{borrow.book.code}</CardDescription>
+          </div>
+          <Badge
+            variant={
+              getBorrowStatus(borrow) === 'overdue'
+                ? 'destructive'
+                : getBorrowStatus(borrow) === 'returned'
+                  ? 'secondary'
+                  : 'default'
+            }
+            className="capitalize"
+          >
+            {getBorrowStatus(borrow)}
+          </Badge>
+        </Link>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex items-center gap-2 text-sm">
+          <User className="h-4 w-4 text-muted-foreground" />
+          <span>{borrow.subscription.user.name}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <LibraryIcon className="h-4 w-4 text-muted-foreground" />
+          <span>{borrow.subscription.membership.library.name}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <Calendar className="h-4 w-4 text-muted-foreground" />
+          <span>Borrowed: {formatDate(borrow.borrowed_at)}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          {isDue ? (
+            <CalendarX className="h-4 w-4 text-destructive" />
+          ) : (
+            <CalendarClock className="h-4 w-4 text-muted-foreground" />
+          )}
+          <span className={`${isDue ? 'text-destructive' : ''}`}>
+            Due: {formatDate(borrow.due_at)}
+          </span>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
+          Return Book
+        </BtnReturnBook>
+      </CardFooter>
+    </Card>
+  )
+}

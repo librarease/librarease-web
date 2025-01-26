@@ -24,8 +24,9 @@ export type BorrowDetail = Omit<Borrow, 'book' | 'subscription' | 'staff'> & {
   staff: Staff
 }
 
-type Return = WithCommon<{
+export type Return = WithCommon<{
   borrowing_id: string
   returned_at: string
+  fine: number
   staff: Pick<Staff, 'id' | 'name'>
 }>

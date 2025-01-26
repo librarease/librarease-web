@@ -1,4 +1,4 @@
-import { CardBorrow } from '@/components/borrows/CardBorrow'
+import { ListCardBorrow } from '@/components/borrows/ListCardBorrow'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -94,7 +94,7 @@ export default async function Borrows({
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow) => (
-          <CardBorrow key={borrow.id} borrow={borrow} />
+          <ListCardBorrow key={borrow.id} borrow={borrow} />
         ))}
       </div>
 
