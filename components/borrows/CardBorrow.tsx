@@ -1,7 +1,7 @@
 import { BorrowDetail } from '@/lib/types/borrow'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { formatDate, isBorrowDue } from '@/lib/utils'
-import { differenceInDays, formatDistanceToNowStrict } from 'date-fns'
+import { isBorrowDue } from '@/lib/utils'
+import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 
 export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
   const overduedDays = differenceInDays(
@@ -22,7 +22,7 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
           <div className="grid grid-cols-3">
             <dt className="font-medium">Borrowed At:</dt>
             <dd className="col-span-2">
-              {formatDate(borrow.borrowed_at)}
+              {format(new Date(borrow.borrowed_at), 'dd-M-yy hh:mm a')}
               {!borrow.returning &&
                 ` (${formatDistanceToNowStrict(new Date(borrow.borrowed_at), { addSuffix: true })})`}
             </dd>
@@ -30,7 +30,7 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
           <div className="grid grid-cols-3">
             <dt className="font-medium">Due At:</dt>
             <dd className="col-span-2">
-              {formatDate(borrow.due_at)}
+              {format(new Date(borrow.due_at), 'dd-M-yy hh:mm a')}
               {!borrow.returning &&
                 ` (${formatDistanceToNowStrict(new Date(borrow.due_at), { addSuffix: true })})`}
             </dd>
@@ -41,7 +41,10 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
               <div className="grid grid-cols-3">
                 <dt className="font-medium">Returned At:</dt>
                 <dd className="col-span-2">
-                  {formatDate(borrow.returning.returned_at)}
+                  {format(
+                    new Date(borrow.returning.returned_at),
+                    'dd-M-yy hh:mm a'
+                  )}
                 </dd>
               </div>
               <div className="grid grid-cols-3">
@@ -52,7 +55,7 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
               </div>
             </>
           )}
-          {isBorrowDue(borrow) && (
+          {isBorrowDue(borrow) && !borrow.returning && (
             <div className="grid grid-cols-3">
               <dt className="font-medium">Fine:</dt>
               <dd className="col-span-2">{fine ?? '-'} Pts</dd>
