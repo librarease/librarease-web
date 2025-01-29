@@ -1,5 +1,5 @@
 import { QueryParams, ResList, ResSingle } from '../types/common'
-import { Subscription } from '../types/subscription'
+import { Subscription, SubscriptionDetail } from '../types/subscription'
 import { BASE_URL } from './common'
 
 const SUBSCRIPTIONS_URL = `${BASE_URL}/subscriptions`
@@ -37,10 +37,12 @@ export const getListSubs = async (
   }
 }
 
-type GetUserQuery = Pick<Subscription, 'id'>
-type GetUserResponse = Promise<ResSingle<Subscription>>
+type GetSubscriptionQuery = Pick<Subscription, 'id'>
+type GetSubscriptionResponse = Promise<ResSingle<SubscriptionDetail>>
 
-export const getUser = async (query: GetUserQuery): GetUserResponse => {
+export const getSubscription = async (
+  query: GetSubscriptionQuery
+): GetSubscriptionResponse => {
   const url = new URL(`${SUBSCRIPTIONS_URL}/${query.id}`)
   const response = await fetch(url.toString())
   return response.json()

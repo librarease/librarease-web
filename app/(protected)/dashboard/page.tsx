@@ -133,7 +133,11 @@ export default async function DashboardPage({
 
       <div className="grid my-4 grid-cols-1 gap-4 md:grid-cols-2">
         <LibrarySelector
-          libs={libsRes.data}
+          libs={libsRes.data.filter((lib) =>
+            claims.librarease.admin_libs
+              .concat(claims.librarease.staff_libs)
+              .includes(lib.id)
+          )}
           lib={library_id}
           onChangeAction={onLibraryChange}
         />

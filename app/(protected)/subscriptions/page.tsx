@@ -116,7 +116,9 @@ export default async function Subscriptions({
         <TableBody>
           {res.data.map((s) => (
             <TableRow key={s.id}>
-              <TableCell>{s.user?.name}</TableCell>
+              <TableCell>
+                <Link href={`subscriptions/${s.id}`}>{s.user?.name}</Link>
+              </TableCell>
               <TableCell>{s.membership?.name}</TableCell>
               <TableCell>{s.membership?.library?.name}</TableCell>
               <TableCell>

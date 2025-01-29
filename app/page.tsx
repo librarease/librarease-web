@@ -61,7 +61,7 @@ export default async function LibraryDashboard() {
           : 2
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <main className="min-h-screen p-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-8">Librarease</h1>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -69,15 +69,17 @@ export default async function LibraryDashboard() {
             if (item.level > userLvl) return null
             const Icon = item.icon
             return (
-              <Link key={item.href} href={item.href}>
-                <Button
-                  variant="outline"
-                  className="w-full h-24 flex flex-col items-center justify-center gap-2 hover:bg-slate-50 hover:text-primary"
-                >
+              <Button
+                key={item.href}
+                variant="outline"
+                className="w-full h-24 flex flex-col items-center justify-center gap-2"
+                asChild
+              >
+                <Link href={item.href}>
                   <Icon className="w-6 h-6" />
                   <span>{item.title}</span>
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             )
           })}
         </div>

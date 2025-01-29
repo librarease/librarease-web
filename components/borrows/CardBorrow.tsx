@@ -22,7 +22,7 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
           <div className="grid grid-cols-3">
             <dt className="font-medium">Borrowed At:</dt>
             <dd className="col-span-2">
-              {format(new Date(borrow.borrowed_at), 'dd-M-yy hh:mm a')}
+              {format(new Date(borrow.borrowed_at), 'MMM d, yyyy hh:mm a')}
               {!borrow.returning &&
                 ` (${formatDistanceToNowStrict(new Date(borrow.borrowed_at), { addSuffix: true })})`}
             </dd>
@@ -30,7 +30,7 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
           <div className="grid grid-cols-3">
             <dt className="font-medium">Due At:</dt>
             <dd className="col-span-2">
-              {format(new Date(borrow.due_at), 'dd-M-yy hh:mm a')}
+              {format(new Date(borrow.due_at), 'MMM d, yyyy hh:mm a')}
               {!borrow.returning &&
                 ` (${formatDistanceToNowStrict(new Date(borrow.due_at), { addSuffix: true })})`}
             </dd>
@@ -43,7 +43,7 @@ export const CardBorrow: React.FC<{ borrow: BorrowDetail }> = ({ borrow }) => {
                 <dd className="col-span-2">
                   {format(
                     new Date(borrow.returning.returned_at),
-                    'dd-M-yy hh:mm a'
+                    'MMM d, yyyy hh:mm a'
                   )}
                 </dd>
               </div>
