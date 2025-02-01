@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/table'
 import { getListBooks } from '@/lib/api/book'
 import { getLibrary } from '@/lib/api/library'
+import { getListMemberships } from '@/lib/api/membership'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default async function LibraryDetail({
@@ -27,9 +29,10 @@ export default async function LibraryDetail({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const [libRes, bookRes] = await Promise.all([
+  const [libRes, bookRes, memRes] = await Promise.all([
     getLibrary({ id }),
-    getListBooks({ limit: 20, library_id: id }),
+    getListBooks({ limit: 5, library_id: id }),
+    getListMemberships({ limit: 5, library_id: id }),
   ])
 
   if ('error' in libRes) {
@@ -42,8 +45,13 @@ export default async function LibraryDetail({
     return <div>{JSON.stringify(bookRes.message)}</div>
   }
 
+  if ('error' in memRes) {
+    console.log({ memRes })
+    return <div>{JSON.stringify(memRes.message)}</div>
+  }
+
   return (
-    <div>
+    <div className="space-y-2">
       <h1 className="text-2xl font-semibold">{libRes.data.name}</h1>
       <Breadcrumb>
         <BreadcrumbList>
@@ -66,33 +74,85 @@ export default async function LibraryDetail({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Table>
-        <TableCaption>List of books available in the library.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Code</TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Year</TableHead>
-            <TableHead className="text-right">Author</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {bookRes.data.map((book) => (
-            <TableRow key={book.id}>
-              <TableCell className="font-medium">{book.code}</TableCell>
-              <TableCell>{book.title}</TableCell>
-              <TableCell>{book.year}</TableCell>
-              <TableCell className="text-right">{book.author}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        {/* <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter> */}
-      </Table>
+      <div className="flex flex-col md:flex-row gap-4 py-2">
+        {libRes.data.logo && (
+          <Image
+            src={libRes.data.logo}
+            alt={libRes.data.name}
+            width={400}
+            height={400}
+            className="rounded-lg w-auto h-auto"
+          />
+        )}
+        <div className="">
+          <dl className="grid gap-2">
+            <div className="grid grid-cols-3">
+              <dt className="font-medium">Phone:</dt>
+              <dd className="col-span-2">{libRes.data.phone}</dd>
+            </div>
+            <div className="grid grid-cols-3">
+              <dt className="font-medium">Email:</dt>
+              <dd className="col-span-2">{libRes.data.email}</dd>
+            </div>
+            <div className="grid grid-cols-3">
+              <dt className="font-medium">Description:</dt>
+              <dd className="col-span-2">{libRes.data.description}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="border border-gray-200 my-4">
+          <Table>
+            <TableCaption>Latest added books from the library.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="">Code</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Year</TableHead>
+                <TableHead className="text-right">Author</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {bookRes.data.map((book) => (
+                <TableRow key={book.id}>
+                  <TableCell className="font-medium">{book.code}</TableCell>
+                  <TableCell>{book.title}</TableCell>
+                  <TableCell>{book.year}</TableCell>
+                  <TableCell className="text-right">{book.author}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <div className="border border-gray-200 my-4">
+          <Table>
+            <TableCaption>
+              Latest added memberships from the library.
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Borrow Limit</TableHead>
+                <TableHead>Borrow Period</TableHead>
+                <TableHead>Price</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {memRes.data.map((m) => (
+                <TableRow key={m.id}>
+                  <TableCell className="whitespace-nowrap">{m.name}</TableCell>
+                  <TableCell>{m.usage_limit ?? '-'}</TableCell>
+                  <TableCell>{m.loan_period} D</TableCell>
+                  <TableCell>{m.price ?? '-'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   )
 }

@@ -17,6 +17,25 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'encrypted-sharing.s3.ap-southeast-1.amazonaws.com',
+        port: '',
+        pathname: '/public/**',
+        search: '',
+      },
+      {
+        protocol: 'http',
+        hostname: '13.212.97.184',
+        port: '9000',
+        pathname: '/librarease/public/**',
+        search: '',
+      },
+    ],
+  },
 }
 
 export default nextConfig

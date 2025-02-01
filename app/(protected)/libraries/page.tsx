@@ -27,6 +27,7 @@ import { SITE_NAME } from '@/lib/consts'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: `Libraries · ${SITE_NAME}`,
@@ -90,6 +91,7 @@ export default async function Libraries({
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
         <TableHeader>
           <TableRow>
+            <TableHead>Logo</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Creatd At</TableHead>
             <TableHead>Updated</TableHead>
@@ -98,6 +100,17 @@ export default async function Libraries({
         <TableBody>
           {res.data.map((lib) => (
             <TableRow key={lib.id}>
+              <TableCell>
+                {lib.logo && (
+                  <Image
+                    src={lib.logo}
+                    alt={lib.name + "'s logo"}
+                    width={50}
+                    height={50}
+                    className="rounded"
+                  />
+                )}
+              </TableCell>
               <TableCell>
                 <Link href={`libraries/${lib.id}`}>{lib.name}</Link>
               </TableCell>
