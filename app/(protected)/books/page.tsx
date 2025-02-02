@@ -26,6 +26,7 @@ import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: `Books · ${SITE_NAME}`,
@@ -91,6 +92,7 @@ export default async function Books({
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
         <TableHeader>
           <TableRow>
+            <TableHead>Cover</TableHead>
             <TableHead>Code</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Library</TableHead>
@@ -101,6 +103,19 @@ export default async function Books({
         <TableBody>
           {res.data.map((b) => (
             <TableRow key={b.id}>
+              <TableCell>
+                {b.cover && (
+                  <div className="w-12 h-auto">
+                    <Image
+                      src={b.cover}
+                      alt={b.title + "'s cover"}
+                      width={50}
+                      height={50}
+                      className="rounded"
+                    />
+                  </div>
+                )}
+              </TableCell>
               <TableCell>{b.code}</TableCell>
               <TableCell>{b.title}</TableCell>
               <TableCell>{b.library?.name}</TableCell>

@@ -6,6 +6,7 @@ export type Book = WithCommon<{
   author: string
   year: number
   code: string
+  cover?: string
   library_id: string
   library?: Pick<Library, 'id' | 'name'>
 }>

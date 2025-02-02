@@ -18,6 +18,7 @@ import { Cardstaff } from '@/components/staffs/CardStaff'
 import { Cardsubscription } from '@/components/subscriptions/CardSubscription'
 import { CardMembership } from '@/components/memberships/CardMembership'
 import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
+import Image from 'next/image'
 
 export default async function BorrowDetailsPage({
   params,
@@ -78,6 +79,15 @@ export default async function BorrowDetailsPage({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {borrowRes.data.book?.cover && (
+          <Image
+            src={borrowRes.data.book.cover}
+            alt={borrowRes.data.book.title + "'s cover"}
+            width={256}
+            height={256}
+            className="rounded-lg w-56 h-auto place-self-center row-span-2"
+          />
+        )}
         <CardBorrow borrow={borrowRes.data} />
         <CardBook book={borrowRes.data.book} />
         <Carduser user={borrowRes.data.subscription.user} />

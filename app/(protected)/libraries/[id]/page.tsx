@@ -79,9 +79,9 @@ export default async function LibraryDetail({
           <Image
             src={libRes.data.logo}
             alt={libRes.data.name}
-            width={400}
-            height={400}
-            className="rounded-lg w-auto h-auto"
+            width={256}
+            height={256}
+            className="rounded-lg w-56 h-auto"
           />
         )}
         <div className="">
@@ -102,7 +102,7 @@ export default async function LibraryDetail({
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 ">
         <div className="border border-gray-200 my-4">
           <Table>
             <TableCaption>Latest added books from the library.</TableCaption>
