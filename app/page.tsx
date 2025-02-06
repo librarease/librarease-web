@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import Landing from '@/components/landing'
+import { cookies } from 'next/headers'
 
 const menuItems = [
   { title: 'Dashboard', icon: ChartSpline, href: '/dashboard', level: 3 },
@@ -42,6 +43,13 @@ const menuItems = [
   // { title: 'My Borrows', icon: BookCopy, href: '/borrows/me', level: 2 },
 ]
 
+async function logoutAction() {
+  'use server'
+  const cookieStore = await cookies()
+  const sessionName = process.env.SESSION_COOKIE_NAME as string
+  cookieStore.delete(sessionName)
+}
+
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()
 
@@ -62,8 +70,13 @@ export default async function LibraryDashboard() {
 
   return (
     <main className="min-h-screen p-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-8">Librarease</h1>
+      <div className="max-w-2xl mx-auto space-y-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Librarease</h1>
+          <Button variant="ghost" onClick={logoutAction}>
+            Logout
+          </Button>
+        </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {menuItems.map((item) => {
             if (item.level > userLvl) return null

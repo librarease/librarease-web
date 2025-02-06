@@ -69,29 +69,31 @@ export default async function Borrows({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Borrows</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
+      <nav className="backdrop-blur sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">Borrows</h1>
+        <div className="flex justify-between items-center">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link href="/" passHref legacyBehavior>
+                  <BreadcrumbLink>Home</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbPage>Borrows</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Button asChild>
-          <Link href="/borrows/new">
-            <Book className="mr-2 h-4 w-4" />
-            New Borrow
-          </Link>
-        </Button>
-      </div>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Borrows</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <Button asChild>
+            <Link href="/borrows/new">
+              <Book className="mr-2 h-4 w-4" />
+              New Borrow
+            </Link>
+          </Button>
+        </div>
+      </nav>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow) => (
           <ListCardBorrow key={borrow.id} borrow={borrow} />
