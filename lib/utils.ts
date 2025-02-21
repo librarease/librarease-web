@@ -39,3 +39,21 @@ export const isSubscriptionActive = (subscription: Subscription) => {
 export const getSubscriptionStatus = (subscription: Subscription) => {
   return isSubscriptionActive(subscription) ? 'active' : 'expired'
 }
+
+export const getBorrowProgressPercent = (borrow: Borrow): number => {
+  if (isBorrowDue(borrow)) return 100
+
+  const start = new Date(borrow.borrowed_at).getTime()
+
+  const end = borrow.returning
+    ? new Date(borrow.returning.returned_at).getTime()
+    : new Date().getTime()
+
+  return Math.min(
+    100,
+    Math.max(
+      0,
+      ((end - start) / (new Date(borrow.due_at).getTime() - start)) * 100
+    )
+  )
+}
