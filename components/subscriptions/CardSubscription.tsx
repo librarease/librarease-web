@@ -7,7 +7,6 @@ import {
 } from '@/lib/utils'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { Badge } from '../ui/badge'
-import Link from 'next/link'
 
 export const Cardsubscription: React.FC<{ subscription: Subscription }> = ({
   subscription,
@@ -16,9 +15,7 @@ export const Cardsubscription: React.FC<{ subscription: Subscription }> = ({
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="text-lg line-clamp-2">
-            <Link href={`/subscriptions/${subscription.id}`}>Subscription</Link>
-          </CardTitle>
+          <CardTitle className="text-lg line-clamp-2">Subscription</CardTitle>
 
           <Badge
             variant={

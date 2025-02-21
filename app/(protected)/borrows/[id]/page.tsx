@@ -10,17 +10,27 @@ import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBorrow } from '@/lib/api/borrow'
 import { Badge } from '@/components/ui/badge'
-import { formatDate, getBorrowStatus, isBorrowDue } from '@/lib/utils'
+import {
+  formatDate,
+  getBorrowStatus,
+  getSubscriptionStatus,
+  isBorrowDue,
+  isSubscriptionActive,
+} from '@/lib/utils'
 import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
+  Book,
   Calendar,
   CalendarCheck,
   CalendarClock,
   CalendarX,
+  Clock,
+  CreditCard,
   Gavel,
   Library,
+  Tally5,
   User,
   UserCog,
 } from 'lucide-react'
@@ -122,12 +132,19 @@ export default async function BorrowDetailsPage({
             <User className="h-4 w-4" />
             <p>
               <span className="font-medium">Name:&nbsp;</span>
+              {/* <Link href={`/users/${borrowRes.data.subscription.user.id}`}> */}
               {borrowRes.data.subscription.user.name}
+              {/* </Link> */}
             </p>
             <Library className="h-4 w-4" />
             <p>
               <span className="font-medium">Library:&nbsp;</span>
-              {borrowRes.data.subscription.membership.library.name}
+              <Link
+                className="link"
+                href={`/libraries/${borrowRes.data.subscription.membership.library.id}`}
+              >
+                {borrowRes.data.subscription.membership.library.name}
+              </Link>
             </p>
             {/* <CreditCard className="h-4 w-4" />
             <p>
@@ -168,17 +185,21 @@ export default async function BorrowDetailsPage({
                 <p>
                   <span className="font-medium">Fine Expected:&nbsp;</span>
                   {differenceInDays(
-                    new Date(),
+                    borrowRes.data.returning
+                      ? new Date(borrowRes.data.returning.returned_at)
+                      : new Date(),
                     new Date(borrowRes.data.due_at)
                   ) +
                     ' x ' +
-                    borrowRes.data.subscription.fine_per_day +
+                    (borrowRes.data.subscription.fine_per_day ?? 0) +
                     ' = ' +
                     differenceInDays(
-                      new Date(),
+                      borrowRes.data.returning
+                        ? new Date(borrowRes.data.returning.returned_at)
+                        : new Date(),
                       new Date(borrowRes.data.due_at)
                     ) *
-                      borrowRes.data.subscription.fine_per_day +
+                      (borrowRes.data.subscription.fine_per_day ?? 0) +
                     ' Pts'}
                 </p>
                 <CalendarX className="h-4 w-4 text-destructive" />
@@ -216,6 +237,69 @@ export default async function BorrowDetailsPage({
           <Progress value={progressPercent} />
         </CardContent>
       </Card> */}
+
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-lg line-clamp-2">
+              Membership Information
+            </CardTitle>
+
+            <Badge
+              variant={
+                isSubscriptionActive(borrowRes.data.subscription)
+                  ? 'default'
+                  : 'secondary'
+              }
+              className="capitalize"
+            >
+              {getSubscriptionStatus(borrowRes.data.subscription)}
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="grid gap-2 grid-cols-[max-content,1fr] md:grid-cols-[max-content,1fr,max-content,1fr] items-center">
+          <CreditCard className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Membership:&nbsp;</span>
+            <Link
+              href={`/subscriptions/${borrowRes.data.subscription.id}`}
+              className="link"
+            >
+              {borrowRes.data.subscription.membership.name}
+            </Link>
+          </p>
+          <Clock className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Expires:&nbsp;</span>
+            {formatDate(borrowRes.data.subscription.expires_at)}
+          </p>
+          <CalendarClock className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Borrow Period:&nbsp;</span>
+            {borrowRes.data.subscription.loan_period} D
+          </p>
+          <Tally5 className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Usage Limit:&nbsp;</span>
+            {borrowRes.data.subscription.usage_limit ?? '-'}
+          </p>
+          <Book className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Active Borrow Limit:&nbsp;</span>
+            {borrowRes.data.subscription.active_loan_limit ?? '-'}
+          </p>
+          <Gavel className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Fine per Day:&nbsp;</span>
+            {borrowRes.data.subscription.fine_per_day ?? '-'} Pts
+          </p>
+          <Calendar className="h-4 w-4" />
+          <p>
+            <span className="font-medium">Purchased At:&nbsp;</span>
+            {formatDate(borrowRes.data.subscription.created_at)}
+          </p>
+        </CardContent>
+      </Card>
 
       {!borrowRes.data.returning && (
         <div className="bottom-0 sticky py-2">
