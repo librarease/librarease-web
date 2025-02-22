@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
-import { getBorrow } from '@/lib/api/borrow'
+import { getBorrow, getListBorrows } from '@/lib/api/borrow'
 import { Badge } from '@/components/ui/badge'
 import {
   formatDate,
@@ -36,6 +36,7 @@ import {
 } from 'lucide-react'
 import clsx from 'clsx'
 import { differenceInDays } from 'date-fns'
+import { Borrow } from '@/lib/types/borrow'
 
 export default async function BorrowDetailsPage({
   params,
@@ -57,9 +58,29 @@ export default async function BorrowDetailsPage({
 
   // const progressPercent = getBorrowProgressPercent(borrowRes.data)
 
-  //   const cookieStore = await cookies()
-  //   const sessionName = process.env.SESSION_COOKIE_NAME as string
-  //   const session = cookieStore.get(sessionName)
+  const headers = await Verify({
+    from: '/borrows',
+  })
+
+  let prevBorrows: Borrow[] = []
+  const [prevBorrowsRes] = await Promise.all([
+    getListBorrows(
+      {
+        subscription_id: borrowRes.data.subscription.id,
+        sort_in: 'asc',
+        limit: 20,
+      },
+      {
+        headers,
+      }
+    ),
+  ])
+
+  if ('error' in prevBorrowsRes) {
+    prevBorrows = []
+  } else {
+    prevBorrows = prevBorrowsRes.data
+  }
 
   return (
     <div className="space-y-4">
@@ -128,15 +149,15 @@ export default async function BorrowDetailsPage({
           <CardHeader>
             <CardTitle>User Information</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-2 grid-cols-[max-content,1fr] items-center">
-            <User className="h-4 w-4" />
+          <CardContent className="grid gap-2 grid-cols-[max-content_1fr] items-center">
+            <User className="size-4" />
             <p>
               <span className="font-medium">Name:&nbsp;</span>
               {/* <Link href={`/users/${borrowRes.data.subscription.user.id}`}> */}
               {borrowRes.data.subscription.user.name}
               {/* </Link> */}
             </p>
-            <Library className="h-4 w-4" />
+            <Library className="size-4" />
             <p>
               <span className="font-medium">Library:&nbsp;</span>
               <Link
@@ -146,12 +167,12 @@ export default async function BorrowDetailsPage({
                 {borrowRes.data.subscription.membership.library.name}
               </Link>
             </p>
-            {/* <CreditCard className="h-4 w-4" />
+            {/* <CreditCard className="size-4" />
             <p>
               <span className="font-medium">Membership:&nbsp;</span>
               {borrowRes.data.subscription.membership.name}
             </p>
-            <Clock className="h-4 w-4" />
+            <Clock className="size-4" />
             <p>
               <span className="font-medium">Expires:&nbsp;</span>
               {formatDate(borrowRes.data.subscription.expires_at)}
@@ -163,8 +184,8 @@ export default async function BorrowDetailsPage({
           <CardHeader>
             <CardTitle>Borrow Details</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-2 grid-cols-[max-content,1fr] items-center">
-            <UserCog className="h-4 w-4 text-muted-foreground" />
+          <CardContent className="grid gap-2 grid-cols-[max-content_1fr] items-center">
+            <UserCog className="size-4 text-muted-foreground" />
             <p>
               <span className="font-medium">Staff:&nbsp;</span>
               {borrowRes.data.staff.name}
@@ -174,14 +195,14 @@ export default async function BorrowDetailsPage({
                 : null}
             </p>
 
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="size-4 text-muted-foreground" />
             <p>
               <span className="font-medium">Borrowed:&nbsp;</span>
               {formatDate(borrowRes.data.borrowed_at)}
             </p>
             {isDue ? (
               <>
-                <Gavel className="h-4 w-4 text-muted-foreground" />
+                <Gavel className="size-4 text-muted-foreground" />
                 <p>
                   <span className="font-medium">Fine Expected:&nbsp;</span>
                   {differenceInDays(
@@ -202,10 +223,10 @@ export default async function BorrowDetailsPage({
                       (borrowRes.data.subscription.fine_per_day ?? 0) +
                     ' Pts'}
                 </p>
-                <CalendarX className="h-4 w-4 text-destructive" />
+                <CalendarX className="size-4 text-destructive" />
               </>
             ) : (
-              <CalendarClock className="h-4 w-4 text-muted-foreground" />
+              <CalendarClock className="size-4 text-muted-foreground" />
             )}
             <p className={clsx({ 'text-destructive': isDue })}>
               <span className="font-medium">Due:&nbsp;</span>
@@ -213,12 +234,12 @@ export default async function BorrowDetailsPage({
             </p>
             {borrowRes.data.returning ? (
               <>
-                <CalendarCheck className="h-4 w-4 text-muted-foreground" />
+                <CalendarCheck className="size-4 text-muted-foreground" />
                 <p>
                   <span className="font-medium">Returned:&nbsp;</span>
                   {formatDate(borrowRes.data.returning.returned_at)}
                 </p>
-                <Gavel className="h-4 w-4 text-muted-foreground" />
+                <Gavel className="size-4 text-muted-foreground" />
                 <p>
                   <span className="font-medium">Fine Received:&nbsp;</span>
                   {borrowRes.data.returning.fine ?? '-'} Pts
@@ -241,10 +262,7 @@ export default async function BorrowDetailsPage({
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
-            <CardTitle className="text-lg line-clamp-2">
-              Membership Information
-            </CardTitle>
-
+            <CardTitle>Membership</CardTitle>
             <Badge
               variant={
                 isSubscriptionActive(borrowRes.data.subscription)
@@ -257,8 +275,8 @@ export default async function BorrowDetailsPage({
             </Badge>
           </div>
         </CardHeader>
-        <CardContent className="grid gap-2 grid-cols-[max-content,1fr] md:grid-cols-[max-content,1fr,max-content,1fr] items-center">
-          <CreditCard className="h-4 w-4" />
+        <CardContent className="grid gap-2 grid-cols-[max-content_1fr] md:grid-cols-[max-content_1fr_max-content_1fr] items-center">
+          <CreditCard className="size-4" />
           <p>
             <span className="font-medium">Membership:&nbsp;</span>
             <Link
@@ -268,38 +286,72 @@ export default async function BorrowDetailsPage({
               {borrowRes.data.subscription.membership.name}
             </Link>
           </p>
-          <Clock className="h-4 w-4" />
+          <Clock className="size-4" />
           <p>
             <span className="font-medium">Expires:&nbsp;</span>
             {formatDate(borrowRes.data.subscription.expires_at)}
           </p>
-          <CalendarClock className="h-4 w-4" />
+          <CalendarClock className="size-4" />
           <p>
             <span className="font-medium">Borrow Period:&nbsp;</span>
             {borrowRes.data.subscription.loan_period} D
           </p>
-          <Tally5 className="h-4 w-4" />
+          <Tally5 className="size-4" />
           <p>
             <span className="font-medium">Usage Limit:&nbsp;</span>
             {borrowRes.data.subscription.usage_limit ?? '-'}
           </p>
-          <Book className="h-4 w-4" />
+          <Book className="size-4" />
           <p>
             <span className="font-medium">Active Borrow Limit:&nbsp;</span>
             {borrowRes.data.subscription.active_loan_limit ?? '-'}
           </p>
-          <Gavel className="h-4 w-4" />
+          <Gavel className="size-4" />
           <p>
             <span className="font-medium">Fine per Day:&nbsp;</span>
             {borrowRes.data.subscription.fine_per_day ?? '-'} Pts
           </p>
-          <Calendar className="h-4 w-4" />
+          <Calendar className="size-4" />
           <p>
             <span className="font-medium">Purchased At:&nbsp;</span>
             {formatDate(borrowRes.data.subscription.created_at)}
           </p>
         </CardContent>
       </Card>
+
+      {prevBorrows.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Previous Borrows</CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-end">
+            {prevBorrows.map((b) => (
+              <Link
+                href={`/borrows/${b.id}`}
+                key={b.id}
+                className={clsx(
+                  'relative left-0 transition-all not-first-of-type:-ml-12 brightness-75',
+                  'hover:transition-all hover:-translate-y-4 hover:transform-none hover:brightness-100',
+                  'peer peer-hover:left-12 peer-hover:transition-all',
+                  '[transform:perspective(800px)_rotateY(20deg)]',
+                  {
+                    'z-10 -translate-y-4 brightness-100 transform-none':
+                      b.id === id,
+                  }
+                )}
+              >
+                <Image
+                  src={b.book?.cover ?? '/book-placeholder.svg'}
+                  alt={b.book.title + "'s cover"}
+                  width={160}
+                  height={160}
+                  className="shadow-md rounded-lg w-40 h-auto place-self-center row-span-2"
+                />
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {!borrowRes.data.returning && (
         <div className="bottom-0 sticky py-2">

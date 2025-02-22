@@ -76,7 +76,7 @@ export default async function Subscriptions({
 
   return (
     <div className="space-y-4">
-      <nav className="backdrop-blur sticky top-0 z-10">
+      <nav className="backdrop-blur-sm sticky top-0 z-10">
         <h1 className="text-2xl font-semibold">Subscriptions</h1>
         <div className="flex justify-between items-center">
           <Breadcrumb>

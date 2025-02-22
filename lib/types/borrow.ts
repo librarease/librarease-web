@@ -10,7 +10,7 @@ export type Borrow = WithCommon<{
   borrowed_at: string
   due_at: string
   returning?: Return
-  book: Pick<Book, 'id' | 'title' | 'code'>
+  book: Pick<Book, 'id' | 'title' | 'code' | 'cover'>
   subscription: Pick<
     Subscription,
     'id' | 'user_id' | 'membership_id' | 'user' | 'membership'

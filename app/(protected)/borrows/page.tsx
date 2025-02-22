@@ -69,7 +69,7 @@ export default async function Borrows({
 
   return (
     <div className="space-y-4">
-      <nav className="backdrop-blur sticky top-0 z-10">
+      <nav className="backdrop-blur-sm sticky top-0 z-10">
         <h1 className="text-2xl font-semibold">Borrows</h1>
         <div className="flex justify-between items-center">
           <Breadcrumb>
@@ -88,7 +88,7 @@ export default async function Borrows({
           </Breadcrumb>
           <Button asChild>
             <Link href="/borrows/new">
-              <Book className="mr-2 h-4 w-4" />
+              <Book className="mr-2 size-4" />
               New Borrow
             </Link>
           </Button>

@@ -60,22 +60,22 @@ export const ListCardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex items-center gap-2 text-sm">
-          <User className="h-4 w-4 text-muted-foreground" />
+          <User className="size-4 text-muted-foreground" />
           <span>{borrow.subscription.user.name}</span>
         </div>
         <div className="flex items-center gap-2 text-sm">
-          <LibraryIcon className="h-4 w-4 text-muted-foreground" />
+          <LibraryIcon className="size-4 text-muted-foreground" />
           <span>{borrow.subscription.membership.library.name}</span>
         </div>
         <div className="flex items-center gap-2 text-sm">
-          <Calendar className="h-4 w-4 text-muted-foreground" />
+          <Calendar className="size-4 text-muted-foreground" />
           <span>Borrowed: {formatDate(borrow.borrowed_at)}</span>
         </div>
         <div className="flex items-center gap-2 text-sm">
           {isDue ? (
-            <CalendarX className="h-4 w-4 text-destructive" />
+            <CalendarX className="size-4 text-destructive" />
           ) : (
-            <CalendarClock className="h-4 w-4 text-muted-foreground" />
+            <CalendarClock className="size-4 text-muted-foreground" />
           )}
           <span className={`${isDue ? 'text-destructive' : ''}`}>
             Due: {formatDate(borrow.due_at)}

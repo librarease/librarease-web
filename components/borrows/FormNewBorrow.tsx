@@ -217,7 +217,7 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
                         {field.value
                           ? books.find((book) => book.id === field.value)?.title
                           : 'Select Book'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -283,7 +283,7 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
                         {field.value
                           ? users.find((user) => user.id === field.value)?.name
                           : 'Select user'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -351,7 +351,7 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
                           ? subs.find((sub) => sub.id === field.value)
                               ?.membership.name
                           : 'Select subscription'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -418,7 +418,7 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
                           ? staffs.find((staff) => staff.id === field.value)
                               ?.name
                           : 'Select Staff'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>

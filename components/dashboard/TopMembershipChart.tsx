@@ -26,7 +26,7 @@ export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
   const chartConfig = data.reduce((acc, { name }, index) => {
     acc[name] = {
       label: name,
-      color: `hsl(var(--chart-${index + 1}))`,
+      color: `var(--chart-${index + 1})`,
     }
     return acc
   }, {} as ChartConfig)
@@ -71,7 +71,7 @@ export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         {/* <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Trending up by 5.2% this month <TrendingUp className="size-4" />
         </div> */}
         <div className="leading-none text-muted-foreground">
           Showing top purchased membership

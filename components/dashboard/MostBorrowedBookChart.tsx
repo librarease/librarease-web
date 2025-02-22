@@ -26,7 +26,7 @@ export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
   const chartConfig = data.reduce((acc, { title }, index) => {
     acc[title] = {
       label: title,
-      color: `hsl(var(--chart-${index + 1}))`,
+      color: `var(--chart-${index + 1})`,
     }
     return acc
   }, {} as ChartConfig)
@@ -88,7 +88,7 @@ export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         {/* <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Trending up by 5.2% this month <TrendingUp className="size-4" />
         </div> */}
         <div className="leading-none text-muted-foreground">
           Showing top most borrowed books

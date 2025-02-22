@@ -150,7 +150,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({
                         {field.value
                           ? users.find((u) => u.id === field.value)?.name
                           : 'Select User'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -216,7 +216,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({
                         {field.value
                           ? libs.find((lib) => lib.id === field.value)?.name
                           : 'Select library'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>

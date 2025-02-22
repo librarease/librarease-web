@@ -89,7 +89,7 @@ export default async function LibraryDashboard() {
                 asChild
               >
                 <Link href={item.href}>
-                  <Icon className="w-6 h-6" />
+                  <Icon className="size-6" />
                   <span>{item.title}</span>
                 </Link>
               </Button>

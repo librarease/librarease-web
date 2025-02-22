@@ -84,7 +84,7 @@ export default function LandingPage() {
                 <Button size="lg" asChild>
                   <Link href="/login">
                     Start Borrowing Today
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
@@ -103,7 +103,7 @@ export default function LandingPage() {
                 return (
                   <Card key={stat.label} className="relative overflow-hidden">
                     <CardHeader>
-                      <Icon className="h-8 w-8 text-primary" />
+                      <Icon className="size-8 text-primary" />
                     </CardHeader>
                     <CardContent>
                       <div className="text-3xl font-bold">{stat.value}</div>
@@ -136,7 +136,7 @@ export default function LandingPage() {
                       className="relative overflow-hidden"
                     >
                       <CardHeader>
-                        <Icon className="h-8 w-8 text-primary" />
+                        <Icon className="size-8 text-primary" />
                         <CardTitle className="text-lg">
                           {feature.title}
                         </CardTitle>
@@ -166,7 +166,7 @@ export default function LandingPage() {
               <Button size="lg" asChild>
                 <Link href="/signup">
                   Create Free Account
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 size-4" />
                 </Link>
               </Button>
             </div>

@@ -185,7 +185,7 @@ export default function ComboboxForm() {
                           {field.value
                             ? libs.find((lib) => lib.id === field.value)?.name
                             : 'Select Library'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
