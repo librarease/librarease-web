@@ -324,13 +324,13 @@ export default async function BorrowDetailsPage({
           <CardHeader>
             <CardTitle>Previous Borrows</CardTitle>
           </CardHeader>
-          <CardContent className="flex items-end">
+          <CardContent className="flex items-end overflow-x-scroll p-6">
             {prevBorrows.map((b) => (
               <Link
                 href={`/borrows/${b.id}`}
                 key={b.id}
                 className={clsx(
-                  'relative left-0 transition-all not-first-of-type:-ml-12 brightness-75',
+                  'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12 brightness-75',
                   'hover:transition-all hover:-translate-y-4 hover:transform-none hover:brightness-100',
                   'peer peer-hover:left-12 peer-hover:transition-all',
                   '[transform:perspective(800px)_rotateY(20deg)]',
@@ -344,8 +344,8 @@ export default async function BorrowDetailsPage({
                   src={b.book?.cover ?? '/book-placeholder.svg'}
                   alt={b.book.title + "'s cover"}
                   width={160}
-                  height={160}
-                  className="shadow-md rounded-lg w-40 h-auto place-self-center row-span-2"
+                  height={240}
+                  className="shadow-md rounded-lg w-40 h-64 place-self-center object-cover"
                 />
               </Link>
             ))}
