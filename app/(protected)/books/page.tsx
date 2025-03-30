@@ -117,7 +117,11 @@ export default async function Books({
                 )}
               </TableCell>
               <TableCell>{b.code}</TableCell>
-              <TableCell>{b.title}</TableCell>
+              <TableCell>
+                <Link href={`books/${b.id}`} className="link">
+                  {b.title}
+                </Link>
+              </TableCell>
               <TableCell>{b.library?.name}</TableCell>
               <TableCell>{b.author}</TableCell>
               <TableCell>{b.year}</TableCell>
