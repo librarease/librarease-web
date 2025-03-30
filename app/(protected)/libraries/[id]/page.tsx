@@ -118,7 +118,11 @@ export default async function LibraryDetail({
               {bookRes.data.map((book) => (
                 <TableRow key={book.id}>
                   <TableCell className="font-medium">{book.code}</TableCell>
-                  <TableCell>{book.title}</TableCell>
+                  <TableCell>
+                    <Link href={`/books/${book.id}`} className="link">
+                      {book.title}
+                    </Link>
+                  </TableCell>
                   <TableCell>{book.year}</TableCell>
                   <TableCell className="text-right">{book.author}</TableCell>
                 </TableRow>

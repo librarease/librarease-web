@@ -1,5 +1,6 @@
 import { Membership } from '@/lib/types/membership'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
 
 export const CardMembership: React.FC<{ membership: Membership }> = ({
@@ -30,7 +31,14 @@ export const CardMembership: React.FC<{ membership: Membership }> = ({
           </div>
           <div className="grid grid-cols-3">
             <dt className="font-medium">Library:</dt>
-            <dd className="col-span-2">{membership.library.name}</dd>
+            <dd className="col-span-2">
+              <Link
+                href={`/libraries/${membership.library_id}`}
+                className="link"
+              >
+                {membership.library.name}
+              </Link>
+            </dd>
           </div>
         </dl>
       </CardContent>

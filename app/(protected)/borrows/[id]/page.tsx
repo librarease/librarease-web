@@ -132,13 +132,15 @@ export default async function BorrowDetailsPage({
                 alt={borrowRes.data.book.title + "'s cover"}
                 width={256}
                 height={256}
-                className="shadow-md rounded-lg w-56 h-auto place-self-center row-span-2"
+                className="shadow-md rounded-md w-56 h-auto hover:shadow-md hover:scale-105 transition-transform"
               />
             </Link>
             <div>
-              <h2 className="text-xl font-semibold">
-                {borrowRes.data.book.title}
-              </h2>
+              <Link href={`/books/${borrowRes.data.book.id}`} className="link">
+                <h2 className="text-xl font-semibold">
+                  {borrowRes.data.book.title}
+                </h2>
+              </Link>
               <p className="text-gray-600">{borrowRes.data.book.author}</p>
               <p className="text-sm text-gray-500">
                 {borrowRes.data.book.code}

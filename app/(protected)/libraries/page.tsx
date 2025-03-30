@@ -112,7 +112,9 @@ export default async function Libraries({
                 )}
               </TableCell>
               <TableCell>
-                <Link href={`libraries/${lib.id}`}>{lib.name}</Link>
+                <Link href={`libraries/${lib.id}`} className="link">
+                  {lib.name}
+                </Link>
               </TableCell>
               <TableCell>{formatDate(lib.created_at)}</TableCell>
               <TableCell>{formatDate(lib.updated_at)}</TableCell>

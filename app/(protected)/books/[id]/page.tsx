@@ -55,11 +55,11 @@ export default async function BookDetailsPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="place-self-center flex">
-        <div className="bg-accent shadow-xl [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-10">
-          <h2 className="my-2 text-nowrap text-sm font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-30px)] origin-top-left">
+      <div className="place-self-center flex my-12">
+        <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-10">
+          <span className="my-2 inline-block text-nowrap text-xs font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-30px)] origin-top-left">
             {bookRes.data.title}
-          </h2>
+          </span>
         </div>
         <Image
           src={bookRes.data?.cover ?? '/book-placeholder.svg'}
@@ -67,14 +67,13 @@ export default async function BookDetailsPage({
           width={256}
           height={256}
           className={clsx(
-            'shadow-xl rounded-r-lg w-56 h-auto',
+            'shadow-xl rounded-r-md w-56 h-auto',
             '[transform:perspective(800px)_rotateY(14deg)]'
           )}
           priority
         />
       </div>
-      <div className="place-self-center text-center">
-        {/* <h2 className="text-xl font-semibold">{bookRes.data.title}</h2> */}
+      <div className="place-self-center text-center border-t">
         <p className="text-gray-600">{bookRes.data.author}</p>
         <p className="text-sm text-gray-500">{bookRes.data.code}</p>
       </div>
