@@ -73,7 +73,7 @@ export default async function BookDetailsPage({
           priority
         />
       </div>
-      <div className="place-self-center text-center border-t">
+      <div className="place-self-center text-center pt-4 border-t">
         <p className="text-gray-600">{bookRes.data.author}</p>
         <p className="text-sm text-gray-500">{bookRes.data.code}</p>
       </div>

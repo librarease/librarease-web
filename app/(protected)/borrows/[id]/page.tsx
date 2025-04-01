@@ -125,14 +125,14 @@ export default async function BorrowDetailsPage({
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
-          <CardContent className="grid md:grid-cols-2 gap-4">
+          <CardContent className="grid place-self-center md:grid-cols-2 gap-4">
             <Link href={`/books/${borrowRes.data.book.id}`}>
               <Image
                 src={borrowRes.data.book?.cover ?? '/book-placeholder.svg'}
                 alt={borrowRes.data.book.title + "'s cover"}
                 width={256}
                 height={256}
-                className="shadow-md rounded-md w-56 h-auto hover:shadow-md hover:scale-105 transition-transform"
+                className="rounded-md w-56 h-auto hover:shadow-md hover:scale-105 transition-transform"
               />
             </Link>
             <div>
