@@ -8,22 +8,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Borrow } from '@/lib/types/borrow'
+import { BorrowDetail } from '@/lib/types/borrow'
 import { useRouter } from 'next/navigation'
 
-export const ModalEditBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
+export const ModalEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
+  borrow,
+}) => {
   const router = useRouter()
   return (
     <Dialog open={true} onOpenChange={router.back}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{borrow.book.title}</DialogTitle>
-          <DialogDescription>
-            Editing {borrow.subscription.user.name}&apos;s Borrow.
-          </DialogDescription>
-
-          <FormEditBorrow borrow={borrow} />
+          <DialogDescription>{borrow.subscription.user.name}</DialogDescription>
         </DialogHeader>
+
+        <FormEditBorrow borrow={borrow} />
       </DialogContent>
     </Dialog>
   )

@@ -315,7 +315,7 @@ export default async function BorrowDetailsPage({
         </Card>
       )}
 
-      <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-4">
+      <div className="bottom-0 sticky py-2 flex flex-col md:flex-row gap-4 basis-1/2">
         {!borrowRes.data.returning && (
           <BtnReturnBook
             variant="outline"

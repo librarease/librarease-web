@@ -18,5 +18,9 @@ export default async function BorrowDetailsPage({
     return <div>{JSON.stringify(borrowRes.message)}</div>
   }
 
-  return <FormEditBorrow borrow={borrowRes.data} />
+  return (
+    <div className="grid place-items-center">
+      <FormEditBorrow borrow={borrowRes.data} />
+    </div>
+  )
 }
