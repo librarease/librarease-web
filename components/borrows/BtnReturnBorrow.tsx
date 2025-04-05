@@ -27,6 +27,7 @@ export const BtnReturnBook: React.FC<
   const onClick = () => {
     startTransition(async () => {
       clearTimeout(confirmTimeout)
+      setConfirmTimeout(undefined)
       const res = await actionReturnBorrow(borrow.id)
       if ('error' in res) {
         toast({

@@ -1,18 +1,9 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
 import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBorrow, getListBorrows } from '@/lib/api/borrow'
 import { Badge } from '@/components/ui/badge'
 import {
   formatDate,
-  getBorrowStatus,
   getSubscriptionStatus,
   isBorrowDue,
   isSubscriptionActive,
@@ -85,43 +76,7 @@ export default async function BorrowDetailsPage({
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">{borrowRes.data.book.title}</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <Link href="/borrows" passHref legacyBehavior>
-                <BreadcrumbLink>Borrows</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{borrowRes.data.book.title}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        <Badge
-          variant={
-            getBorrowStatus(borrowRes.data) === 'overdue'
-              ? 'destructive'
-              : getBorrowStatus(borrowRes.data) === 'returned'
-                ? 'secondary'
-                : 'default'
-          }
-          className="uppercase h-8 min-w-24 justify-center"
-        >
-          {getBorrowStatus(borrowRes.data)}
-        </Badge>
-      </div>
-
+    <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="md:row-span-2">
           <CardHeader>
@@ -331,7 +286,7 @@ export default async function BorrowDetailsPage({
           <CardHeader>
             <CardTitle>Previous Borrows</CardTitle>
           </CardHeader>
-          <CardContent className="flex items-end overflow-x-scroll p-6">
+          <CardContent className="flex items-end overflow-x-scroll p-6 isolate">
             {prevBorrows.map((b) => (
               <Link
                 href={`/borrows/${b.id}`}
@@ -375,6 +330,6 @@ export default async function BorrowDetailsPage({
           </Link>
         </Button>
       </div>
-    </div>
+    </>
   )
 }
