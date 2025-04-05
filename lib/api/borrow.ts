@@ -1,4 +1,4 @@
-import { Borrow, BorrowDetail } from '../types/borrow'
+import { Borrow, BorrowDetail, Return } from '../types/borrow'
 import { QueryParams, ResList, ResSingle } from '../types/common'
 import { BASE_URL } from './common'
 
@@ -61,9 +61,7 @@ export const createBorrow = async (
 }
 
 export const returnBorrow = async (
-  data: Pick<Borrow, 'id'> & {
-    returned_at: string
-  },
+  data: Pick<Borrow, 'id'> & Partial<Pick<Return, 'returned_at' | 'fine'>>,
   init?: RequestInit
 ): GetBorrowResponse => {
   const headers = new Headers(init?.headers)

@@ -30,6 +30,7 @@ import {
   CreditCard,
   Gavel,
   Library,
+  Pen,
   Tally5,
   User,
   UserCog,
@@ -37,6 +38,7 @@ import {
 import clsx from 'clsx'
 import { differenceInDays } from 'date-fns'
 import { Borrow } from '@/lib/types/borrow'
+import { Button } from '@/components/ui/button'
 
 export default async function BorrowDetailsPage({
   params,
@@ -125,7 +127,7 @@ export default async function BorrowDetailsPage({
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
-          <CardContent className="grid place-self-center md:grid-cols-2 gap-4">
+          <CardContent className="grid place-self-center md:place-self-auto md:grid-cols-2 gap-4">
             <Link href={`/books/${borrowRes.data.book.id}`}>
               <Image
                 src={borrowRes.data.book?.cover ?? '/book-placeholder.svg'}
@@ -133,6 +135,7 @@ export default async function BorrowDetailsPage({
                 width={256}
                 height={256}
                 className="rounded-md w-56 h-auto hover:shadow-md hover:scale-105 transition-transform"
+                priority
               />
             </Link>
             <div>
@@ -349,7 +352,7 @@ export default async function BorrowDetailsPage({
                   alt={b.book.title + "'s cover"}
                   width={160}
                   height={240}
-                  className="shadow-md rounded-lg w-40 h-64 place-self-center object-cover"
+                  className="shadow-md rounded-lg w-40 h-60 place-self-center object-cover"
                 />
               </Link>
             ))}
@@ -357,15 +360,21 @@ export default async function BorrowDetailsPage({
         </Card>
       )}
 
-      {!borrowRes.data.returning && (
-        <div className="bottom-0 sticky py-2">
+      <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-4">
+        {!borrowRes.data.returning && (
           <BtnReturnBook
             variant="outline"
             className="w-full"
             borrow={borrowRes.data}
           />
-        </div>
-      )}
+        )}
+        <Button asChild>
+          <Link href={`/borrows/${borrowRes.data.id}/edit`} className="w-full">
+            <Pen />
+            Edit
+          </Link>
+        </Button>
+      </div>
     </div>
   )
 }

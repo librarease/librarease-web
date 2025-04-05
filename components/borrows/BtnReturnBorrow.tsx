@@ -1,39 +1,64 @@
 'use client'
 
 import { Borrow } from '@/lib/types/borrow'
-import { useState } from 'react'
+import { useTransition, useState } from 'react'
 import { Button, ButtonProps } from '../ui/button'
-import { Lock, Unlock } from 'lucide-react'
-import { ReturnBorrow } from '@/lib/actions/return-borrow'
+import { Lock, Unlock, Loader } from 'lucide-react'
+import { actionReturnBorrow } from '@/lib/actions/return-borrow'
 import { formatDate } from '@/lib/utils'
+import { toast } from '../hooks/use-toast'
 
 export const BtnReturnBook: React.FC<
   ButtonProps & {
     borrow: Borrow
   }
 > = ({ borrow, ...props }) => {
-  const [confirm, setConfirm] = useState<NodeJS.Timeout>()
+  const [confirmTimeout, setConfirmTimeout] = useState<NodeJS.Timeout>()
+  const [clientBorrow, setClientBorrow] = useState<Borrow>(borrow)
+  const [isPending, startTransition] = useTransition()
 
   const onUnlock = () => {
     const timerId = setTimeout(() => {
-      setConfirm(undefined)
+      setConfirmTimeout(undefined)
     }, 3_000)
-    setConfirm(timerId)
+    setConfirmTimeout(timerId)
   }
 
   const onClick = () => {
-    ReturnBorrow(borrow.id)
-    if (confirm) clearTimeout(confirm)
+    startTransition(async () => {
+      clearTimeout(confirmTimeout)
+      const res = await actionReturnBorrow(borrow.id)
+      if ('error' in res) {
+        toast({
+          title: 'Failed to return book',
+          description: res.error,
+          variant: 'destructive',
+        })
+        return
+      }
+      // optimistic update
+      setClientBorrow((prev) => ({
+        ...prev,
+        returning: {
+          returned_at: new Date().toISOString(),
+        } as Borrow['returning'],
+      }))
+      toast({
+        title: 'Success',
+        description: 'Book returned successfully',
+        variant: 'default',
+      })
+    })
   }
 
-  if (borrow.returning)
+  if (clientBorrow.returning)
     return (
       <Button {...props} variant="secondary" disabled>
-        {formatDate(borrow.returning.returned_at)}
+        {formatDate(clientBorrow.returning.returned_at)}
       </Button>
     )
 
-  if (!confirm) {
+  if (!confirmTimeout) {
     return (
       <Button onClick={onUnlock} {...props}>
         <Lock />
@@ -41,9 +66,10 @@ export const BtnReturnBook: React.FC<
       </Button>
     )
   }
+
   return (
-    <Button onClick={onClick} {...props} variant="default">
-      <Unlock />
+    <Button onClick={onClick} {...props} variant="default" disabled={isPending}>
+      {isPending ? <Loader className="animate-spin" /> : <Unlock />}
       Confirm
     </Button>
   )
