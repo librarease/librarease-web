@@ -19,7 +19,8 @@ import { cn, formatDate } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '../ui/calendar'
 import { Input } from '../ui/input'
-import { useCallback } from 'react'
+import { useCallback, useTransition } from 'react'
+import { actionUpdateBorrow } from '@/lib/actions/update-borrow'
 
 const FormSchema = z.object({
   id: z.string({
@@ -32,26 +33,35 @@ const FormSchema = z.object({
       returned_at: z.string(),
       fine: z.coerce.number().nonnegative(),
     })
-    .nullable(),
+    .optional(),
 })
 
-export const FormEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
-  borrow,
-}) => {
+export const FormEditBorrow: React.FC<{
+  borrow: BorrowDetail
+}> = ({ borrow }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: borrow,
   })
   const { toast } = useToast()
 
+  const [isPending, startTransition] = useTransition()
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    startTransition(async () => {
+      const res = await actionUpdateBorrow(data)
+      if ('error' in res) {
+        toast({
+          title: 'Failed to update borrow',
+          description: res.error,
+          variant: 'destructive',
+        })
+        return
+      }
+      toast({
+        title: 'Success',
+        description: 'Borrow updated successfully',
+      })
     })
   }
 
@@ -208,7 +218,7 @@ export const FormEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
         <Button type="reset" variant="ghost" onClick={onReset}>
           Reset
         </Button>
-        <Button type="submit" disabled={!form.formState.isDirty}>
+        <Button type="submit" disabled={!form.formState.isDirty || isPending}>
           Submit
         </Button>
       </form>

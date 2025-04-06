@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: SITE_NAME,
-  description: 'A simple library management system',
+  description: 'A simple and powerful library management system',
 }
 
 export default function RootLayout({

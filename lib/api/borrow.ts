@@ -38,6 +38,10 @@ type GetBorrowResponse = Promise<ResSingle<BorrowDetail>>
 export const getBorrow = async (query: GetBorrowQuery): GetBorrowResponse => {
   const url = new URL(`${BORROW_URL}/${query.id}`)
   const response = await fetch(url.toString())
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
   return response.json()
 }
 
@@ -70,6 +74,32 @@ export const returnBorrow = async (
   const response = await fetch(`${BORROW_URL}/${data.id}/return`, {
     ...init,
     method: 'POST',
+    body: JSON.stringify(data),
+    headers,
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}
+
+export type UpdateBorrowData = Pick<Borrow, 'id'> &
+  Partial<Pick<Borrow, 'borrowed_at' | 'due_at'>> & {
+    returning?: Pick<Return, 'returned_at' | 'fine'>
+  }
+
+export const updateBorrow = async (
+  data: UpdateBorrowData,
+  init?: RequestInit
+): GetBorrowResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${BORROW_URL}/${data.id}`, {
+    ...init,
+    method: 'PUT',
     body: JSON.stringify(data),
     headers,
   })

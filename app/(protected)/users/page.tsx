@@ -62,26 +62,28 @@ export default async function Users({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Users</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
+      <nav className="backdrop-blur-sm sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">Users</h1>
+        <div className="flex justify-between items-center">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link href="/" passHref legacyBehavior>
+                  <BreadcrumbLink>Home</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbPage>Users</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Button asChild>
-          <Link href="/users/new">Add User</Link>
-        </Button>
-      </div>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Users</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <Button asChild>
+            <Link href="/users/new">Add User</Link>
+          </Button>
+        </div>
+      </nav>
 
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}

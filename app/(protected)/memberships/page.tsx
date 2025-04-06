@@ -64,26 +64,28 @@ export default async function Memberships({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Memberships</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
+      <nav className="backdrop-blur-sm sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">Memberships</h1>
+        <div className="flex justify-between items-center">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link href="/" passHref legacyBehavior>
+                  <BreadcrumbLink>Home</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbPage>Memberships</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Button asChild>
-          <Link href="/memberships/new">New Membership</Link>
-        </Button>
-      </div>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Memberships</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <Button asChild>
+            <Link href="/memberships/new">New Membership</Link>
+          </Button>
+        </div>
+      </nav>
 
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}

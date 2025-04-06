@@ -37,39 +37,41 @@ export default async function SubscriptionDetailsPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">{subsRes.data.user.name}</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <Link href="/subscriptions" passHref legacyBehavior>
-                <BreadcrumbLink>Subscriptions</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{subsRes.data.user.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+      <nav className="backdrop-blur-sm sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">{subsRes.data.user.name}</h1>
+        <div className="flex justify-between items-center">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link href="/" passHref legacyBehavior>
+                  <BreadcrumbLink>Home</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <Link href="/subscriptions" passHref legacyBehavior>
+                  <BreadcrumbLink>Subscriptions</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{subsRes.data.user.name}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
-        <Badge
-          variant={
-            getSubscriptionStatus(subsRes.data) === 'active'
-              ? 'default'
-              : 'secondary'
-          }
-          className="uppercase h-8 min-w-24 justify-center"
-        >
-          {getSubscriptionStatus(subsRes.data)}
-        </Badge>
-      </div>
+          <Badge
+            variant={
+              getSubscriptionStatus(subsRes.data) === 'active'
+                ? 'default'
+                : 'secondary'
+            }
+            className="uppercase h-8 min-w-24 justify-center"
+          >
+            {getSubscriptionStatus(subsRes.data)}
+          </Badge>
+        </div>
+      </nav>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Carduser user={subsRes.data.user} />

@@ -76,26 +76,28 @@ export default async function Staffs({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Staffs</h1>
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/" passHref legacyBehavior>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
+      <nav className="backdrop-blur-sm sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">Staffs</h1>
+        <div className="flex justify-between items-center">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link href="/" passHref legacyBehavior>
+                  <BreadcrumbLink>Home</BreadcrumbLink>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbPage>Staffs</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Button asChild>
-          <Link href="/staffs/new">Assign a Staff</Link>
-        </Button>
-      </div>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Staffs</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <Button asChild>
+            <Link href="/staffs/new">Assign a Staff</Link>
+          </Button>
+        </div>
+      </nav>
 
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
