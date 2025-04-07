@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
   Form,
+  FormControl,
   // FormDescription,
   FormField,
   FormItem,
@@ -54,7 +55,9 @@ export const LibraryForm: React.FC<LibraryFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Name</FormLabel>
-                <Input placeholder="Name" {...field} />
+                <FormControl>
+                  <Input placeholder="Name" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -66,7 +69,9 @@ export const LibraryForm: React.FC<LibraryFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Logo</FormLabel>
-                <Input placeholder="Logo URL" {...field} />
+                <FormControl>
+                  <Input placeholder="Logo URL" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -78,7 +83,9 @@ export const LibraryForm: React.FC<LibraryFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col col-span-2">
                 <FormLabel>Address</FormLabel>
-                <Input placeholder="Address" {...field} />
+                <FormControl>
+                  <Input placeholder="Address" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -90,7 +97,9 @@ export const LibraryForm: React.FC<LibraryFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Email</FormLabel>
-                <Input placeholder="Email" type="email" {...field} />
+                <FormControl>
+                  <Input placeholder="Email" type="email" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -102,7 +111,9 @@ export const LibraryForm: React.FC<LibraryFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Phone</FormLabel>
-                <Input placeholder="Phone" type="tel" {...field} />
+                <FormControl>
+                  <Input placeholder="Phone" type="tel" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -114,7 +125,9 @@ export const LibraryForm: React.FC<LibraryFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col col-span-2">
                 <FormLabel>Description</FormLabel>
-                <Textarea placeholder="About" {...field} rows={3} />
+                <FormControl>
+                  <Textarea placeholder="About" {...field} rows={3} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

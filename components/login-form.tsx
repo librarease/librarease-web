@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useActionState, useEffect, useState } from 'react'
-import { login } from '@/lib/actions/login'
+import { loginAction } from '@/lib/actions/login'
 import Link from 'next/link'
 import { Checkbox } from './ui/checkbox'
 
@@ -29,7 +29,7 @@ export function LoginForm({
   }
 
   const [state, action, isPending] = useActionState(
-    login,
+    loginAction,
     initialState,
     props.from
   )

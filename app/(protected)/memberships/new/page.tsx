@@ -237,7 +237,9 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Name</FormLabel>
-                  <Input placeholder="Name" {...field} />
+                  <FormControl>
+                    <Input placeholder="Name" {...field} />
+                  </FormControl>
                   <FormDescription>
                     How would you like to name this membership?
                   </FormDescription>
@@ -252,7 +254,9 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Duration</FormLabel>
-                  <Input placeholder="Days" type="number" {...field} />
+                  <FormControl>
+                    <Input placeholder="Days" type="number" {...field} />
+                  </FormControl>
                   <FormDescription>How long is the membership?</FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -265,12 +269,14 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Borrow Period</FormLabel>
-                  <Input
-                    placeholder="Days"
-                    type="number"
-                    {...field}
-                    onChange={field.onChange}
-                  />
+                  <FormControl>
+                    <Input
+                      placeholder="Days"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormDescription>
                     How many days can a book be borrowed?
                   </FormDescription>
@@ -285,12 +291,14 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Active Limit</FormLabel>
-                  <Input
-                    placeholder="Days"
-                    type="number"
-                    {...field}
-                    onChange={field.onChange}
-                  />
+                  <FormControl>
+                    <Input
+                      placeholder="Days"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormDescription>
                     How many books can be borrowed at a time?
                   </FormDescription>
@@ -305,12 +313,14 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fine per Day</FormLabel>
-                  <Input
-                    placeholder="Pts"
-                    type="number"
-                    {...field}
-                    onChange={field.onChange}
-                  />
+                  <FormControl>
+                    <Input
+                      placeholder="Pts"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormDescription>
                     How much is the fine per day?
                   </FormDescription>
@@ -325,12 +335,14 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Usage Limit</FormLabel>
-                  <Input
-                    placeholder="Times"
-                    type="number"
-                    {...field}
-                    onChange={field.onChange}
-                  />
+                  <FormControl>
+                    <Input
+                      placeholder="Times"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormDescription>
                     How many times can a membership be used?
                   </FormDescription>
@@ -345,12 +357,14 @@ export default function ComboboxForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Price</FormLabel>
-                  <Input
-                    placeholder="Pts"
-                    type="number"
-                    {...field}
-                    onChange={field.onChange}
-                  />
+                  <FormControl>
+                    <Input
+                      placeholder="Pts"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormDescription>
                     How much does the membership cost?
                   </FormDescription>

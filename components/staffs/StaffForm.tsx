@@ -268,7 +268,9 @@ export const StaffForm: React.FC<StaffFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Name</FormLabel>
-                <Input placeholder="Name" {...field} />
+                <FormControl>
+                  <Input placeholder="Name" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

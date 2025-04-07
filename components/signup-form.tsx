@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useActionState } from 'react'
-import { register } from '@/lib/actions/register'
+import { registerAction } from '@/lib/actions/register'
 import Link from 'next/link'
 
 const initialState = {
@@ -27,7 +27,7 @@ export function SignUpForm({
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
   const [state, action, isPending] = useActionState(
-    register,
+    registerAction,
     initialState,
     '/login'
   )

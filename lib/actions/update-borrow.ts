@@ -5,7 +5,7 @@ import { updateBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 import { redirect } from 'next/navigation'
 
-export async function actionUpdateBorrow(
+export async function updateBorrowAction(
   data: Parameters<typeof updateBorrow>[0]
 ) {
   const headers = await Verify({

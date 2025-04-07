@@ -4,17 +4,16 @@ import { Borrow } from '@/lib/types/borrow'
 import { useTransition, useState } from 'react'
 import { Button, ButtonProps } from '../ui/button'
 import { Lock, Unlock, Loader } from 'lucide-react'
-import { returnBorrowAction } from '@/lib/actions/return-borrow'
-import { formatDate } from '@/lib/utils'
+import { undoReturnAction } from '@/lib/actions/undo-return'
 import { toast } from '../hooks/use-toast'
 
-export const BtnReturnBook: React.FC<
+export const BtnUndoReturn: React.FC<
   ButtonProps & {
     borrow: Borrow
   }
 > = ({ borrow, ...props }) => {
   const [confirmTimeout, setConfirmTimeout] = useState<NodeJS.Timeout>()
-  const [clientBorrow, setClientBorrow] = useState<Borrow>(borrow)
+  const [, setClientBorrow] = useState<Borrow>(borrow)
   const [isPending, startTransition] = useTransition()
 
   const onUnlock = () => {
@@ -28,10 +27,10 @@ export const BtnReturnBook: React.FC<
     startTransition(async () => {
       clearTimeout(confirmTimeout)
       setConfirmTimeout(undefined)
-      const res = await returnBorrowAction(borrow.id)
+      const res = await undoReturnAction(borrow.id)
       if ('error' in res) {
         toast({
-          title: 'Failed to return book',
+          title: 'Failed to undo return book',
           description: res.error,
           variant: 'destructive',
         })
@@ -40,38 +39,34 @@ export const BtnReturnBook: React.FC<
       // optimistic update
       setClientBorrow((prev) => ({
         ...prev,
-        returning: {
-          returned_at: new Date().toISOString(),
-        } as Borrow['returning'],
+        returning: undefined,
       }))
       toast({
         title: 'Success',
-        description: 'Book returned successfully',
+        description: 'Borrow return undone successfully',
         variant: 'default',
       })
     })
   }
 
-  if (clientBorrow.returning)
-    return (
-      <Button {...props} variant="secondary" disabled>
-        {formatDate(clientBorrow.returning.returned_at)}
-      </Button>
-    )
-
   if (!confirmTimeout) {
     return (
       <Button onClick={onUnlock} {...props}>
         <Lock />
-        Return
+        Undo Return
       </Button>
     )
   }
 
   return (
-    <Button onClick={onClick} {...props} variant="default" disabled={isPending}>
+    <Button
+      onClick={onClick}
+      {...props}
+      variant="destructive"
+      disabled={isPending}
+    >
       {isPending ? <Loader className="animate-spin" /> : <Unlock />}
-      Click again to return book
+      Click again to confirm
     </Button>
   )
 }

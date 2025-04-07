@@ -169,9 +169,6 @@ export const BookForm: React.FC<BookFormProps> = ({
                     </Command>
                   </PopoverContent>
                 </Popover>
-                {/* <FormDescription>
-                    This is the language that will be used in the dashboard.
-                  </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -183,15 +180,13 @@ export const BookForm: React.FC<BookFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Title</FormLabel>
-                <Input
-                  placeholder="Title"
-                  // type="number"
-                  {...field}
-                  onChange={field.onChange}
-                />
-                {/* <FormDescription>
-                    How much is the fine per day?
-                  </FormDescription> */}
+                <FormControl>
+                  <Input
+                    placeholder="Title"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -203,15 +198,13 @@ export const BookForm: React.FC<BookFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Author</FormLabel>
-                <Input
-                  placeholder="Name"
-                  // type="number"
-                  {...field}
-                  onChange={field.onChange}
-                />
-                {/* <FormDescription>
-                    How much is the fine per day?
-                  </FormDescription> */}
+                <FormControl>
+                  <Input
+                    placeholder="Name"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -223,15 +216,13 @@ export const BookForm: React.FC<BookFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Year</FormLabel>
-                <Input
-                  placeholder="Year"
-                  // type="number"
-                  {...field}
-                  onChange={field.onChange}
-                />
-                {/* <FormDescription>
-                    How much is the fine per day?
-                  </FormDescription> */}
+                <FormControl>
+                  <Input
+                    placeholder="Year"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -243,15 +234,13 @@ export const BookForm: React.FC<BookFormProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Code</FormLabel>
-                <Input
-                  placeholder="Code"
-                  // type="number"
-                  {...field}
-                  onChange={field.onChange}
-                />
-                {/* <FormDescription>
-                    How much is the fine per day?
-                  </FormDescription> */}
+                <FormControl>
+                  <Input
+                    placeholder="Code"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

@@ -18,7 +18,7 @@ type formState = {
   from: string
 }
 
-export async function login(
+export async function loginAction(
   formState: formState,
   formData: FormData
 ): Promise<formState> {

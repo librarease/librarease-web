@@ -30,6 +30,7 @@ import clsx from 'clsx'
 import { differenceInDays } from 'date-fns'
 import { Borrow } from '@/lib/types/borrow'
 import { Button } from '@/components/ui/button'
+import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
 
 export default async function BorrowDetailsPage({
   params,
@@ -314,8 +315,14 @@ export default async function BorrowDetailsPage({
         </Card>
       )}
 
-      <div className="bottom-0 sticky py-2 flex flex-col md:flex-row gap-4 basis-1/2">
-        {!borrowRes.data.returning && (
+      <div className="bottom-0 sticky py-2 flex flex-col md:flex-row gap-2 md:gap-4 basis-1/2">
+        {borrowRes.data.returning ? (
+          <BtnUndoReturn
+            variant="outline"
+            className="w-full"
+            borrow={borrowRes.data}
+          />
+        ) : (
           <BtnReturnBook
             variant="outline"
             className="w-full"

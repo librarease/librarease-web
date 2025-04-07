@@ -20,7 +20,7 @@ import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '../ui/calendar'
 import { Input } from '../ui/input'
 import { useCallback, useTransition } from 'react'
-import { actionUpdateBorrow } from '@/lib/actions/update-borrow'
+import { updateBorrowAction } from '@/lib/actions/update-borrow'
 
 const FormSchema = z.object({
   id: z.string({
@@ -49,7 +49,7 @@ export const FormEditBorrow: React.FC<{
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     startTransition(async () => {
-      const res = await actionUpdateBorrow(data)
+      const res = await updateBorrowAction(data)
       if ('error' in res) {
         toast({
           title: 'Failed to update borrow',
@@ -203,12 +203,14 @@ export const FormEditBorrow: React.FC<{
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fine</FormLabel>
-                  <Input
-                    placeholder="Pts"
-                    type="number"
-                    {...field}
-                    onChange={field.onChange}
-                  />
+                  <FormControl>
+                    <Input
+                      placeholder="Pts"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

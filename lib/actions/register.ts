@@ -18,7 +18,7 @@ type formState = {
   password: string
 }
 
-export async function register(
+export async function registerAction(
   _: formState,
   formData: FormData
 ): Promise<formState> {
