@@ -9,11 +9,27 @@ import {
 import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { Badge } from '@/components/ui/badge'
-import { getSubscriptionStatus } from '@/lib/utils'
-import { Carduser } from '@/components/users/CardUser'
-import { Cardsubscription } from '@/components/subscriptions/CardSubscription'
-import { CardMembership } from '@/components/memberships/CardMembership'
+import {
+  formatDate,
+  getSubscriptionStatus,
+  isSubscriptionActive,
+} from '@/lib/utils'
 import { getSubscription } from '@/lib/api/subscription'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Book,
+  Calendar,
+  CalendarClock,
+  CircleDollarSign,
+  Clock,
+  CreditCard,
+  Gavel,
+  Library,
+  Mail,
+  Tally5,
+  User,
+} from 'lucide-react'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 export default async function SubscriptionDetailsPage({
   params,
@@ -73,10 +89,108 @@ export default async function SubscriptionDetailsPage({
         </div>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Carduser user={subsRes.data.user} />
-        <Cardsubscription subscription={subsRes.data} />
-        <CardMembership membership={subsRes.data.membership} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="row-span-2">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Subscription Details</CardTitle>
+              <Badge
+                variant={
+                  isSubscriptionActive(subsRes.data) ? 'default' : 'secondary'
+                }
+                className="capitalize"
+              >
+                {getSubscriptionStatus(subsRes.data)}
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="grid gap-2 grid-cols-[max-content_1fr] items-center">
+            <CalendarClock className="size-4" />
+            <p>
+              <span className="font-medium">Borrow Period:&nbsp;</span>
+              {subsRes.data.loan_period} D
+            </p>
+            <Tally5 className="size-4" />
+            <p>
+              <span className="font-medium">Usage Limit:&nbsp;</span>
+              {subsRes.data.usage_limit ?? '-'}
+            </p>
+            <Book className="size-4" />
+            <p>
+              <span className="font-medium">Active Borrow Limit:&nbsp;</span>
+              {subsRes.data.active_loan_limit ?? '-'}
+            </p>
+            <Gavel className="size-4" />
+            <p>
+              <span className="font-medium">Fine per Day:&nbsp;</span>
+              {subsRes.data.fine_per_day ?? '-'} Pts
+            </p>
+            <Clock className="size-4" />
+            <p>
+              <span className="font-medium">Expires:&nbsp;</span>
+              {formatDate(subsRes.data.expires_at)} (
+              {formatDistanceToNowStrict(new Date(subsRes.data.expires_at), {
+                addSuffix: true,
+              })}
+              )
+            </p>
+            <Calendar className="size-4" />
+            <p>
+              <span className="font-medium">Purchased At:&nbsp;</span>
+              {formatDate(subsRes.data.created_at)}
+            </p>
+            <CircleDollarSign className="size-4 text-muted-foreground" />
+            <p>
+              <span>Amount:&nbsp;</span>
+              {subsRes.data.amount ?? '-'} Pts
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>User Information</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2 grid-cols-[max-content_1fr] items-center">
+            <User className="size-4" />
+            <p>
+              <span className="font-medium">Name:&nbsp;</span>
+              {/* <Link href={`/users/${subsRes.data.user.id}`}> */}
+              {subsRes.data.user.name}
+              {/* </Link> */}
+            </p>
+            <Mail className="size-4" />
+            <p>
+              <span className="font-medium">Email:&nbsp;</span>
+              {subsRes.data.user.email ?? '-'}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Membership</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2 grid-cols-[max-content_1fr] items-center">
+            <CreditCard className="size-4" />
+            <p>
+              <span className="font-medium">Name:&nbsp;</span>
+              {/* <Link href={`/users/${subsRes.data.user.id}`}> */}
+              {subsRes.data.membership.name}
+              {/* </Link> */}
+            </p>
+            <Library className="size-4" />
+            <p>
+              <span className="font-medium">Library:&nbsp;</span>
+              <Link
+                className="link"
+                href={`/libraries/${subsRes.data.membership.library.id}`}
+              >
+                {subsRes.data.membership.library.name}
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
