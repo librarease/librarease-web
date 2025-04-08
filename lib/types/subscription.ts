@@ -16,6 +16,8 @@ export type Subscription = WithCommon<{
 }>
 
 export type SubscriptionDetail = Omit<Subscription, 'user' | 'membership'> & {
+  usage_count?: number
+  active_loan_count?: number
   user: User
   membership: Membership
 }

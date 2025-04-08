@@ -9,11 +9,7 @@ import {
 import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { Badge } from '@/components/ui/badge'
-import {
-  formatDate,
-  getSubscriptionStatus,
-  isSubscriptionActive,
-} from '@/lib/utils'
+import { formatDate, getSubscriptionStatus } from '@/lib/utils'
 import { getSubscription } from '@/lib/api/subscription'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -30,6 +26,7 @@ import {
   User,
 } from 'lucide-react'
 import { formatDistanceToNowStrict } from 'date-fns'
+import { Progress } from '@/components/ui/progress'
 
 export default async function SubscriptionDetailsPage({
   params,
@@ -92,17 +89,7 @@ export default async function SubscriptionDetailsPage({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="row-span-2">
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Subscription Details</CardTitle>
-              <Badge
-                variant={
-                  isSubscriptionActive(subsRes.data) ? 'default' : 'secondary'
-                }
-                className="capitalize"
-              >
-                {getSubscriptionStatus(subsRes.data)}
-              </Badge>
-            </div>
+            <CardTitle>Subscription Details</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2 grid-cols-[max-content_1fr] items-center">
             <CalendarClock className="size-4" />
@@ -147,7 +134,7 @@ export default async function SubscriptionDetailsPage({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="order-first md:order-none">
           <CardHeader>
             <CardTitle>User Information</CardTitle>
           </CardHeader>
@@ -189,6 +176,49 @@ export default async function SubscriptionDetailsPage({
                 {subsRes.data.membership.library.name}
               </Link>
             </p>
+          </CardContent>
+        </Card>
+
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle>Usage</CardTitle>
+          </CardHeader>
+          <CardContent className="grid md:grid-cols-2 gap-4">
+            {subsRes.data.active_loan_limit && (
+              <div>
+                <div className="flex justify-between">
+                  <span>Active Borrows</span>
+                  <span>
+                    {subsRes.data.active_loan_count ?? 0} /{' '}
+                    {subsRes.data.active_loan_limit}
+                  </span>
+                </div>
+                <Progress
+                  value={
+                    ((subsRes.data.active_loan_count ?? 0) /
+                      subsRes.data.active_loan_limit) *
+                    100
+                  }
+                />
+              </div>
+            )}
+            {subsRes.data.usage_limit && (
+              <div>
+                <div className="flex justify-between">
+                  <span>Borrowed Books</span>
+                  <span>
+                    {subsRes.data.usage_count ?? 0} / {subsRes.data.usage_limit}
+                  </span>
+                </div>
+                <Progress
+                  value={
+                    ((subsRes.data.usage_count ?? 0) /
+                      subsRes.data.usage_limit) *
+                    100
+                  }
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

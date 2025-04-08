@@ -212,15 +212,6 @@ export default async function BorrowDetailsPage({
         </Card>
       </div>
 
-      {/* <Card>
-        <CardHeader>
-          <CardTitle>Progress</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Progress value={progressPercent} />
-        </CardContent>
-      </Card> */}
-
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
