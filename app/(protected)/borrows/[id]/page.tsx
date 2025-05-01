@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Verify } from '@/lib/firebase/firebase'
+import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import { getBorrow, getListBorrows } from '@/lib/api/borrow'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -31,6 +31,7 @@ import { differenceInDays } from 'date-fns'
 import { Borrow } from '@/lib/types/borrow'
 import { Button } from '@/components/ui/button'
 import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
+import { redirect, RedirectType } from 'next/navigation'
 
 export default async function BorrowDetailsPage({
   params,
@@ -39,7 +40,9 @@ export default async function BorrowDetailsPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/borrows/${id}` })
+  const from = `/borrows/${id}`
+
+  const headers = await Verify({ from })
 
   const [borrowRes] = await Promise.all([getBorrow({ id })])
 
@@ -49,11 +52,10 @@ export default async function BorrowDetailsPage({
 
   const isDue = isBorrowDue(borrowRes.data)
 
-  // const progressPercent = getBorrowProgressPercent(borrowRes.data)
-
-  const headers = await Verify({
-    from: '/borrows',
-  })
+  const claim = await IsLoggedIn()
+  if (!claim || !claim.librarease) {
+    redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
+  }
 
   let prevBorrows: Borrow[] = []
   const [prevBorrowsRes] = await Promise.all([
@@ -74,6 +76,12 @@ export default async function BorrowDetailsPage({
   } else {
     prevBorrows = prevBorrowsRes.data
   }
+
+  const isSuperAdmin = claim.librarease.role === 'SUPERADMIN'
+  const isAdmin = claim.librarease.role === 'ADMIN'
+  const isStaff = claim.librarease.admin_libs
+    .concat(claim.librarease.staff_libs)
+    .includes(borrowRes.data.subscription.membership.library_id)
 
   return (
     <>
@@ -306,27 +314,32 @@ export default async function BorrowDetailsPage({
         </Card>
       )}
 
-      <div className="bottom-0 sticky py-2 flex flex-col md:flex-row gap-2 md:gap-4 basis-1/2">
-        {borrowRes.data.returning ? (
-          <BtnUndoReturn
-            variant="outline"
-            className="w-full"
-            borrow={borrowRes.data}
-          />
-        ) : (
-          <BtnReturnBook
-            variant="outline"
-            className="w-full"
-            borrow={borrowRes.data}
-          />
-        )}
-        <Button asChild>
-          <Link href={`/borrows/${borrowRes.data.id}/edit`} className="w-full">
-            <Pen />
-            Edit
-          </Link>
-        </Button>
-      </div>
+      {(isSuperAdmin || isAdmin || isStaff) && (
+        <div className="bottom-0 sticky py-2 flex flex-col md:flex-row gap-2 md:gap-4 basis-1/2">
+          {borrowRes.data.returning ? (
+            <BtnUndoReturn
+              variant="outline"
+              className="w-full"
+              borrow={borrowRes.data}
+            />
+          ) : (
+            <BtnReturnBook
+              variant="outline"
+              className="w-full"
+              borrow={borrowRes.data}
+            />
+          )}
+          <Button asChild>
+            <Link
+              href={`/borrows/${borrowRes.data.id}/edit`}
+              className="w-full"
+            >
+              <Pen />
+              Edit
+            </Link>
+          </Button>
+        </div>
+      )}
     </>
   )
 }

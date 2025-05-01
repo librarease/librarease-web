@@ -55,7 +55,7 @@ export async function IsLoggedIn(): Promise<
   | (DecodedIdToken & {
       librarease: {
         id: string
-        role: string
+        role: 'USER' | 'ADMIN' | 'SUPERADMIN'
         admin_libs: string[]
         staff_libs: string[]
       }
@@ -76,7 +76,7 @@ export async function IsLoggedIn(): Promise<
     return {
       librarease: {
         id: '',
-        role: '',
+        role: 'USER',
         admin_libs: [],
         staff_libs: [],
       },
