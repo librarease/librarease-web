@@ -27,20 +27,7 @@ const menuItems = [
     href: '/subscriptions',
     level: 3,
   },
-  { title: 'Borrows', icon: BookCopy, href: '/borrows', level: 3 },
-  // {
-  //   title: 'My Memberships',
-  //   icon: CreditCard,
-  //   href: '/memberships/me',
-  //   level: 2,
-  // },
-  // {
-  //   title: 'My Subscriptions',
-  //   icon: ScrollText,
-  //   href: '/subscriptions/me',
-  //   level: 2,
-  // },
-  // { title: 'My Borrows', icon: BookCopy, href: '/borrows/me', level: 2 },
+  { title: 'Borrows', icon: BookCopy, href: '/borrows', level: 2 },
 ]
 
 async function logoutAction() {
