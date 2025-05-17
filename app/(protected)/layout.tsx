@@ -1,5 +1,27 @@
-export default function ProtectedLayout({
+import { NavUser } from '@/components/nav-user'
+import { IsLoggedIn } from '@/lib/firebase/firebase'
+
+export default async function ProtectedLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <div className="container mx-auto px-4 my-4">{children}</div>
+  const claim = await IsLoggedIn()
+  return (
+    <div className="container mx-auto px-4 my-4">
+      <nav className="flex items-center justify-between">
+        <div>LibrarEase</div>
+        {claim && (
+          <NavUser
+            user={{
+              id: claim.librarease.id,
+              avatar: 'https://github.com/agmmtoo.png',
+              email: claim.email ?? '',
+              name: claim.librarease.role,
+            }}
+          />
+        )}
+      </nav>
+
+      {children}
+    </div>
+  )
 }

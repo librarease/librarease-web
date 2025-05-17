@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import Landing from '@/components/landing'
-import { cookies } from 'next/headers'
+import { logoutAction } from '@/lib/actions/logout'
 
 const menuItems = [
   { title: 'Dashboard', icon: ChartSpline, href: '/dashboard', level: 3 },
@@ -29,13 +29,6 @@ const menuItems = [
   },
   { title: 'Borrows', icon: BookCopy, href: '/borrows', level: 2 },
 ]
-
-async function logoutAction() {
-  'use server'
-  const cookieStore = await cookies()
-  const sessionName = process.env.SESSION_COOKIE_NAME as string
-  cookieStore.delete(sessionName)
-}
 
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()
