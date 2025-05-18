@@ -8,7 +8,13 @@ import type { DecodedIdToken } from 'firebase-admin/auth'
  * is valid and returns the uid & internal client id headers
  * redirect to login page if the cookie is invalid
  */
-export async function Verify({ from }: { from: string }): Promise<Headers> {
+export async function Verify({
+  from,
+  forceRedirect = true,
+}: {
+  from: string
+  forceRedirect?: boolean
+}): Promise<Headers> {
   const cookieStore = await cookies()
   const sessionName = process.env.SESSION_COOKIE_NAME as string
   const session = cookieStore.get(sessionName)
@@ -40,7 +46,7 @@ export async function Verify({ from }: { from: string }): Promise<Headers> {
     }
   }
 
-  if (!headers.has('X-Uid') || !headers.has('X-Client-Id')) {
+  if (forceRedirect && (!headers.has('X-Uid') || !headers.has('X-Client-Id'))) {
     redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
   }
 

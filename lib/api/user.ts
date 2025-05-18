@@ -54,3 +54,26 @@ export const createUser = async (
   }
   return response.json()
 }
+
+type GetMeQuery = {
+  include_unread_notifications_count?: boolean
+}
+type GetMeResponse = Promise<
+  ResSingle<User & { unread_notifications_count: number }>
+>
+
+export const getMe = async (
+  query: GetMeQuery,
+  init?: RequestInit
+): GetMeResponse => {
+  const url = new URL(`${USERS_URL}/me`)
+  if (query.include_unread_notifications_count) {
+    url.searchParams.append('include', 'unread_notifications_count')
+  }
+  const response = await fetch(url.toString(), init)
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}

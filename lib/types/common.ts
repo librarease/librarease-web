@@ -2,6 +2,7 @@ export interface ResMeta {
   total: number
   skip: number
   limit: number
+  unread?: number
 }
 
 interface ResErr {

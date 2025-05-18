@@ -1,13 +1,8 @@
 'use client'
 
-import {
-  BellIcon,
-  CreditCardIcon,
-  LogOutIcon,
-  UserCircleIcon,
-} from 'lucide-react'
+import { BellIcon, LogOutIcon, UserCircleIcon } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,17 +16,17 @@ import { Button } from './ui/button'
 import { useEffect } from 'react'
 import { useToast } from './hooks/use-toast'
 import { Notification } from '@/lib/types/notification'
-import { streamNoti } from '@/lib/api/noti'
+import { streamNotification } from '@/lib/api/notification'
 import { logoutAction } from '@/lib/actions/logout'
+import { User } from '@/lib/types/user'
+import { Badge } from './ui/badge'
+import Link from 'next/link'
 
 export function NavUser({
   user,
 }: {
-  user: {
-    id: string
-    name: string
-    email: string
-    avatar: string
+  user: User & {
+    unread_notifications_count: number
   }
 }) {
   const { toast } = useToast()
@@ -52,7 +47,7 @@ export function NavUser({
       })
     }
 
-    const cleanup = streamNoti(user.id, {
+    const cleanup = streamNotification(user.id, {
       onMessage: onMessage,
       onError: onError,
       onConnect: console.log,
@@ -62,11 +57,13 @@ export function NavUser({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="w-8 h-8">
-            <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback className="rounded-lg">AO</AvatarFallback>
+            {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
+            <AvatarFallback className="rounded-lg">
+              {user.name.slice(0, 2)}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -80,8 +77,9 @@ export function NavUser({
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-lg">AO</AvatarFallback>
+              <AvatarFallback className="rounded-lg">
+                {user.name.slice(0, 2)}
+              </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user.name}</span>
@@ -97,17 +95,20 @@ export function NavUser({
             <UserCircleIcon />
             Account
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCardIcon />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BellIcon />
-            Notifications
+          <DropdownMenuItem asChild>
+            <Link href="/notifications">
+              <BellIcon />
+              Notifications
+              {user.unread_notifications_count > 0 && (
+                <Badge className="" variant="outline">
+                  {user.unread_notifications_count}
+                </Badge>
+              )}
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logoutAction}>
+        <DropdownMenuItem onClick={logoutAction} variant="destructive">
           <LogOutIcon />
           Log out
         </DropdownMenuItem>
