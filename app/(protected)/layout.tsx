@@ -6,23 +6,17 @@ import Link from 'next/link'
 export default async function ProtectedLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // const claim = await IsLoggedIn()
-
   const headers = await Verify({ from: '', forceRedirect: false })
 
-  const res = await getMe(
-    {
-      include_unread_notifications_count: true,
-    },
-    {
-      headers,
-    }
+  const me = await getMe(
+    { include_unread_notifications_count: true },
+    { headers }
   )
-
-  if ('error' in res) {
-    console.log('Error getting user', res.error)
-    return <div>Something went wrong</div>
-  }
+    .then((res) => ('error' in res ? null : res.data))
+    .catch((e) => {
+      console.warn('Error fetching me:', e)
+      return null
+    })
 
   return (
     <div className="container mx-auto px-4 my-4">
@@ -30,7 +24,7 @@ export default async function ProtectedLayout({
         <Link href="/" className="uppercase font-semibold tracking-wider">
           Librarease
         </Link>
-        {res.data && <NavUser user={res.data} />}
+        {me && <NavUser user={me} />}
       </nav>
 
       {children}

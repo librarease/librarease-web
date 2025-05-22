@@ -16,11 +16,12 @@ import {
 } from '@/components/ui/pagination'
 
 import { Verify } from '@/lib/firebase/firebase'
-import { BellOff } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { getListNotifications } from '@/lib/api/notification'
+import { readAllNotificationsAction } from '@/lib/actions/notification'
 
 export const metadata: Metadata = {
   title: `Notifications · ${SITE_NAME}`,
@@ -80,9 +81,13 @@ export default async function Notifications({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button>
-            <BellOff className="mr-2 size-4" />
-            Mark All as Read
+          <Button
+            onClick={readAllNotificationsAction}
+            disabled={!res.meta.unread}
+            variant="outline"
+          >
+            <CheckCircle className="mr-2 size-4" />
+            Mark all as read
           </Button>
         </div>
       </nav>
@@ -101,7 +106,6 @@ export default async function Notifications({
           </li>
         ))}
       </ul>
-
       <Pagination>
         <PaginationContent>
           <PaginationItem>
