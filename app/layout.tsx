@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: SITE_NAME,
   description: 'A simple and powerful library management system',
+  metadataBase: new URL(process.env.APP_URL!),
 }
 
 export default function RootLayout({
