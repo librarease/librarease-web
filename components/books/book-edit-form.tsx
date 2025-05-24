@@ -4,9 +4,7 @@ import { BookDetail } from '@/lib/types/book'
 // import { useRouter } from 'next/router'
 import { BookForm, BookFormValues } from './BookForm'
 
-export const BookEditForm: React.FC<{ book: BookDetail; token: string }> = ({
-  book,
-}) => {
+export const BookEditForm: React.FC<{ book: BookDetail }> = ({ book }) => {
   const initialData = {
     title: book.title,
     author: book.author,

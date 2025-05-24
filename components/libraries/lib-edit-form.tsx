@@ -6,9 +6,8 @@ import { updateLibrary } from '@/lib/api/library'
 import { toast } from '@/components/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 
-export const LibraryEditForm: React.FC<{ library: Library; token: string }> = ({
+export const LibraryEditForm: React.FC<{ library: Library }> = ({
   library,
-  token,
 }) => {
   const initialData = {
     name: library.name,
@@ -22,11 +21,7 @@ export const LibraryEditForm: React.FC<{ library: Library; token: string }> = ({
   const router = useRouter()
 
   function onSubmit(data: LibraryFormValues) {
-    updateLibrary(library.id, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    updateLibrary(library.id, data)
       .then(console.log)
       .then(() => {
         toast({

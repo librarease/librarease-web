@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { getStaff } from '@/lib/api/staff'
 import { Verify } from '@/lib/firebase/firebase'
-import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 export default async function EditStaffPage({
@@ -27,10 +26,6 @@ export default async function EditStaffPage({
   }
 
   await Verify({ from: `/staffs/${id}/edit` })
-
-  const cookieStore = await cookies()
-  const sessionName = process.env.SESSION_COOKIE_NAME as string
-  const session = cookieStore.get(sessionName)
 
   return (
     <div className="grid grid-rows-2">
@@ -56,7 +51,7 @@ export default async function EditStaffPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <StaffEditForm staff={staffRes.data} token={session?.value as string} />
+      <StaffEditForm staff={staffRes.data} />
     </div>
   )
 }

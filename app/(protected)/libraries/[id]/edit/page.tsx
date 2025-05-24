@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { getLibrary } from '@/lib/api/library'
 import { Verify } from '@/lib/firebase/firebase'
-import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 export default async function EditPage({
@@ -27,10 +26,6 @@ export default async function EditPage({
     console.log({ libRes })
     return <div>{JSON.stringify(libRes.message)}</div>
   }
-
-  const cookieStore = await cookies()
-  const sessionName = process.env.SESSION_COOKIE_NAME as string
-  const session = cookieStore.get(sessionName)
 
   return (
     <div>
@@ -56,7 +51,7 @@ export default async function EditPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <LibraryEditForm library={libRes.data} token={session?.value as string} />
+      <LibraryEditForm library={libRes.data} />
     </div>
   )
 }

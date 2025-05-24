@@ -12,15 +12,11 @@ const initialData: StaffFormValues = {
   user_id: '',
 }
 
-export const StaffCreateForm: React.FC<{ token: string }> = ({ token }) => {
+export const StaffCreateForm: React.FC = () => {
   const router = useRouter()
 
   function onSubmit(data: StaffFormValues) {
-    createStaff(data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    createStaff(data)
       .then(console.log)
       .then(() => {
         toast({

@@ -9,7 +9,6 @@ import {
 import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBook } from '@/lib/api/book'
-import { cookies } from 'next/headers'
 import { BookEditForm } from '@/components/books/book-edit-form'
 
 export default async function EditBookPage({
@@ -27,10 +26,6 @@ export default async function EditBookPage({
     console.log({ libRes: bookRes })
     return <div>{JSON.stringify(bookRes.message)}</div>
   }
-
-  const cookieStore = await cookies()
-  const sessionName = process.env.SESSION_COOKIE_NAME as string
-  const session = cookieStore.get(sessionName)
 
   return (
     <div className="space-y-4">
@@ -54,7 +49,7 @@ export default async function EditBookPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <BookEditForm book={bookRes.data} token={session?.value as string} />
+      <BookEditForm book={bookRes.data} />
     </div>
   )
 }

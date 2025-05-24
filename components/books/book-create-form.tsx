@@ -14,7 +14,7 @@ const initialData: BookFormValues = {
   library_id: '',
 }
 
-export const BookCreateForm: React.FC<{ token: string }> = () => {
+export const BookCreateForm: React.FC = () => {
   const router = useRouter()
 
   function onSubmit(data: BookFormValues) {

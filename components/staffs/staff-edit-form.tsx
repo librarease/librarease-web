@@ -6,10 +6,7 @@ import { toast } from '../hooks/use-toast'
 import { updateStaff } from '@/lib/api/staff'
 import { Staff } from '@/lib/types/staff'
 
-export const StaffEditForm: React.FC<{ token: string; staff: Staff }> = ({
-  staff,
-  token,
-}) => {
+export const StaffEditForm: React.FC<{ staff: Staff }> = ({ staff }) => {
   const initialData = {
     name: staff.name,
     library_id: staff.library_id,
@@ -20,11 +17,7 @@ export const StaffEditForm: React.FC<{ token: string; staff: Staff }> = ({
   const router = useRouter()
 
   function onSubmit(data: StaffFormValues) {
-    updateStaff(staff.id, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    updateStaff(staff.id, data)
       .then(console.log)
       .then(() => {
         toast({

@@ -32,7 +32,7 @@ export default function NewBook() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <BookCreateForm token="" />
+      <BookCreateForm />
     </div>
   )
 }

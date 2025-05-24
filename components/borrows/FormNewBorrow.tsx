@@ -26,7 +26,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getListUsers } from '@/lib/api/user'
 import { User } from '@/lib/types/user'
 import { Book } from '@/lib/types/book'
@@ -58,15 +58,8 @@ const FormSchema = z.object({
   }),
 })
 
-// pass token from page since session cookie is http only
-export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
+export const FormNewBorrow: React.FC = () => {
   const router = useRouter()
-
-  const headers = useMemo(() => {
-    const h = new Headers()
-    h.set('Authorization', `Bearer ${token}`)
-    return h
-  }, [token])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -144,17 +137,12 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
   const selectedUser = form.watch('user_id')
 
   useEffect(() => {
-    getListSubs(
-      {
-        limit: 20,
-        user_id: selectedUser,
-        membership_name: subQ,
-        is_active: true,
-      },
-      {
-        headers,
-      }
-    ).then((res) => {
+    getListSubs({
+      limit: 20,
+      user_id: selectedUser,
+      membership_name: subQ,
+      is_active: true,
+    }).then((res) => {
       if ('error' in res) {
         toast({
           title: 'Error',
@@ -164,21 +152,16 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
       }
       setSubs(res.data)
     })
-  }, [subQ, selectedUser, headers])
+  }, [subQ, selectedUser])
 
   const [staffQ, setStaffQ] = useState('')
   const [staffs, setStaffs] = useState<Staff[]>([])
 
   useEffect(() => {
-    getListStaffs(
-      {
-        limit: 20,
-        name: staffQ,
-      },
-      {
-        headers,
-      }
-    ).then((res) => {
+    getListStaffs({
+      limit: 20,
+      name: staffQ,
+    }).then((res) => {
       if ('error' in res) {
         toast({
           title: 'Error',
@@ -188,7 +171,7 @@ export const FormNewBorrow: React.FC<{ token: string }> = ({ token }) => {
       }
       setStaffs(res.data)
     })
-  }, [staffQ, headers])
+  }, [staffQ])
 
   return (
     <div className="grid place-items-center">

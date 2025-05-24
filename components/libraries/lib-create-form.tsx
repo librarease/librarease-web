@@ -14,15 +14,11 @@ const initialData: LibraryFormValues = {
   description: '',
 }
 
-export const LibraryCreateForm: React.FC<{ token: string }> = ({ token }) => {
+export const LibraryCreateForm: React.FC = () => {
   const router = useRouter()
 
   function onSubmit(data: LibraryFormValues) {
-    createLibrary(data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    createLibrary(data)
       .then(console.log)
       .then(() => {
         toast({

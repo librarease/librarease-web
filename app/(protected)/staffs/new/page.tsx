@@ -7,17 +7,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Verify } from '@/lib/firebase/firebase'
-import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 export default async function CreateStaffPage() {
-  await Verify({ from: '/staffs/new' })
-
-  const cookieStore = await cookies()
-  const sessionName = process.env.SESSION_COOKIE_NAME as string
-  const session = cookieStore.get(sessionName)
-
   return (
     <div className="grid grid-rows-2">
       <h1 className="text-2xl font-semibold">Assign a Staff</h1>
@@ -42,7 +34,7 @@ export default async function CreateStaffPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <StaffCreateForm token={session?.value as string} />
+      <StaffCreateForm />
     </div>
   )
 }
