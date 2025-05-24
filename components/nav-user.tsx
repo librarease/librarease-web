@@ -40,11 +40,7 @@ export function NavUser({
       })
     }
     function onError(event: Event) {
-      toast({
-        title: 'Error',
-        description: JSON.stringify(event),
-        variant: 'destructive',
-      })
+      console.warn('Error in notification stream:', event)
     }
 
     const cleanup = streamNotification(user.id, {
