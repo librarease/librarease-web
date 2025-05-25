@@ -3,6 +3,11 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   output: 'standalone',
 
+  experimental: {
+    // for event source stream
+    proxyTimeout: 0,
+  },
+
   /* config options here */
   env: {
     API_URL: process.env.API_URL,
