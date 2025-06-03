@@ -34,9 +34,8 @@ const nextConfig: NextConfig = {
         search: '',
       },
       {
-        protocol: 'http',
-        hostname: '13.212.97.184',
-        port: '9000',
+        protocol: 'https',
+        hostname: 'assets.librarease.org',
         pathname: '/librarease/public/**',
         search: '',
       },
