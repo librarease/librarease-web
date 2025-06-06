@@ -40,7 +40,7 @@ export default async function Subscriptions({
   const library_id = sp?.library_id
 
   const headers = await Verify({
-    from: '/borrows',
+    from: '/subscriptions',
   })
 
   const res = await getListSubs(
