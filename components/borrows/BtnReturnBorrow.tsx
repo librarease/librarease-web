@@ -2,14 +2,14 @@
 
 import { Borrow } from '@/lib/types/borrow'
 import { useTransition, useState } from 'react'
-import { Button, ButtonProps } from '../ui/button'
+import { Button } from '../ui/button'
 import { Lock, Unlock, Loader } from 'lucide-react'
 import { returnBorrowAction } from '@/lib/actions/return-borrow'
 import { formatDate } from '@/lib/utils'
 import { toast } from '../hooks/use-toast'
 
 export const BtnReturnBook: React.FC<
-  ButtonProps & {
+  React.ComponentProps<typeof Button> & {
     borrow: Borrow
   }
 > = ({ borrow, ...props }) => {

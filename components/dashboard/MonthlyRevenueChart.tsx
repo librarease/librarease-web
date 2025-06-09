@@ -72,7 +72,7 @@ export function MonthlyRevenueChart({ data }: { data: Analysis['revenue'] }) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={formatDate}
+              tickFormatter={(value) => formatDate(value)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>

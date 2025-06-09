@@ -2,13 +2,13 @@
 
 import { Borrow } from '@/lib/types/borrow'
 import { useTransition, useState } from 'react'
-import { Button, ButtonProps } from '../ui/button'
+import { Button } from '../ui/button'
 import { Lock, Unlock, Loader } from 'lucide-react'
 import { undoReturnAction } from '@/lib/actions/undo-return'
 import { toast } from '../hooks/use-toast'
 
 export const BtnUndoReturn: React.FC<
-  ButtonProps & {
+  React.ComponentProps<typeof Button> & {
     borrow: Borrow
   }
 > = ({ borrow, ...props }) => {

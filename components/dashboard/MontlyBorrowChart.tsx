@@ -68,7 +68,7 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={formatDate}
+              tickFormatter={(value) => formatDate(value)}
             />
             <ChartTooltip
               cursor={false}
