@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   Form,
   FormControl,
@@ -28,7 +28,7 @@ type LibraryFormProps = {
 }
 
 const FormSchema = z.object({
-  name: z.string().nonempty({ message: 'Name is required' }),
+  name: z.string().nonempty({ error: 'Name is required' }),
   logo: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),

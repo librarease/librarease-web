@@ -7,11 +7,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatDate = (date: string): string => {
-  const formatter = new Intl.DateTimeFormat('en-US', {
+export const formatDate = (
+  date: string,
+  options?: Intl.DateTimeFormatOptions
+): string => {
+  const formatter = new Intl.DateTimeFormat('mm', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    ...(options ?? {}),
   })
   return formatter.format(new Date(date))
 }

@@ -94,7 +94,7 @@ export function DateRangeSelector({
             </SelectContent>
           </Select>
           <Calendar
-            initialFocus
+            autoFocus
             mode="range"
             defaultMonth={date?.from}
             selected={date}

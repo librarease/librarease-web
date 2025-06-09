@@ -21,6 +21,7 @@ import { Calendar } from '../ui/calendar'
 import { Input } from '../ui/input'
 import { useCallback, useTransition } from 'react'
 import { updateBorrowAction } from '@/lib/actions/update-borrow'
+import { TimeInput } from '../ui/time-input'
 
 const FormSchema = z.object({
   id: z.string({
@@ -89,7 +90,10 @@ export const FormEditBorrow: React.FC<{
                       className={cn(!field.value && 'text-muted-foreground')}
                     >
                       {field.value ? (
-                        formatDate(field.value)
+                        formatDate(field.value, {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -106,7 +110,25 @@ export const FormEditBorrow: React.FC<{
                       date > new Date(form.getValues('due_at')) ||
                       date < new Date('1900-01-01')
                     }
-                    initialFocus
+                    autoFocus
+                  />
+                  <Input
+                    className="max-w-max mx-auto mb-2"
+                    type="time"
+                    value={(() => {
+                      const d = new Date(field.value)
+                      const hh = String(d.getHours()).padStart(2, '0')
+                      const mm = String(d.getMinutes()).padStart(2, '0')
+                      return `${hh}:${mm}`
+                    })()}
+                    onChange={(e) => {
+                      const [hh = 0, mm = 0] = e.target.value
+                        .split(':')
+                        .map(Number)
+                      const d = new Date(field.value)
+                      d.setHours(hh, mm)
+                      field.onChange(d.toISOString())
+                    }}
                   />
                 </PopoverContent>
               </Popover>
@@ -129,7 +151,10 @@ export const FormEditBorrow: React.FC<{
                       className={cn(!field.value && 'text-muted-foreground')}
                     >
                       {field.value ? (
-                        formatDate(field.value)
+                        formatDate(field.value, {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -145,8 +170,9 @@ export const FormEditBorrow: React.FC<{
                     disabled={(date) =>
                       date < new Date(form.getValues('borrowed_at'))
                     }
-                    initialFocus
+                    autoFocus
                   />
+                  <TimeInput value={field.value} onChange={field.onChange} />
                 </PopoverContent>
               </Popover>
 
@@ -172,7 +198,10 @@ export const FormEditBorrow: React.FC<{
                           )}
                         >
                           {field.value ? (
-                            formatDate(field.value)
+                            formatDate(field.value, {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -188,7 +217,11 @@ export const FormEditBorrow: React.FC<{
                         disabled={(date) =>
                           date < new Date(form.getValues('borrowed_at'))
                         }
-                        initialFocus
+                        autoFocus
+                      />
+                      <TimeInput
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </PopoverContent>
                   </Popover>

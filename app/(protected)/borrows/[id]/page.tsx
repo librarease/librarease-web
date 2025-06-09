@@ -3,7 +3,6 @@ import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import { getBorrow, getListBorrows } from '@/lib/api/borrow'
 import { Badge } from '@/components/ui/badge'
 import {
-  formatDate,
   getSubscriptionStatus,
   isBorrowDue,
   isSubscriptionActive,
@@ -32,6 +31,7 @@ import { Borrow } from '@/lib/types/borrow'
 import { Button } from '@/components/ui/button'
 import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
 import { redirect, RedirectType } from 'next/navigation'
+import { DateTime } from '@/components/common/DateTime'
 
 export default async function BorrowDetailsPage({
   params,
@@ -168,7 +168,10 @@ export default async function BorrowDetailsPage({
             <Calendar className="size-4 text-muted-foreground" />
             <p>
               <span className="font-medium">Borrowed:&nbsp;</span>
-              {formatDate(borrowRes.data.borrowed_at)}
+              <DateTime
+                dateTime={borrowRes.data.borrowed_at}
+                relative={!borrowRes.data.returning}
+              />
             </p>
             {isDue ? (
               <>
@@ -200,14 +203,17 @@ export default async function BorrowDetailsPage({
             )}
             <p className={clsx({ 'text-destructive': isDue })}>
               <span className="font-medium">Due:&nbsp;</span>
-              {formatDate(borrowRes.data.due_at)}
+              <DateTime
+                dateTime={borrowRes.data.due_at}
+                relative={!borrowRes.data.returning}
+              />
             </p>
             {borrowRes.data.returning ? (
               <>
                 <CalendarCheck className="size-4 text-muted-foreground" />
                 <p>
                   <span className="font-medium">Returned:&nbsp;</span>
-                  {formatDate(borrowRes.data.returning.returned_at)}
+                  <DateTime dateTime={borrowRes.data.returning.returned_at} />
                 </p>
                 <Gavel className="size-4 text-muted-foreground" />
                 <p>
@@ -250,7 +256,7 @@ export default async function BorrowDetailsPage({
           <Clock className="size-4" />
           <p>
             <span className="font-medium">Expires:&nbsp;</span>
-            {formatDate(borrowRes.data.subscription.expires_at)}
+            <DateTime dateTime={borrowRes.data.subscription.expires_at} />
           </p>
           <CalendarClock className="size-4" />
           <p>
@@ -275,7 +281,7 @@ export default async function BorrowDetailsPage({
           <Calendar className="size-4" />
           <p>
             <span className="font-medium">Purchased At:&nbsp;</span>
-            {formatDate(borrowRes.data.subscription.created_at)}
+            <DateTime dateTime={borrowRes.data.subscription.created_at} />
           </p>
         </CardContent>
       </Card>
@@ -315,7 +321,7 @@ export default async function BorrowDetailsPage({
       )}
 
       {(isSuperAdmin || isAdmin || isStaff) && (
-        <div className="bottom-0 sticky py-2 flex flex-col md:flex-row gap-2 md:gap-4 basis-1/2">
+        <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-2">
           {borrowRes.data.returning ? (
             <BtnUndoReturn
               variant="outline"
