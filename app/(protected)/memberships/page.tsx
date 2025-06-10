@@ -14,18 +14,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { getListMemberships } from '@/lib/api/membership'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
+import { ListCardMembership } from '@/components/memberships/ListCardMembership'
 
 export const metadata: Metadata = {
   title: `Memberships · ${SITE_NAME}`,
@@ -87,35 +80,11 @@ export default async function Memberships({
         </div>
       </nav>
 
-      <Table>
-        {/* <TableCaption>List of books available in the library.</TableCaption> */}
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Library</TableHead>
-            <TableHead>Duration</TableHead>
-            <TableHead>Borrow Limit</TableHead>
-            <TableHead>Borrow Period</TableHead>
-            <TableHead>Active Limit</TableHead>
-            <TableHead>Fine per Day</TableHead>
-            <TableHead>Price</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {res.data.map((m) => (
-            <TableRow key={m.id}>
-              <TableCell>{m.name}</TableCell>
-              <TableCell>{m.library.name}</TableCell>
-              <TableCell>{m.duration} D</TableCell>
-              <TableCell>{m.usage_limit ?? '-'}</TableCell>
-              <TableCell>{m.loan_period} D</TableCell>
-              <TableCell>{m.active_loan_limit}</TableCell>
-              <TableCell>{m.fine_per_day ?? '-'} Pts</TableCell>
-              <TableCell>{m.price ?? '-'}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {res.data.map((m) => (
+          <ListCardMembership key={m.id} membership={m} />
+        ))}
+      </div>
 
       <Pagination>
         <PaginationContent>
