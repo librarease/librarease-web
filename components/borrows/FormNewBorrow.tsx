@@ -96,6 +96,7 @@ export const FormNewBorrow: React.FC = () => {
 
   const [userQ, setUserQ] = useState('')
   const [users, setUsers] = useState<User[]>([])
+  const selectedUser = form.watch('user_id')
 
   useEffect(() => {
     getListUsers({
@@ -134,7 +135,6 @@ export const FormNewBorrow: React.FC = () => {
 
   const [subQ, setSubQ] = useState('')
   const [subs, setSubs] = useState<Subscription[]>([])
-  const selectedUser = form.watch('user_id')
 
   useEffect(() => {
     getListSubs({
