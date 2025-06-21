@@ -8,6 +8,7 @@ import {
   ScrollText,
   BookCopy,
   ChartSpline,
+  BellIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -17,10 +18,11 @@ import { logoutAction } from '@/lib/actions/logout'
 const menuItems = [
   { title: 'Dashboard', icon: ChartSpline, href: '/dashboard', level: 3 },
   { title: 'Libraries', icon: Library, href: '/libraries', level: 1 },
+  { title: 'Notifications', icon: BellIcon, href: '/notifications', level: 2 },
   { title: 'Books', icon: Book, href: '/books', level: 1 },
   { title: 'Users', icon: Users, href: '/users', level: 3 },
   { title: 'Staffs', icon: UserCog, href: '/staffs', level: 3 },
-  { title: 'Memberships', icon: CreditCard, href: '/memberships', level: 3 },
+  { title: 'Memberships', icon: CreditCard, href: '/memberships', level: 1 },
   {
     title: 'Subscriptions',
     icon: ScrollText,

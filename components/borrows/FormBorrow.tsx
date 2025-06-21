@@ -6,10 +6,11 @@ import {
   Search,
   UserIcon,
   BookIcon,
-  Scan,
   CheckCircle2,
   ChevronsUpDown,
   Check,
+  CreditCard,
+  UserCog,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,14 +23,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { z } from 'zod'
 import { User } from '@/lib/types/user'
@@ -70,6 +63,8 @@ import { Book } from '@/lib/types/book'
 import { getListBooks } from '@/lib/api/book'
 import { Staff } from '@/lib/types/staff'
 import { getListStaffs } from '@/lib/api/staff'
+import { Scanner } from '../common/Scanner'
+import Image from 'next/image'
 
 const FormSchema = z.object({
   user_id: z.string({
@@ -159,16 +154,23 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
   }, [userQ])
 
   // subscriptions
-  const [subQ, setSubQ] = useState('')
+  const [subQ, setSubQ] = useState<
+    Pick<Parameters<typeof getListSubs>[0], 'membership_name' | 'id'>
+  >({
+    membership_name: '',
+    id: '',
+  })
   const [subs, setSubs] = useState<Subscription[]>([])
-  const selectedSubscription = form.watch('subscription_id')
+  const selectedSubscription = subs.find(
+    (sub) => sub.id === form.watch('subscription_id')
+  )
 
   useEffect(() => {
     getListSubs({
       limit: 20,
       user_id: selectedUser,
-      membership_name: subQ,
       is_active: true,
+      ...subQ,
     }).then((res) => {
       if ('error' in res) {
         toast({
@@ -182,15 +184,20 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
   }, [subQ, selectedUser])
 
   // books
-
-  const [bookQ, setBookQ] = useState('')
+  const [bookQ, setBookQ] = useState<
+    Pick<Parameters<typeof getListBooks>[0], 'title' | 'id'>
+  >({
+    title: '',
+    id: '',
+  })
   const [books, setBooks] = useState<Book[]>([])
-  const selectedBook = form.watch('book_id')
+
+  const selectedBook = books.find((book) => book.id === form.watch('book_id'))
 
   useEffect(() => {
     getListBooks({
       limit: 20,
-      title: bookQ,
+      ...bookQ,
     }).then((res) => {
       if ('error' in res) {
         toast({
@@ -225,32 +232,6 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
     })
   }, [staffQ, props.id])
   const selectedStaff = form.watch('staff_id')
-
-  const [scannedSubscription, setScannedSubscription] =
-    useState<Subscription | null>(
-      subs.find((sub) => sub.id === selectedSubscription) || null
-    )
-  const [scannedBook, setScannedBook] = useState<Book | null>(
-    books.find((book) => book.id === selectedBook) || null
-  )
-  const [isScanning, setIsScanning] = useState<'subscription' | 'book' | null>(
-    null
-  )
-
-  const simulateQRScan = (type: 'subscription' | 'book') => {
-    setIsScanning(type)
-    // Simulate scanning delay
-    setTimeout(() => {
-      if (type === 'subscription') {
-        setScannedSubscription(
-          subs.find((sub) => sub.id === selectedSubscription) || null
-        )
-      } else {
-        setScannedBook(books[0])
-      }
-      setIsScanning(null)
-    }, 5000)
-  }
 
   return (
     <Form {...form}>
@@ -349,9 +330,6 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                           </Command>
                         </PopoverContent>
                       </Popover>
-                      {/* <FormDescription>
-                                      This is the language that will be used in the dashboard.
-                                    </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -368,7 +346,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                       selectedSubscription && 'text-primary'
                     )}
                   >
-                    <QrCode className="h-5 w-5" />
+                    <CreditCard className="h-5 w-5" />
                     Step 2: Select Subscription
                   </CardTitle>
                   <CardDescription>
@@ -380,43 +358,49 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                     control={form.control}
                     name="subscription_id"
                     render={({ field }) => (
-                      <FormItem className="space-y-2 max-h-72 overflow-y-scroll">
+                      <FormItem>
                         <Input
                           type="text"
-                          value={subQ}
-                          onChange={(e) => setSubQ(e.target.value)}
+                          value={subQ.membership_name}
+                          onChange={(e) =>
+                            setSubQ({ membership_name: e.target.value })
+                          }
                           placeholder="Search subscription..."
-                          className="mb-4 sticky top-0"
                         />
-                        {subs.map((sub) => (
-                          <div
-                            key={sub.id}
-                            className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                              selectedSubscription === sub.id
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                            onClick={() => field.onChange(sub.id)}
-                          >
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h4 className="font-medium">
-                                  {sub.membership.name}
-                                </h4>
-                                <p className="text-sm text-muted-foreground">
-                                  {sub.membership.library.name}
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  Active loans limit: {sub.active_loan_limit}
-                                </p>
+                        <div className="space-y-2 max-h-72 overflow-y-scroll">
+                          {subs.map((sub) => (
+                            <div
+                              key={sub.id}
+                              className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                                selectedSubscription?.id === sub.id
+                                  ? 'border-primary bg-primary/5'
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                              onClick={() => field.onChange(sub.id)}
+                            >
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <h4 className="font-medium">
+                                    {sub.membership.name}
+                                  </h4>
+                                  <p className="text-sm text-muted-foreground">
+                                    {sub.membership.library.name}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Active loans limit: {sub.active_loan_limit}
+                                  </p>
+                                </div>
+                                <Badge
+                                  variant="outline"
+                                  className="hidden md:block"
+                                >
+                                  Expires:&nbsp;
+                                  <DateTime dateTime={sub.expires_at} />
+                                </Badge>
                               </div>
-                              <Badge variant="outline">
-                                Expires:&nbsp;
-                                <DateTime dateTime={sub.expires_at} />
-                              </Badge>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -470,38 +454,50 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                     control={form.control}
                     name="book_id"
                     render={({ field }) => (
-                      <FormItem className="space-y-2 max-h-72 overflow-y-scroll">
+                      <FormItem className="">
                         <Input
                           type="text"
-                          value={bookQ}
-                          onChange={(e) => setBookQ(e.target.value)}
+                          value={bookQ.title}
+                          onChange={(e) => setBookQ({ title: e.target.value })}
                           placeholder="Search book title..."
-                          className="mb-4 sticky top-0"
                         />
-                        {books.map((book) => (
-                          <div
-                            key={book.id}
-                            className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                              selectedBook === book.id
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                            onClick={() => field.onChange(book.id)}
-                          >
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h4 className="font-medium">{book.title}</h4>
-                                <p className="text-sm text-muted-foreground">
-                                  {book.author}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  Code: {book.code}
-                                </p>
+                        <div className="space-y-2 max-h-72 overflow-y-scroll">
+                          {books.map((book) => (
+                            <div
+                              key={book.id}
+                              className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                                selectedBook?.id === book.id
+                                  ? 'border-primary bg-primary/5'
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                              onClick={() => field.onChange(book.id)}
+                            >
+                              <div className="flex gap-4">
+                                {book.cover && (
+                                  <div className="w-12 h-auto">
+                                    <Image
+                                      src={book.cover}
+                                      alt={book.title + "'s cover"}
+                                      width={50}
+                                      height={50}
+                                      className="rounded"
+                                    />
+                                  </div>
+                                )}
+                                <div>
+                                  <h4 className="font-medium">{book.title}</h4>
+                                  <p className="text-sm text-muted-foreground">
+                                    {book.author}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    Code: {book.code}
+                                  </p>
+                                </div>
+                                {/* <Badge variant="secondary">Available</Badge> */}
                               </div>
-                              <Badge variant="secondary">Available</Badge>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -519,7 +515,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                       selectedStaff && 'text-primary'
                     )}
                   >
-                    <UserIcon className="h-5 w-5" />
+                    <UserCog className="h-5 w-5" />
                     Step 4: Select Staff
                   </CardTitle>
                   <CardDescription>
@@ -587,9 +583,6 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                             </Command>
                           </PopoverContent>
                         </Popover>
-                        {/* <FormDescription>
-                                      This is the language that will be used in the dashboard.
-                                    </FormDescription> */}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -601,134 +594,79 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
 
           <TabsContent value="qr" className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <QrCode className="h-5 w-5" />
-                    Scan Subscription QR
-                  </CardTitle>
-                  <CardDescription>
-                    Scan the user&apos;s subscription QR code
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {!scannedSubscription ? (
-                    <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg">
-                      <Scan className="h-12 w-12 text-muted-foreground mb-4" />
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            onClick={() => simulateQRScan('subscription')}
-                            disabled={isScanning === 'subscription'}
-                          >
-                            {isScanning === 'subscription'
-                              ? 'Scanning...'
-                              : 'Start Scanning'}
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>
-                              Scanning Subscription QR Code
-                            </DialogTitle>
-                            <DialogDescription>
-                              Point your camera at the subscription QR code
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="flex items-center justify-center py-8">
-                            <div className="w-64 h-64 border-2 border-dashed border-primary rounded-lg flex items-center justify-center">
-                              <Scan className="h-16 w-16 text-primary animate-pulse" />
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  ) : (
-                    <div className="p-4 border border-green-200 bg-green-50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        <span className="font-medium text-green-800">
-                          Subscription Scanned
-                        </span>
+              <FormField
+                control={form.control}
+                name="subscription_id"
+                render={({ field }) => (
+                  <Scanner
+                    title="Scan Subscription QR"
+                    description="Select to scan subscription QR code"
+                    onChange={(id) => {
+                      setSubQ({ id })
+                      field.onChange(id)
+                    }}
+                  >
+                    {selectedSubscription && (
+                      <div className="p-4 border border-primary/40 bg-primary/5 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckCircle2 className="h-5 w-5 text-primary" />
+                          <span className="font-medium text-primary">
+                            Subscription Scanned
+                          </span>
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">
+                            {selectedSubscription.membership.name}
+                          </p>
+                          <p className="text-muted-foreground">
+                            {selectedSubscription.membership.library.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Borrow Period:&nbsp;
+                            {selectedSubscription.loan_period}&nbsp;Days
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-sm">
-                        <p className="font-medium">
-                          {scannedSubscription.membership.name}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {scannedSubscription.membership.library.name}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Active loans limit:{' '}
-                          {scannedSubscription.active_loan_limit}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                    )}
+                  </Scanner>
+                )}
+              />
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BookIcon className="h-5 w-5" />
-                    Scan Book QR
-                  </CardTitle>
-                  <CardDescription>
-                    Scan the book&apos;s QR code
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {!scannedBook ? (
-                    <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg">
-                      <Scan className="h-12 w-12 text-muted-foreground mb-4" />
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            onClick={() => simulateQRScan('book')}
-                            disabled={isScanning === 'book'}
-                          >
-                            {isScanning === 'book'
-                              ? 'Scanning...'
-                              : 'Start Scanning'}
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Scanning Book QR Code</DialogTitle>
-                            <DialogDescription>
-                              Point your camera at the book&apos;s QR code
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="flex items-center justify-center py-8">
-                            <div className="w-64 h-64 border-2 border-dashed border-primary rounded-lg flex items-center justify-center">
-                              <Scan className="h-16 w-16 text-primary animate-pulse" />
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  ) : (
-                    <div className="p-4 border border-green-200 bg-green-50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        <span className="font-medium text-green-800">
-                          Book Scanned
-                        </span>
+              <FormField
+                control={form.control}
+                name="book_id"
+                render={({ field }) => (
+                  <Scanner
+                    title="Scan Book QR"
+                    description="Select to scan book QR code"
+                    onChange={(id) => {
+                      setBookQ({ id })
+                      field.onChange(id)
+                    }}
+                  >
+                    {selectedBook && (
+                      <div className="p-4 border border-primary/40 bg-primary/5 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckCircle2 className="h-5 w-5 text-primary" />
+                          <span className="font-medium text-primary">
+                            Book Scanned
+                          </span>
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">{selectedBook.title}</p>
+                          <p className="text-muted-foreground">
+                            {selectedBook.library?.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Author:&nbsp;
+                            {selectedBook.author}
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-sm">
-                        <p className="font-medium">{scannedBook.title}</p>
-                        <p className="text-muted-foreground">
-                          {scannedBook.author}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Code: {scannedBook.code}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                    )}
+                  </Scanner>
+                )}
+              />
             </div>
           </TabsContent>
 
@@ -741,7 +679,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
 
         <div className="flex justify-between items-center">
           <Button type="reset" variant="outline" onClick={onReset}>
-            Cancel
+            Reset
           </Button>
           <Button
             type="submit"
