@@ -9,7 +9,7 @@ export const ImageUploader: React.FC<
     value?: string
     imageName: string
   } & Parameters<typeof Input>[0]
-> = ({ onChange, value, imageName, ...props }) => {
+> = ({ onChange, imageName }) => {
   const [url, setUrl] = useState<string>('')
   const [preview, setPreview] = useState<string>()
 
