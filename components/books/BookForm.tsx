@@ -33,10 +33,12 @@ import { Library } from '@/lib/types/library'
 import { useState, useEffect, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
 import { Book } from '@/lib/types/book'
+import Image from 'next/image'
+import { ImageUploader } from '../common/ImageUploader'
 
 export type BookFormValues = Pick<
   Book,
-  'title' | 'author' | 'year' | 'code' | 'library_id'
+  'title' | 'author' | 'year' | 'code' | 'library_id' | 'cover'
 >
 
 type BookFormProps = {
@@ -70,6 +72,7 @@ const FormSchema = z.object({
       required_error: 'Please select the library.',
     })
     .uuid(),
+  cover: z.string().optional(),
 })
 
 export const BookForm: React.FC<BookFormProps> = ({
@@ -103,6 +106,8 @@ export const BookForm: React.FC<BookFormProps> = ({
   const onReset = useCallback(() => {
     form.reset()
   }, [form])
+
+  const title = form.watch('title')
 
   return (
     <div className="grid place-items-center">
@@ -245,6 +250,37 @@ export const BookForm: React.FC<BookFormProps> = ({
               </FormItem>
             )}
           />
+
+          {initialData.cover && (
+            <Image
+              className="w-12 h-auto rounded col-span-2"
+              src={initialData.cover}
+              alt={initialData.title}
+              width={50}
+              height={50}
+            />
+          )}
+
+          {title && (
+            <FormField
+              control={form.control}
+              name="cover"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Cover Image URL</FormLabel>
+                  <FormControl>
+                    <ImageUploader
+                      {...field}
+                      imageName={title}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <Button type="reset" variant="ghost" onClick={onReset}>
             Reset

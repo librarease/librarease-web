@@ -11,6 +11,7 @@ export const BookEditForm: React.FC<{ book: BookDetail }> = ({ book }) => {
     year: book.year,
     code: book.code,
     library_id: book.library_id,
+    cover: book.cover,
   }
   //   const router = useRouter()
 
