@@ -23,7 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { User } from '@/lib/types/user'
 import { getListUsers } from '@/lib/api/user'
@@ -67,9 +67,7 @@ import { Scanner } from '../common/Scanner'
 import Image from 'next/image'
 
 const FormSchema = z.object({
-  user_id: z.string({
-    required_error: 'Please select a user.',
-  }),
+  user_id: z.string().optional(),
   book_id: z.string({
     required_error: 'Please select a book.',
   }),
@@ -90,13 +88,9 @@ type FormBorrowProps = {
 
 export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const selectedMethod = searchParams.get('tab') || 'manual'
-  const setSelectedMethod = (value: 'manual' | 'qr') => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.set('tab', value)
-    router.replace(`?${newParams.toString()}`)
-  }
+  const [selectedMethod, setSelectedMethod] = useState<'manual' | 'qr'>(
+    'manual'
+  )
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -337,7 +331,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
               </CardContent>
             </Card>
 
-            {selectedUser && (
+            {(selectedUser || form.formState.errors.subscription_id) && (
               <Card>
                 <CardHeader>
                   <CardTitle
@@ -409,7 +403,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
               </Card>
             )}
 
-            {selectedSubscription && (
+            {(selectedSubscription || form.formState.errors.book_id) && (
               <Card>
                 <CardHeader>
                   <CardTitle
@@ -506,7 +500,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
               </Card>
             )}
 
-            {selectedBook && (
+            {(selectedBook || form.formState.errors.staff_id) && (
               <Card>
                 <CardHeader>
                   <CardTitle
@@ -597,7 +591,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
               <FormField
                 control={form.control}
                 name="subscription_id"
-                render={({ field }) => (
+                render={({ field, fieldState: { error } }) => (
                   <Scanner
                     title="Scan Subscription QR"
                     description="Select to scan subscription QR code"
@@ -605,6 +599,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                       setSubQ({ id })
                       field.onChange(id)
                     }}
+                    error={error?.message}
                   >
                     {selectedSubscription && (
                       <div className="p-4 border border-primary/40 bg-primary/5 rounded-lg">
@@ -635,7 +630,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
               <FormField
                 control={form.control}
                 name="book_id"
-                render={({ field }) => (
+                render={({ field, fieldState: { error } }) => (
                   <Scanner
                     title="Scan Book QR"
                     description="Select to scan book QR code"
@@ -643,6 +638,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
                       setBookQ({ id })
                       field.onChange(id)
                     }}
+                    error={error?.message}
                   >
                     {selectedBook && (
                       <div className="p-4 border border-primary/40 bg-primary/5 rounded-lg">

@@ -18,10 +18,12 @@ import {
 
 import { getListBorrows } from '@/lib/api/borrow'
 import { Verify } from '@/lib/firebase/firebase'
-import { Book } from 'lucide-react'
+import { BookUser, Scan } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
+import { DropdownMenuBorrow } from '@/components/borrows/DropdownMenuBorrow'
+import { BtnScanReturnBorrow } from '@/components/borrows/ModalReturnBorrow'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -86,12 +88,23 @@ export default async function Borrows({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button asChild>
-            <Link href="/borrows/new">
-              <Book className="mr-2 size-4" />
-              New Borrow
-            </Link>
-          </Button>
+          <div className="md:hidden">
+            <DropdownMenuBorrow />
+          </div>
+          <div className="hidden md:flex gap-2">
+            <BtnScanReturnBorrow>
+              <>
+                <Scan className="mr-2 size-4" />
+                Scan to Return
+              </>
+            </BtnScanReturnBorrow>
+            <Button asChild>
+              <Link href="/borrows/new">
+                <BookUser className="mr-2 size-4" />
+                Borrow a book
+              </Link>
+            </Button>
+          </div>
         </div>
       </nav>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

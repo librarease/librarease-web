@@ -9,14 +9,26 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { BorrowDetail } from '@/lib/types/borrow'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 
 export const ModalEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
   borrow,
 }) => {
   const router = useRouter()
+  const pathname = usePathname()
+  const [open, setOpen] = useState(true)
+  const prevPathRef = useRef(pathname)
+
+  useEffect(() => {
+    if (pathname !== prevPathRef.current) {
+      setOpen(false)
+    }
+    prevPathRef.current = pathname
+  }, [pathname])
+
   return (
-    <Dialog open={true} onOpenChange={router.back}>
+    <Dialog open={open} onOpenChange={router.back}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{borrow.book.title}</DialogTitle>

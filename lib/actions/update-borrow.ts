@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 import { updateBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
-import { redirect } from 'next/navigation'
 
 export async function updateBorrowAction(
   data: Parameters<typeof updateBorrow>[0]
@@ -24,6 +23,5 @@ export async function updateBorrowAction(
     return { error: 'failed to update borrow' }
   } finally {
     revalidatePath(`/borrows/${data.id}`)
-    redirect(`/borrows/${data.id}`)
   }
 }

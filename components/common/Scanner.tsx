@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect } from 'react'
 import { Input } from '../ui/input'
 import {
   Card,
@@ -14,14 +16,32 @@ export const Scanner: React.FC<
   React.PropsWithChildren<{
     title?: string
     description?: string
+    value?: string
     onChange: (id: string) => void
+    error?: string
+    isLoading?: boolean
+    initialFocus?: boolean
   }>
-> = ({ title, description, onChange, children }) => {
+> = ({
+  title,
+  description,
+  error,
+  initialFocus,
+  onChange,
+  value,
+  children,
+}) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleCardClick = () => {
     inputRef.current?.focus()
   }
+
+  useEffect(() => {
+    if (initialFocus) {
+      inputRef.current?.focus()
+    }
+  }, [initialFocus, inputRef])
 
   return (
     <Card
@@ -46,11 +66,22 @@ export const Scanner: React.FC<
           tabIndex={-1}
           className="opacity-0 w-0 h-0 p-0"
           ref={inputRef}
+          value={value}
           onChange={(e) => onChange(e.target.value)}
         />
         {children || (
-          <div className="grid place-items-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg">
-            <Scan className="h-12 w-12 text-muted-foreground" />
+          <div
+            className={cn(
+              'grid place-items-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg',
+              error && 'border-destructive/50'
+            )}
+          >
+            <Scan
+              className={cn(
+                'h-12 w-12 text-muted-foreground',
+                error && 'text-destructive'
+              )}
+            />
           </div>
         )}
       </CardContent>
