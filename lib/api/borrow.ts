@@ -9,6 +9,7 @@ type GetListBorrowsQuery = QueryParams<
     is_active?: boolean
     is_expired?: boolean
     library_id?: string
+    status?: 'active' | 'overdue' | 'returned'
   }
 >
 type GetListBorrowsResponse = Promise<ResList<Borrow>>
