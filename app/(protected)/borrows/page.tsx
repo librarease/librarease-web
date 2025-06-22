@@ -130,7 +130,7 @@ export default async function Borrows({
           ]}
           activeHref={`/borrows${status ? `?status=${status}` : ''}`}
         />
-        <Badge className="ml-4 hidden md:block" variant="outline">
+        <Badge className="ml-4 hidden md:inline" variant="outline">
           {res.meta.total}
         </Badge>
       </div>

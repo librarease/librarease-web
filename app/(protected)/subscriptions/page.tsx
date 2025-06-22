@@ -104,7 +104,7 @@ export default async function Subscriptions({
           ]}
           activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
         />
-        <Badge className="ml-4 hidden md:block" variant="outline">
+        <Badge className="ml-4 hidden md:inline-block" variant="outline">
           {res.meta.total}
         </Badge>
       </div>
