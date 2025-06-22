@@ -5,10 +5,10 @@ import {
   Users,
   UserCog,
   CreditCard,
-  ScrollText,
-  BookCopy,
   ChartSpline,
   BellIcon,
+  BookUser,
+  Ticket,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -25,11 +25,11 @@ const menuItems = [
   { title: 'Memberships', icon: CreditCard, href: '/memberships', level: 1 },
   {
     title: 'Subscriptions',
-    icon: ScrollText,
+    icon: Ticket,
     href: '/subscriptions',
-    level: 3,
+    level: 2,
   },
-  { title: 'Borrows', icon: BookCopy, href: '/borrows', level: 2 },
+  { title: 'Borrows', icon: BookUser, href: '/borrows', level: 2 },
 ]
 
 export default async function LibraryDashboard() {

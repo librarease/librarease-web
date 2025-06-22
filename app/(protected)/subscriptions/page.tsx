@@ -100,7 +100,7 @@ export default async function Subscriptions({
           tabs={[
             { name: 'All', href: '/subscriptions' },
             { name: 'Active', href: '/subscriptions?status=active' },
-            { name: 'Overdue', href: '/subscriptions?status=expired' },
+            { name: 'Expired', href: '/subscriptions?status=expired' },
           ]}
           activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
         />
