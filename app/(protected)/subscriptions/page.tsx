@@ -20,6 +20,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { ListCardSubscription } from '@/components/subscriptions/ListCardSubscription'
+import { TabLink } from '@/components/borrows/TabLink'
+import { Badge } from '@/components/ui/badge'
 
 export const metadata: Metadata = {
   title: `Subscriptions · ${SITE_NAME}`,
@@ -32,12 +34,14 @@ export default async function Subscriptions({
     skip?: number
     limit?: number
     library_id?: string
+    status?: 'active' | 'expired'
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
+  const status = sp?.status
 
   const headers = await Verify({
     from: '/subscriptions',
@@ -49,6 +53,7 @@ export default async function Subscriptions({
       sort_in: 'desc',
       limit: limit,
       skip: skip,
+      status,
       ...(library_id ? { library_id } : {}),
     },
     {
@@ -90,6 +95,19 @@ export default async function Subscriptions({
           </Button>
         </div>
       </nav>
+      <div className="">
+        <TabLink
+          tabs={[
+            { name: 'All', href: '/subscriptions' },
+            { name: 'Active', href: '/subscriptions?status=active' },
+            { name: 'Overdue', href: '/subscriptions?status=expired' },
+          ]}
+          activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
+        />
+        <Badge className="ml-4 hidden md:block" variant="outline">
+          {res.meta.total}
+        </Badge>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((sub) => (
@@ -99,12 +117,16 @@ export default async function Subscriptions({
 
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href={prevURL} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href={nextURL} />
-          </PaginationItem>
+          {res.meta.skip > 0 && (
+            <PaginationItem>
+              <PaginationPrevious href={prevURL} />
+            </PaginationItem>
+          )}
+          {res.meta.limit <= res.data.length && (
+            <PaginationItem>
+              <PaginationNext href={nextURL} />
+            </PaginationItem>
+          )}
         </PaginationContent>
       </Pagination>
     </div>

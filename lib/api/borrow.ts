@@ -15,7 +15,7 @@ type GetListBorrowsQuery = QueryParams<
 type GetListBorrowsResponse = Promise<ResList<Borrow>>
 
 export const getListBorrows = async (
-  query: GetListBorrowsQuery,
+  { status, ...query }: GetListBorrowsQuery,
   init?: RequestInit
 ): GetListBorrowsResponse => {
   const url = new URL(BORROW_URL)
@@ -24,6 +24,16 @@ export const getListBorrows = async (
       url.searchParams.append(key, String(value))
     }
   })
+
+  if (status) {
+    if (status === 'active') {
+      url.searchParams.append('is_active', 'true')
+    } else if (status === 'overdue') {
+      url.searchParams.append('is_overdue', 'true')
+    } else if (status === 'returned') {
+      url.searchParams.append('is_returned', 'true')
+    }
+  }
 
   const response = await fetch(url.toString(), init)
   if (!response.ok) {

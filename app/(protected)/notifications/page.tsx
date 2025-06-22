@@ -108,12 +108,16 @@ export default async function Notifications({
       </ul>
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href={prevURL} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href={nextURL} />
-          </PaginationItem>
+          {res.meta.skip > 0 && (
+            <PaginationItem>
+              <PaginationPrevious href={prevURL} />
+            </PaginationItem>
+          )}
+          {res.meta.limit <= res.data.length && (
+            <PaginationItem>
+              <PaginationNext href={nextURL} />
+            </PaginationItem>
+          )}
         </PaginationContent>
       </Pagination>
     </div>

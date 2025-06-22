@@ -8,12 +8,13 @@ type GetListSubsQuery = QueryParams<
   Subscription & {
     membership_name: string
     is_active?: boolean
+    status?: 'active' | 'expired'
   }
 >
 type GetListSubsResponse = Promise<ResList<Subscription>>
 
 export const getListSubs = async (
-  query: GetListSubsQuery,
+  { status, ...query }: GetListSubsQuery,
   init?: RequestInit
 ): GetListSubsResponse => {
   const url = new URL(SUBSCRIPTIONS_URL)
@@ -22,6 +23,15 @@ export const getListSubs = async (
       url.searchParams.append(key, String(value))
     }
   })
+
+  if (status) {
+    if (status === 'active') {
+      url.searchParams.append('is_active', 'true')
+    } else if (status === 'expired') {
+      url.searchParams.append('is_expired', 'true')
+    }
+  }
+
   try {
     const response = await fetch(url.toString(), init)
     if (!response.ok) {

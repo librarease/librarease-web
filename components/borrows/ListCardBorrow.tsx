@@ -21,7 +21,10 @@ import {
 import clsx from 'clsx'
 import Link from 'next/link'
 
-export const ListCardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
+export const ListCardBorrow: React.FC<{ borrow: Borrow; idx: number }> = ({
+  borrow,
+  idx,
+}) => {
   const isDue = isBorrowDue(borrow)
 
   return (
@@ -42,7 +45,11 @@ export const ListCardBorrow: React.FC<{ borrow: Borrow }> = ({ borrow }) => {
                 {borrow.book.title}
               </abbr>
             </CardTitle>
-            <CardDescription>{borrow.book.code}</CardDescription>
+            <CardDescription>
+              <span className="text-muted-foreground/80 font-bold tracking-wider">
+                #&nbsp;{idx.toString().padStart(4, '0')}
+              </span>
+            </CardDescription>
           </div>
           <Badge
             variant={

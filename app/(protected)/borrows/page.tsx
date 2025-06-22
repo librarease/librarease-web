@@ -25,6 +25,7 @@ import { SITE_NAME } from '@/lib/consts'
 import { DropdownMenuBorrow } from '@/components/borrows/DropdownMenuBorrow'
 import { BtnScanReturnBorrow } from '@/components/borrows/ModalReturnBorrow'
 import { TabLink } from '@/components/borrows/TabLink'
+import { Badge } from '@/components/ui/badge'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -129,21 +130,32 @@ export default async function Borrows({
           ]}
           activeHref={`/borrows${status ? `?status=${status}` : ''}`}
         />
+        <Badge className="ml-4 hidden md:block" variant="outline">
+          {res.meta.total}
+        </Badge>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {res.data.map((borrow) => (
-          <ListCardBorrow key={borrow.id} borrow={borrow} />
+        {res.data.map((borrow, idx) => (
+          <ListCardBorrow
+            key={borrow.id}
+            borrow={borrow}
+            idx={skip + idx + 1}
+          />
         ))}
       </div>
 
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href={prevURL} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href={nextURL} />
-          </PaginationItem>
+          {res.meta.skip > 0 && (
+            <PaginationItem>
+              <PaginationPrevious href={prevURL} />
+            </PaginationItem>
+          )}
+          {res.meta.limit <= res.data.length && (
+            <PaginationItem>
+              <PaginationNext href={nextURL} />
+            </PaginationItem>
+          )}
         </PaginationContent>
       </Pagination>
     </div>
