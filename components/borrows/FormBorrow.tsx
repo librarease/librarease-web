@@ -27,7 +27,7 @@ import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { User } from '@/lib/types/user'
 import { getListUsers } from '@/lib/api/user'
-import { toast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createBorrow } from '@/lib/api/borrow'
@@ -101,24 +101,11 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
     createBorrow(data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'You submitted the following values:',
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                {JSON.stringify(data, null, 2)}
-              </code>
-            </pre>
-          ),
-        })
+        toast('Borrow created successfully')
         router.push('/borrows')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 
@@ -137,10 +124,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
       name: userQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setUsers(res.data)
@@ -167,10 +151,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
       ...subQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setSubs(res.data)
@@ -194,10 +175,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
       ...bookQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast(res.message)
         return
       }
       setBooks(res.data)
@@ -216,10 +194,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
       user_id: props.id,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast(res.message)
         return
       }
       setStaffs(res.data)
@@ -237,7 +212,7 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
           value={selectedMethod}
           onValueChange={(value) => setSelectedMethod(value as 'manual' | 'qr')}
         >
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-foreground/5">
             <TabsTrigger value="manual" className="flex items-center gap-2">
               <Search className="h-4 w-4" />
               Manual Selection

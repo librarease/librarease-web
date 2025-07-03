@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form'
-import { useToast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { cn, formatDate } from '@/lib/utils'
@@ -44,7 +44,6 @@ export const FormEditBorrow: React.FC<{
     resolver: zodResolver(FormSchema),
     defaultValues: borrow,
   })
-  const { toast } = useToast()
 
   const [isPending, startTransition] = useTransition()
 
@@ -52,17 +51,10 @@ export const FormEditBorrow: React.FC<{
     startTransition(async () => {
       const res = await updateBorrowAction(data)
       if ('error' in res) {
-        toast({
-          title: 'Failed to update borrow',
-          description: res.error,
-          variant: 'destructive',
-        })
+        toast.error(res.error)
         return
       }
-      toast({
-        title: 'Success',
-        description: 'Borrow updated successfully',
-      })
+      toast('Borrow updated successfully')
     })
   }
 

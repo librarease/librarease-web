@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { cn } from '@/lib/utils'
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -94,10 +94,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({
       name: userQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setUsers(res.data)
@@ -113,10 +110,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({
       name: libQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setLibs(res.data)

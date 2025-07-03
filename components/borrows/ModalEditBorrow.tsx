@@ -28,8 +28,8 @@ export const ModalEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
   }, [pathname])
 
   return (
-    <Dialog open={open} onOpenChange={router.back}>
-      <DialogContent>
+    <Dialog open={open} onOpenChange={router.back} modal={false}>
+      <DialogContent className="bg-background/5 backdrop-blur-md">
         <DialogHeader>
           <DialogTitle>{borrow.book.title}</DialogTitle>
           <DialogDescription>{borrow.subscription.user.name}</DialogDescription>

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import Landing from '@/components/landing'
 import { logoutAction } from '@/lib/actions/logout'
+import { ModeToggle } from '@/components/button-toggle-theme'
 
 const menuItems = [
   { title: 'Dashboard', icon: ChartSpline, href: '/dashboard', level: 3 },
@@ -55,9 +56,12 @@ export default async function LibraryDashboard() {
       <div className="max-w-2xl mx-auto space-y-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Librarease</h1>
-          <Button variant="ghost" onClick={logoutAction}>
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" onClick={logoutAction}>
+              Logout
+            </Button>
+            <ModeToggle />
+          </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {menuItems.map((item) => {

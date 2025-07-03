@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { BookForm, BookFormValues } from './BookForm'
 import { createBook } from '@/lib/api/book'
-import { toast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 
 const initialData: BookFormValues = {
   title: '',
@@ -21,17 +21,11 @@ export const BookCreateForm: React.FC = () => {
     createBook(data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'Book Registered',
-        })
+        toast('Book Registered')
         router.push('/books')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 

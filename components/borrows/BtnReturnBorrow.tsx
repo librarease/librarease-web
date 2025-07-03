@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 import { Lock, Unlock, Loader } from 'lucide-react'
 import { returnBorrowAction } from '@/lib/actions/return-borrow'
 import { formatDate } from '@/lib/utils'
-import { toast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 
 export const BtnReturnBook: React.FC<
   React.ComponentProps<typeof Button> & {
@@ -30,11 +30,7 @@ export const BtnReturnBook: React.FC<
       setConfirmTimeout(undefined)
       const res = await returnBorrowAction(borrow.id)
       if ('error' in res) {
-        toast({
-          title: 'Failed to return book',
-          description: res.error,
-          variant: 'destructive',
-        })
+        toast.error(res.error)
         return
       }
       // optimistic update
@@ -44,11 +40,7 @@ export const BtnReturnBook: React.FC<
           returned_at: new Date().toISOString(),
         } as Borrow['returning'],
       }))
-      toast({
-        title: 'Success',
-        description: 'Book returned successfully',
-        variant: 'default',
-      })
+      toast('Book returned successfully')
     })
   }
 

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { useState } from 'react'
 import { Scanner } from '@/components/common/Scanner'
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 import { returnBorrowAction } from '@/lib/actions/return-borrow'
 import Link from 'next/link'
 import { Button } from '../ui/button'
@@ -24,17 +24,9 @@ export const ModalReturnBorrow: React.FC<{
   const onChange = async (id: string) => {
     const res = await returnBorrowAction(id)
     if ('error' in res) {
-      toast({
-        title: 'Failed to return book',
-        description: res.error,
-        variant: 'destructive',
-      })
+      toast.error(res.error)
     } else {
-      toast({
-        title: 'Success',
-        description: 'Book returned successfully',
-        variant: 'default',
-      })
+      toast('Book returned successfully')
       setId(id)
     }
   }

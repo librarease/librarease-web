@@ -41,7 +41,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 
 const FormSchema = z.object({
   user_id: z.string({
@@ -69,24 +69,11 @@ export const FormNewBorrow: React.FC = () => {
     createBorrow(data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'You submitted the following values:',
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                {JSON.stringify(data, null, 2)}
-              </code>
-            </pre>
-          ),
-        })
+        toast('Borrow created successfully')
         router.push('/borrows')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 
@@ -104,10 +91,7 @@ export const FormNewBorrow: React.FC = () => {
       name: userQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setUsers(res.data)
@@ -123,10 +107,7 @@ export const FormNewBorrow: React.FC = () => {
       title: bookQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setBooks(res.data)
@@ -144,10 +125,7 @@ export const FormNewBorrow: React.FC = () => {
       is_active: true,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast(res.message)
         return
       }
       setSubs(res.data)
@@ -163,10 +141,7 @@ export const FormNewBorrow: React.FC = () => {
       name: staffQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast(res.message)
         return
       }
       setStaffs(res.data)

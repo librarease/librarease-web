@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { cn } from '@/lib/utils'
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -80,17 +80,11 @@ export default function ComboboxForm() {
     createSubscription(data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'Purchased Membership',
-        })
+        toast('Purchased Membership')
         router.push('/subscriptions')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 
@@ -107,10 +101,7 @@ export default function ComboboxForm() {
       name: userQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setUsers(res.data)
@@ -126,10 +117,7 @@ export default function ComboboxForm() {
       name: libQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setLibs(res.data)
@@ -148,10 +136,7 @@ export default function ComboboxForm() {
       library_ids: libID,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setMems(res.data)

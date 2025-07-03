@@ -14,13 +14,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from './ui/button'
 import { useEffect } from 'react'
-import { useToast } from './hooks/use-toast'
 import { Notification } from '@/lib/types/notification'
 import { streamNotification } from '@/lib/api/notification'
 import { logoutAction } from '@/lib/actions/logout'
 import { User } from '@/lib/types/user'
 import { Badge } from './ui/badge'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 export function NavUser({
   user,
@@ -29,15 +29,9 @@ export function NavUser({
     unread_notifications_count: number
   }
 }) {
-  const { toast } = useToast()
-
   useEffect(() => {
     function onMessage(data: Notification) {
-      toast({
-        title: data.title,
-        description: data.message,
-        variant: 'default',
-      })
+      toast(data.message)
     }
     function onError(event: Event) {
       console.warn('Error in notification stream:', event)
@@ -49,7 +43,7 @@ export function NavUser({
       onConnect: console.log,
     })
     return cleanup
-  }, [user.id, toast])
+  }, [user.id])
 
   return (
     <DropdownMenu>

@@ -107,8 +107,8 @@ export default async function BorrowDetailsPage({
                   {borrowRes.data.book.title}
                 </h2>
               </Link>
-              <p className="text-gray-600">{borrowRes.data.book.author}</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-foreground/80">{borrowRes.data.book.author}</p>
+              <p className="text-sm text-foreground/60">
                 {borrowRes.data.book.code}
               </p>
             </div>
@@ -325,7 +325,7 @@ export default async function BorrowDetailsPage({
           {borrowRes.data.returning ? (
             <BtnUndoReturn
               variant="outline"
-              className="w-full"
+              className="w-full backdrop-blur-md"
               borrow={borrowRes.data}
             />
           ) : (

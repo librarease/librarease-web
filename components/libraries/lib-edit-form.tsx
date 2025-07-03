@@ -3,7 +3,7 @@
 import { Library } from '@/lib/types/library'
 import { LibraryForm, LibraryFormValues } from './LibraryForm'
 import { updateLibrary } from '@/lib/api/library'
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 export const LibraryEditForm: React.FC<{ library: Library }> = ({
@@ -24,17 +24,11 @@ export const LibraryEditForm: React.FC<{ library: Library }> = ({
     updateLibrary(library.id, data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'Library Updated',
-        })
+        toast('Library Updated')
         router.push(`/libraries/${library.id}`)
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 

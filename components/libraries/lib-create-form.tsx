@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { LibraryForm, LibraryFormValues } from './LibraryForm'
 import { createLibrary } from '@/lib/api/library'
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 
 const initialData: LibraryFormValues = {
   name: '',
@@ -21,17 +21,11 @@ export const LibraryCreateForm: React.FC = () => {
     createLibrary(data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'Library Created',
-        })
+        toast('Library Created')
         router.push('/libraries')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
   return <LibraryForm initialData={initialData} onSubmit={onSubmit} />

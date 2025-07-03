@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { StaffForm, StaffFormValues } from './StaffForm'
-import { toast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 import { updateStaff } from '@/lib/api/staff'
 import { Staff } from '@/lib/types/staff'
 
@@ -20,17 +20,11 @@ export const StaffEditForm: React.FC<{ staff: Staff }> = ({ staff }) => {
     updateStaff(staff.id, data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'Staff Updated',
-        })
+        toast('Staff Updated')
         router.push('/staffs')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 

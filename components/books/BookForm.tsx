@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { cn } from '@/lib/utils'
-import { toast } from '@/components/hooks/use-toast'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -93,10 +93,7 @@ export const BookForm: React.FC<BookFormProps> = ({
       name: libQ,
     }).then((res) => {
       if ('error' in res) {
-        toast({
-          title: 'Error',
-          description: res.message,
-        })
+        toast.error(res.message)
         return
       }
       setLibs(res.data)

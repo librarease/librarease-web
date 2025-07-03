@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { StaffForm, StaffFormValues } from './StaffForm'
-import { toast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 import { createStaff } from '@/lib/api/staff'
 
 const initialData: StaffFormValues = {
@@ -19,18 +19,11 @@ export const StaffCreateForm: React.FC = () => {
     createStaff(data)
       .then(console.log)
       .then(() => {
-        toast({
-          title: 'Assigned Staff to Library',
-          description: `${data.name} has been assigned to the library.`,
-        })
+        toast(`${data.name} has been assigned to the library.`)
         router.push('/staffs')
       })
       .catch((e) => {
-        toast({
-          title: 'Error',
-          description: e?.error,
-          variant: 'destructive',
-        })
+        toast.error(e?.error)
       })
   }
 

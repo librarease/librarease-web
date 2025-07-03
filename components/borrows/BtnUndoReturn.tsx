@@ -5,7 +5,7 @@ import { useTransition, useState } from 'react'
 import { Button } from '../ui/button'
 import { Lock, Unlock, Loader } from 'lucide-react'
 import { undoReturnAction } from '@/lib/actions/undo-return'
-import { toast } from '../hooks/use-toast'
+import { toast } from 'sonner'
 
 export const BtnUndoReturn: React.FC<
   React.ComponentProps<typeof Button> & {
@@ -29,11 +29,7 @@ export const BtnUndoReturn: React.FC<
       setConfirmTimeout(undefined)
       const res = await undoReturnAction(borrow.id)
       if ('error' in res) {
-        toast({
-          title: 'Failed to undo return book',
-          description: res.error,
-          variant: 'destructive',
-        })
+        toast.error(res.error)
         return
       }
       // optimistic update
@@ -41,11 +37,7 @@ export const BtnUndoReturn: React.FC<
         ...prev,
         returning: undefined,
       }))
-      toast({
-        title: 'Success',
-        description: 'Borrow return undone successfully',
-        variant: 'default',
-      })
+      toast('Borrow return undone successfully')
     })
   }
 
