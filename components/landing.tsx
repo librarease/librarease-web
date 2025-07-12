@@ -41,14 +41,14 @@ export default function LandingPage() {
         <Link className="flex items-center justify-center" href="/">
           <span className="ml-2 text-lg font-bold">Librarease</span>
         </Link>
-        <nav className="flex gap-4 sm:gap-6">
-          <ModeToggle />
+        <nav className="flex gap-2 sm:gap-6">
           <Button variant="ghost" asChild>
             <Link href="/login">Sign In</Link>
           </Button>
           <Button asChild>
             <Link href="/signup">Get Started</Link>
           </Button>
+          <ModeToggle />
         </nav>
       </header>
       <main className="flex-1">
