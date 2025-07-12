@@ -81,7 +81,7 @@ export default function LandingPage() {
                 className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
                 asChild
               >
-                <Link href="/signin">
+                <Link href="/login">
                   Start Your Journey
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
