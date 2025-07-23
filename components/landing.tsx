@@ -37,7 +37,7 @@ export default function LandingPage() {
         <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-r from-purple-200/25 to-pink-200/20 rounded-full blur-3xl animate-pulse delay-2000" /> */}
       </div>
       <header className="px-4 lg:px-6 h-14 flex items-center border-b justify-between">
-        <Link className="flex items-center justify-center" href="/" legacyBehavior>
+        <Link className="flex items-center justify-center" href="/">
           <span className="ml-2 text-lg font-bold">Librarease</span>
         </Link>
         <nav className="flex gap-2 sm:gap-6">
@@ -80,9 +80,11 @@ export default function LandingPage() {
                 className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
                 asChild
               >
-                <Link href="/login" legacyBehavior>
-                  Start Your Journey
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                <Link href="/login">
+                  <>
+                    Start Your Journey
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </>
                 </Link>
               </Button>
               <Button
@@ -236,7 +238,7 @@ export default function LandingPage() {
                   className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
                   asChild
                 >
-                  <Link href="/signup" legacyBehavior>
+                  <Link href="/signup">
                     Get Started Today
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -266,5 +268,5 @@ export default function LandingPage() {
         </nav>
       </footer>
     </div>
-  );
+  )
 }

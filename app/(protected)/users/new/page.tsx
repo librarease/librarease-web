@@ -10,7 +10,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 export default function NewUser() {
@@ -34,15 +33,11 @@ export default function NewUser() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/users" passHref legacyBehavior>
-              <BreadcrumbLink>Users</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/users">Users</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

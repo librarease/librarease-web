@@ -36,7 +36,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { getListLibraries } from '@/lib/api/library'
 import { getListMemberships } from '@/lib/api/membership'
@@ -149,15 +148,11 @@ export default function ComboboxForm() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/subscriptions" passHref legacyBehavior>
-              <BreadcrumbLink>Subscriptions</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/subscriptions">Subscriptions</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

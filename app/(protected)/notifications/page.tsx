@@ -17,7 +17,6 @@ import {
 
 import { Verify } from '@/lib/firebase/firebase'
 import { CheckCircle } from 'lucide-react'
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { getListNotifications } from '@/lib/api/notification'
@@ -70,9 +69,7 @@ export default async function Notifications({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 

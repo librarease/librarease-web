@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { Badge } from '@/components/ui/badge'
 import { formatDate, getSubscriptionStatus } from '@/lib/utils'
@@ -27,6 +26,7 @@ import {
 } from 'lucide-react'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { Progress } from '@/components/ui/progress'
+import Link from 'next/link'
 
 export default async function SubscriptionDetailsPage({
   params,
@@ -56,15 +56,13 @@ export default async function SubscriptionDetailsPage({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <Link href="/subscriptions" passHref legacyBehavior>
-                  <BreadcrumbLink>Subscriptions</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/subscriptions">
+                  Subscriptions
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -171,7 +169,7 @@ export default async function SubscriptionDetailsPage({
               <Link
                 className="link"
                 href={`/libraries/${subsRes.data.membership.library.id}`}
-                legacyBehavior>
+              >
                 {subsRes.data.membership.library.name}
               </Link>
             </p>
@@ -222,5 +220,5 @@ export default async function SubscriptionDetailsPage({
         </Card>
       </div>
     </div>
-  );
+  )
 }

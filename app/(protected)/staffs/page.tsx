@@ -82,9 +82,7 @@ export default async function Staffs({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 

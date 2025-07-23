@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/button'
 import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
 import { redirect, RedirectType } from 'next/navigation'
 import { DateTime } from '@/components/common/DateTime'
+import { ThreeDBook } from '@/components/books/three-d-book'
 
 export default async function BorrowDetailsPage({
   params,
@@ -91,18 +92,19 @@ export default async function BorrowDetailsPage({
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
           <CardContent className="grid place-self-center md:place-self-auto md:grid-cols-2 gap-4">
-            <Link href={`/books/${borrowRes.data.book.id}`} legacyBehavior>
-              <Image
+            <Link href={`/books/${borrowRes.data.book.id}`}>
+              {/* <Image
                 src={borrowRes.data.book?.cover ?? '/book-placeholder.svg'}
                 alt={borrowRes.data.book.title + "'s cover"}
                 width={256}
                 height={256}
                 className="rounded-md w-56 h-auto hover:shadow-md hover:scale-105 transition-transform"
                 priority
-              />
+              /> */}
+              <ThreeDBook book={borrowRes.data.book} />
             </Link>
             <div>
-              <Link href={`/books/${borrowRes.data.book.id}`} className="link" legacyBehavior>
+              <Link href={`/books/${borrowRes.data.book.id}`} className="link">
                 <h2 className="text-xl font-semibold">
                   {borrowRes.data.book.title}
                 </h2>
@@ -133,7 +135,7 @@ export default async function BorrowDetailsPage({
               <Link
                 className="link"
                 href={`/libraries/${borrowRes.data.subscription.membership.library.id}`}
-                legacyBehavior>
+              >
                 {borrowRes.data.subscription.membership.library.name}
               </Link>
             </p>
@@ -248,7 +250,7 @@ export default async function BorrowDetailsPage({
             <Link
               href={`/subscriptions/${borrowRes.data.subscription.id}`}
               className="link"
-              legacyBehavior>
+            >
               {borrowRes.data.subscription.membership.name}
             </Link>
           </p>
@@ -304,7 +306,7 @@ export default async function BorrowDetailsPage({
                       b.id === id,
                   }
                 )}
-                legacyBehavior>
+              >
                 <Image
                   src={b.book?.cover ?? '/book-placeholder.svg'}
                   alt={b.book.title + "'s cover"}
@@ -336,7 +338,7 @@ export default async function BorrowDetailsPage({
             <Link
               href={`/borrows/${borrowRes.data.id}/edit`}
               className="w-full"
-              legacyBehavior>
+            >
               <Pen />
               Edit
             </Link>
@@ -344,5 +346,5 @@ export default async function BorrowDetailsPage({
         </div>
       )}
     </>
-  );
+  )
 }

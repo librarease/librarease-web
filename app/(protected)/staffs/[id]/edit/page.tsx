@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { getStaff } from '@/lib/api/staff'
 import { Verify } from '@/lib/firebase/firebase'
-import Link from 'next/link'
 
 export default async function EditStaffPage({
   params,
@@ -33,15 +32,11 @@ export default async function EditStaffPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/staffs" passHref legacyBehavior>
-              <BreadcrumbLink>Staffs</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/staffs">Staffs</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

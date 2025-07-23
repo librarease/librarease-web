@@ -74,15 +74,15 @@ export default async function LibraryDashboard() {
                 className="w-full h-24 flex flex-col items-center justify-center gap-2"
                 asChild
               >
-                <Link href={item.href} legacyBehavior>
+                <Link href={item.href}>
                   <Icon className="size-6" />
                   <span>{item.title}</span>
                 </Link>
               </Button>
-            );
+            )
           })}
         </div>
       </div>
     </main>
-  );
+  )
 }

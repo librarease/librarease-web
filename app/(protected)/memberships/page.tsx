@@ -19,6 +19,9 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { ListCardMembership } from '@/components/memberships/ListCardMembership'
+import { Search } from 'lucide-react'
+import { DebouncedInput } from '@/components/common/DebouncedInput'
+import { Badge } from '@/components/ui/badge'
 
 export const metadata: Metadata = {
   title: `Memberships · ${SITE_NAME}`,
@@ -31,6 +34,7 @@ export default async function Memberships({
     skip?: number
     limit?: number
     library_id?: string
+    name?: string
   }>
 }) {
   const sp = await searchParams
@@ -42,6 +46,7 @@ export default async function Memberships({
     sort_in: 'desc',
     limit: limit,
     skip: skip,
+    name: sp?.name,
     ...(library_id ? { library_id } : {}),
   })
 
@@ -63,14 +68,17 @@ export default async function Memberships({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
-                <BreadcrumbPage>Memberships</BreadcrumbPage>
+                <BreadcrumbPage>
+                  Memberships{' '}
+                  <Badge className="ml-4" variant="outline">
+                    {res.meta.total}
+                  </Badge>
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -79,6 +87,16 @@ export default async function Memberships({
           </Button>
         </div>
       </nav>
+
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
+
+        <DebouncedInput
+          name="name"
+          placeholder="Search by name"
+          className="pl-8 max-w-md"
+        />
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((m) => (

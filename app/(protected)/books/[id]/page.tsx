@@ -6,12 +6,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
-// import { Verify } from '@/lib/firebase/firebase'
 import { getBook } from '@/lib/api/book'
-import Image from 'next/image'
-import clsx from 'clsx'
-// import { cookies } from 'next/headers'
+import { BookDown, Calendar, Hash, Library } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ThreeDBook } from '@/components/books/three-d-book'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
 
 export default async function BookDetailsPage({
   params,
@@ -20,8 +21,6 @@ export default async function BookDetailsPage({
 }) {
   const { id } = await params
 
-  // await Verify({ from: `/books/${id}` })
-
   const [bookRes] = await Promise.all([getBook({ id })])
 
   if ('error' in bookRes) {
@@ -29,25 +28,17 @@ export default async function BookDetailsPage({
     return <div>{JSON.stringify(bookRes.message)}</div>
   }
 
-  // const cookieStore = await cookies()
-  // const sessionName = process.env.SESSION_COOKIE_NAME as string
-  // const session = cookieStore.get(sessionName)
-
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">{bookRes.data.title}</h1>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/books" passHref legacyBehavior>
-              <BreadcrumbLink>Books</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/books">Books</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -55,28 +46,83 @@ export default async function BookDetailsPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="place-self-center flex my-12">
-        <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-10">
-          <span className="my-2 inline-block text-nowrap text-xs font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-30px)] origin-top-left">
-            {bookRes.data.title}
-          </span>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Book Cover */}
+        <div className="lg:col-span-1 grid place-items-center gap-4">
+          <ThreeDBook book={bookRes.data} />
+          <Button className="w-full" disabled={true}>
+            {true ? (
+              <>
+                <BookDown className="mr-2 h-4 w-4" />
+                Borrow Book
+              </>
+            ) : (
+              'Currently Borrowed'
+            )}
+          </Button>
+          <Button variant="outline" className="w-full bg-transparent">
+            Add to Wishlist
+          </Button>
         </div>
-        <Image
-          src={bookRes.data?.cover ?? '/book-placeholder.svg'}
-          alt={bookRes.data.title + "'s cover"}
-          width={256}
-          height={256}
-          className={clsx(
-            'shadow-xl rounded-r-md w-56 h-auto',
-            '[transform:perspective(800px)_rotateY(14deg)]'
-          )}
-          priority
-        />
+
+        {/* Book Information */}
+        <div className="lg:col-span-2 space-y-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{bookRes.data.title}</h1>
+            <p className="text-xl text-muted-foreground mb-4">
+              {bookRes.data.author}
+            </p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Badge variant={true ? 'default' : 'destructive'}>
+                {true ? 'Available' : 'Borrowed'}
+              </Badge>
+              <Badge variant="outline">bookRes.data.genre</Badge>
+            </div>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Book Information</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-2 grid-cols-[max-content_1fr] md:grid-cols-[max-content_1fr_max-content_1fr] items-center">
+              <Hash className="size-4" />
+              <p>
+                <span className="font-medium">Code:&nbsp;</span>
+                {bookRes.data.code}
+              </p>
+              <Calendar className="size-4" />
+              <p>
+                <span className="font-medium">Year:&nbsp;</span>
+                {bookRes.data.year}
+              </p>
+              <Library className="size-4" />
+              <p>
+                <span className="font-medium">Library:&nbsp;</span>
+                <Link href={`/libraries/${bookRes.data.library.id}`}>
+                  {bookRes.data.library.name}
+                </Link>
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Description</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm leading-relaxed">
+                bookRes.data.description
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-      <div className="place-self-center text-center pt-4 border-t">
+
+      {/* <div className="place-self-center text-center pt-4 border-t">
         <p className="text-gray-600">{bookRes.data.author}</p>
         <p className="text-sm text-gray-500">{bookRes.data.code}</p>
-      </div>
+      </div> */}
     </div>
   )
 }

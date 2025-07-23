@@ -14,7 +14,6 @@ import { TopMembershipChart } from '@/components/dashboard/TopMembershipChart'
 import { getAnalysis } from '@/lib/api/analysis'
 import { SITE_NAME } from '@/lib/consts'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
 import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -119,9 +118,7 @@ export default async function DashboardPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

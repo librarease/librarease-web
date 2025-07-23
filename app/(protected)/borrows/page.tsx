@@ -90,14 +90,17 @@ export default async function Borrows({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
-                <BreadcrumbPage>Borrows</BreadcrumbPage>
+                <BreadcrumbPage>
+                  Borrows
+                  <Badge className="ml-4" variant="outline">
+                    {res.meta.total}
+                  </Badge>
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -112,7 +115,7 @@ export default async function Borrows({
               </>
             </BtnScanReturnBorrow>
             <Button asChild>
-              <Link href="/borrows/new" legacyBehavior>
+              <Link href="/borrows/new">
                 <BookUser className="mr-2 size-4" />
                 Borrow a book
               </Link>
@@ -120,20 +123,17 @@ export default async function Borrows({
           </div>
         </div>
       </nav>
-      <div className="">
-        <TabLink
-          tabs={[
-            { name: 'All', href: '/borrows' },
-            { name: 'Active', href: '/borrows?status=active' },
-            { name: 'Overdue', href: '/borrows?status=overdue' },
-            { name: 'Returned', href: '/borrows?status=returned' },
-          ]}
-          activeHref={`/borrows${status ? `?status=${status}` : ''}`}
-        />
-        <Badge className="ml-4 hidden md:inline" variant="outline">
-          {res.meta.total}
-        </Badge>
-      </div>
+
+      <TabLink
+        tabs={[
+          { name: 'All', href: '/borrows' },
+          { name: 'Active', href: '/borrows?status=active' },
+          { name: 'Overdue', href: '/borrows?status=overdue' },
+          { name: 'Returned', href: '/borrows?status=returned' },
+        ]}
+        activeHref={`/borrows${status ? `?status=${status}` : ''}`}
+      />
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow, idx) => (
           <ListCardBorrow
@@ -158,5 +158,5 @@ export default async function Borrows({
         </PaginationContent>
       </Pagination>
     </div>
-  );
+  )
 }

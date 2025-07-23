@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBook } from '@/lib/api/book'
 import { BookEditForm } from '@/components/books/book-edit-form'
@@ -33,15 +32,11 @@ export default async function EditBookPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/books" passHref legacyBehavior>
-              <BreadcrumbLink>Books</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/books">Books</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

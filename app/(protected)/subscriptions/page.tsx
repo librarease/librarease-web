@@ -79,14 +79,17 @@ export default async function Subscriptions({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
-                <BreadcrumbPage>Subscriptions</BreadcrumbPage>
+                <BreadcrumbPage>
+                  Subscriptions
+                  <Badge className="ml-4" variant="outline">
+                    {res.meta.total}
+                  </Badge>
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -95,19 +98,15 @@ export default async function Subscriptions({
           </Button>
         </div>
       </nav>
-      <div className="">
-        <TabLink
-          tabs={[
-            { name: 'All', href: '/subscriptions' },
-            { name: 'Active', href: '/subscriptions?status=active' },
-            { name: 'Expired', href: '/subscriptions?status=expired' },
-          ]}
-          activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
-        />
-        <Badge className="ml-4 hidden md:inline-block" variant="outline">
-          {res.meta.total}
-        </Badge>
-      </div>
+
+      <TabLink
+        tabs={[
+          { name: 'All', href: '/subscriptions' },
+          { name: 'Active', href: '/subscriptions?status=active' },
+          { name: 'Expired', href: '/subscriptions?status=expired' },
+        ]}
+        activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((sub) => (

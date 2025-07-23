@@ -72,9 +72,7 @@ export default async function Libraries({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -113,7 +111,7 @@ export default async function Libraries({
                 )}
               </TableCell>
               <TableCell>
-                <Link href={`libraries/${lib.id}`} className="link" legacyBehavior>
+                <Link href={`libraries/${lib.id}`} className="link">
                   {lib.name}
                 </Link>
               </TableCell>
@@ -138,5 +136,5 @@ export default async function Libraries({
         </PaginationContent>
       </Pagination>
     </div>
-  );
+  )
 }

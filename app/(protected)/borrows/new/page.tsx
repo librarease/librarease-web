@@ -8,7 +8,6 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
-import Link from 'next/link'
 import { redirect, RedirectType } from 'next/navigation'
 
 export default async function ComboboxForm() {
@@ -26,15 +25,11 @@ export default async function ComboboxForm() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/borrows" passHref legacyBehavior>
-              <BreadcrumbLink>Borrows</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/borrows">Borrows</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

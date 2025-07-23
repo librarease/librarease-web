@@ -56,15 +56,11 @@ export default async function LibraryDetail({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/libraries" passHref legacyBehavior>
-              <BreadcrumbLink>Libraries</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/libraries">Libraries</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 
@@ -117,7 +113,7 @@ export default async function LibraryDetail({
                 <TableRow key={book.id}>
                   <TableCell className="font-medium">{book.code}</TableCell>
                   <TableCell>
-                    <Link href={`/books/${book.id}`} className="link" legacyBehavior>
+                    <Link href={`/books/${book.id}`} className="link">
                       {book.title}
                     </Link>
                   </TableCell>
@@ -156,5 +152,5 @@ export default async function LibraryDetail({
         </div>
       </div>
     </div>
-  );
+  )
 }

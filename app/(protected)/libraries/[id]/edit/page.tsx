@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { getLibrary } from '@/lib/api/library'
 import { Verify } from '@/lib/firebase/firebase'
-import Link from 'next/link'
 
 export default async function EditPage({
   params,
@@ -33,15 +32,11 @@ export default async function EditPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/libraries" passHref legacyBehavior>
-              <BreadcrumbLink>Libraries</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/libraries">Libraries</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

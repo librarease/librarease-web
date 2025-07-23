@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import Link from 'next/link'
 import { BookCreateForm } from '@/components/books/book-create-form'
 
 export default function NewBook() {
@@ -16,15 +15,11 @@ export default function NewBook() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/" passHref legacyBehavior>
-              <BreadcrumbLink>Home</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/books" passHref legacyBehavior>
-              <BreadcrumbLink>Books</BreadcrumbLink>
-            </Link>
+            <BreadcrumbLink href="/books">Books</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

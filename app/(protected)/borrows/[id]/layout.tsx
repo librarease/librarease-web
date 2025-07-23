@@ -9,7 +9,6 @@ import {
 import { getBorrow } from '@/lib/api/borrow'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBorrowStatus } from '@/lib/utils'
-import Link from 'next/link'
 
 export default async function BorrowDetailsLayout({
   children,
@@ -38,21 +37,17 @@ export default async function BorrowDetailsLayout({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link href="/" passHref legacyBehavior>
-                  <BreadcrumbLink>Home</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <Link href="/borrows" passHref legacyBehavior>
-                  <BreadcrumbLink>Borrows</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href="/borrows">Borrows</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <Link href={`/borrows/${id}`} passHref legacyBehavior>
-                  <BreadcrumbLink>{borrowRes.data.book.title}</BreadcrumbLink>
-                </Link>
+                <BreadcrumbLink href={`/borrows/${id}`}>
+                  {borrowRes.data.book.title}
+                </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
