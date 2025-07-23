@@ -85,7 +85,6 @@ export default async function SubscriptionDetailsPage({
           </Badge>
         </div>
       </nav>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="row-span-2">
           <CardHeader>
@@ -172,7 +171,7 @@ export default async function SubscriptionDetailsPage({
               <Link
                 className="link"
                 href={`/libraries/${subsRes.data.membership.library.id}`}
-              >
+                legacyBehavior>
                 {subsRes.data.membership.library.name}
               </Link>
             </p>
@@ -223,5 +222,5 @@ export default async function SubscriptionDetailsPage({
         </Card>
       </div>
     </div>
-  )
+  );
 }

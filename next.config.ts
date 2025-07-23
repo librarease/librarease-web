@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
     proxyTimeout: 0,
   },
 
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
   /* config options here */
   env: {
     API_URL: process.env.API_URL,

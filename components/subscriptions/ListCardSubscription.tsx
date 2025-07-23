@@ -36,7 +36,7 @@ export const ListCardSubscription: React.FC<{ subscription: Subscription }> = ({
         <Link
           href={`/subscriptions/${subscription.id}`}
           className="flex justify-between items-start min-h-20"
-        >
+          legacyBehavior>
           <div>
             <CardTitle className="text-lg line-clamp-2">
               {subscription.membership.name}
@@ -88,5 +88,5 @@ export const ListCardSubscription: React.FC<{ subscription: Subscription }> = ({
         </BtnReturnBook> */}
       </CardFooter>
     </Card>
-  )
+  );
 }

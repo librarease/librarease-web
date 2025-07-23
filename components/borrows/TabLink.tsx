@@ -23,10 +23,10 @@ export const TabLink: React.FC<{
             'px-2 py-1 text-center text-sm font-medium text-foreground flex items-center justify-center min-w-[80px]', // min-w ensures same width
             activeHref === href && 'bg-background rounded-md shadow-sm'
           )}
-        >
+          legacyBehavior>
           {name}
         </Link>
       ))}
     </div>
-  )
+  );
 }

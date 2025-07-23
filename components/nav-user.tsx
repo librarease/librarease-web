@@ -86,7 +86,7 @@ export function NavUser({
             Account
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/notifications">
+            <Link href="/notifications" legacyBehavior>
               <BellIcon />
               Notifications
               {user.unread_notifications_count > 0 && (
@@ -104,5 +104,5 @@ export function NavUser({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

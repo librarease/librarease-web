@@ -48,7 +48,7 @@ export const ModalReturnBorrow: React.FC<{
         <DialogFooter>
           {id && (
             <Button variant="ghost" asChild>
-              <Link href={`/borrows/${id}`}>
+              <Link href={`/borrows/${id}`} legacyBehavior>
                 Go to Borrow Details
                 <ArrowRight className="mr-2 size-4" />
               </Link>
@@ -57,7 +57,7 @@ export const ModalReturnBorrow: React.FC<{
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export const BtnScanReturnBorrow: React.FC<

@@ -88,7 +88,6 @@ export default async function Libraries({
           </Button>
         </div>
       </nav>
-
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
         <TableHeader>
@@ -114,7 +113,7 @@ export default async function Libraries({
                 )}
               </TableCell>
               <TableCell>
-                <Link href={`libraries/${lib.id}`} className="link">
+                <Link href={`libraries/${lib.id}`} className="link" legacyBehavior>
                   {lib.name}
                 </Link>
               </TableCell>
@@ -124,7 +123,6 @@ export default async function Libraries({
           ))}
         </TableBody>
       </Table>
-
       <Pagination>
         <PaginationContent>
           {res.meta.skip > 0 && (
@@ -140,5 +138,5 @@ export default async function Libraries({
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }

@@ -38,7 +38,7 @@ export const ListCardBorrow: React.FC<{ borrow: Borrow; idx: number }> = ({
         <Link
           href={`/borrows/${borrow.id}`}
           className="flex justify-between items-start min-h-20"
-        >
+          legacyBehavior>
           <div>
             <CardTitle className="text-lg line-clamp-2">
               <abbr title={borrow.book.title} className="no-underline">
@@ -95,5 +95,5 @@ export const ListCardBorrow: React.FC<{ borrow: Borrow; idx: number }> = ({
         </BtnReturnBook>
       </CardFooter>
     </Card>
-  )
+  );
 }

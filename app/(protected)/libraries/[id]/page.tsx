@@ -73,7 +73,6 @@ export default async function LibraryDetail({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
       <div className="flex flex-col md:flex-row gap-4 py-2">
         {libRes.data.logo && (
           <Image
@@ -101,7 +100,6 @@ export default async function LibraryDetail({
           </dl>
         </div>
       </div>
-
       <div className="grid md:grid-cols-2 gap-4 ">
         <div className="border border-gray-200 my-4">
           <Table>
@@ -119,7 +117,7 @@ export default async function LibraryDetail({
                 <TableRow key={book.id}>
                   <TableCell className="font-medium">{book.code}</TableCell>
                   <TableCell>
-                    <Link href={`/books/${book.id}`} className="link">
+                    <Link href={`/books/${book.id}`} className="link" legacyBehavior>
                       {book.title}
                     </Link>
                   </TableCell>
@@ -158,5 +156,5 @@ export default async function LibraryDetail({
         </div>
       </div>
     </div>
-  )
+  );
 }

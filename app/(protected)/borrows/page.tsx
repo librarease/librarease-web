@@ -112,7 +112,7 @@ export default async function Borrows({
               </>
             </BtnScanReturnBorrow>
             <Button asChild>
-              <Link href="/borrows/new">
+              <Link href="/borrows/new" legacyBehavior>
                 <BookUser className="mr-2 size-4" />
                 Borrow a book
               </Link>
@@ -143,7 +143,6 @@ export default async function Borrows({
           />
         ))}
       </div>
-
       <Pagination>
         <PaginationContent>
           {res.meta.skip > 0 && (
@@ -159,5 +158,5 @@ export default async function Borrows({
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }
