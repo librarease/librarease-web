@@ -1,5 +1,5 @@
-import { QueryParams, ResList, ResSingle } from '../types/common'
-import { Subscription, SubscriptionDetail } from '../types/subscription'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
+import { Subscription, SubscriptionDetail } from '@/lib/types/subscription'
 import { BASE_URL } from './common'
 
 const SUBSCRIPTIONS_URL = `${BASE_URL}/subscriptions`
@@ -9,6 +9,7 @@ type GetListSubsQuery = QueryParams<
     membership_name: string
     is_active?: boolean
     status?: 'active' | 'expired'
+    library_id?: string
   }
 >
 type GetListSubsResponse = Promise<ResList<Subscription>>

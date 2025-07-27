@@ -1,5 +1,5 @@
-import { Book, BookDetail } from '../types/book'
-import { QueryParams, ResList, ResSingle } from '../types/common'
+import { Book, BookDetail } from '@/lib/types/book'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
 import { BASE_URL } from './common'
 
 const BOOKS_URL = `${BASE_URL}/books`

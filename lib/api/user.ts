@@ -1,5 +1,6 @@
-import { QueryParams, ResList, ResSingle } from '../types/common'
-import { User } from '../types/user'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
+import { Staff } from '@/lib/types/staff'
+import { User } from '@/lib/types/user'
 import { BASE_URL } from './common'
 
 const USERS_URL = `${BASE_URL}/users`
@@ -57,9 +58,10 @@ export const createUser = async (
 
 type GetMeQuery = {
   include_unread_notifications_count?: boolean
+  includeStaff?: boolean
 }
 type GetMeResponse = Promise<
-  ResSingle<User & { unread_notifications_count: number }>
+  ResSingle<User & { unread_notifications_count: number; staffs?: Staff[] }>
 >
 
 export const getMe = async (
@@ -69,6 +71,9 @@ export const getMe = async (
   const url = new URL(`${USERS_URL}/me`)
   if (query.include_unread_notifications_count) {
     url.searchParams.append('include', 'unread_notifications_count')
+  }
+  if (query.includeStaff) {
+    url.searchParams.append('include', 'staffs')
   }
   const response = await fetch(url.toString(), init)
   if (!response.ok) {

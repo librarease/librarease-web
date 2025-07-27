@@ -1,5 +1,5 @@
-import { Analysis } from '../types/analysis'
-import { ResSingle } from '../types/common'
+import { Analysis } from '@/lib/types/analysis'
+import { ResSingle } from '@/lib/types/common'
 import { BASE_URL } from './common'
 
 const ANSLYSIS_URL = `${BASE_URL}/analysis`
