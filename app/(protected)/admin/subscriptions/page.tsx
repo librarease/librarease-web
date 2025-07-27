@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
@@ -13,47 +14,55 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { getListBooks } from '@/lib/api/book'
+import { getListSubs } from '@/lib/api/subscription'
+import { Verify } from '@/lib/firebase/firebase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { Search } from 'lucide-react'
-import { DebouncedInput } from '@/components/common/DebouncedInput'
+import { ListCardSubscription } from '@/components/subscriptions/ListCardSubscription'
+import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
-import { ListBook } from '@/components/books/ListBook'
-import { Verify } from '@/lib/firebase/firebase'
+import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {
-  title: `Books · ${SITE_NAME}`,
+  title: `Subscriptions · ${SITE_NAME}`,
 }
 
-export default async function UserBooks({
+export default async function Subscriptions({
   searchParams,
 }: {
   searchParams: Promise<{
     skip?: number
     limit?: number
-    library_id?: string
-    title?: string
+    status?: 'active' | 'expired'
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
-  const library_id = sp?.library_id
+  const status = sp?.status
 
-  const query = {
-    sort_by: 'created_at',
-    sort_in: 'desc',
-    limit: limit,
-    skip: skip,
-    title: sp?.title,
-    ...(library_id ? { library_id } : {}),
-  } as const
+  const headers = await Verify({
+    from: '/admin/subscriptions',
+  })
 
-  await Verify({ from: '/books' })
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libID = cookieStore.get(cookieName)?.value
 
-  const res = await getListBooks(query)
+  const res = await getListSubs(
+    {
+      sort_by: 'created_at',
+      sort_in: 'desc',
+      limit: limit,
+      skip: skip,
+      status,
+      library_id: libID,
+    },
+    {
+      headers,
+    }
+  )
 
   if ('error' in res) {
     console.log(res)
@@ -62,24 +71,24 @@ export default async function UserBooks({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/books?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/books?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/admin/subscriptions?skip=${skip + limit}&limit=${limit}`
+  const prevURL = `/admin/subscriptions?skip=${prevSkip}&limit=${limit}`
 
   return (
     <div className="space-y-4">
       <nav className="backdrop-blur-sm sticky top-0 z-10">
-        <h1 className="text-2xl font-semibold">Books</h1>
+        <h1 className="text-2xl font-semibold">Subscriptions</h1>
         <div className="flex justify-between items-center">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  Books{' '}
+                  Subscriptions
                   <Badge className="ml-4" variant="outline">
                     {res.meta.total}
                   </Badge>
@@ -87,26 +96,27 @@ export default async function UserBooks({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+          <Button asChild>
+            <Link href="/admin/subscriptions/new">New Subscription</Link>
+          </Button>
         </div>
       </nav>
 
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
+      <TabLink
+        tabs={[
+          { name: 'All', href: '/admin/subscriptions' },
+          { name: 'Active', href: '/admin/subscriptions?status=active' },
+          { name: 'Expired', href: '/admin/subscriptions?status=expired' },
+        ]}
+        activeHref={`/admin/subscriptions${status ? `?status=${status}` : ''}`}
+      />
 
-        <DebouncedInput
-          name="title"
-          placeholder="Search by title"
-          className="pl-8 max-w-md"
-        />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {res.data.map((book) => (
-          <Link key={book.id} href={`/books/${book.id}`} passHref>
-            <ListBook book={book} />
-          </Link>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {res.data.map((sub) => (
+          <ListCardSubscription key={sub.id} subscription={sub} />
         ))}
       </div>
+
       <Pagination>
         <PaginationContent>
           {res.meta.skip > 0 && (

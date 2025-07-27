@@ -1,5 +1,5 @@
-import { Membership } from '../types/membership'
-import { QueryParams, ResList, ResSingle } from '../types/common'
+import { Membership } from '@/lib/types/membership'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
 import { BASE_URL } from './common'
 
 const MEMBERSHIPS_URL = `${BASE_URL}/memberships`

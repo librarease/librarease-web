@@ -14,52 +14,48 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { getListSubs } from '@/lib/api/subscription'
-import { Verify } from '@/lib/firebase/firebase'
+import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { ListCardSubscription } from '@/components/subscriptions/ListCardSubscription'
-import { TabLink } from '@/components/borrows/TabLink'
+import { Search } from 'lucide-react'
+import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
+import { ListBook } from '@/components/books/ListBook'
+import { cookies } from 'next/headers'
+import { Verify } from '@/lib/firebase/firebase'
 
 export const metadata: Metadata = {
-  title: `Subscriptions · ${SITE_NAME}`,
+  title: `Books · ${SITE_NAME}`,
 }
 
-export default async function Subscriptions({
+export default async function Books({
   searchParams,
 }: {
   searchParams: Promise<{
     skip?: number
     limit?: number
-    library_id?: string
-    status?: 'active' | 'expired'
+    title?: string
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
-  const library_id = sp?.library_id
-  const status = sp?.status
 
-  const headers = await Verify({
-    from: '/subscriptions',
+  await Verify({ from: '/admin/books' })
+
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libID = cookieStore.get(cookieName)?.value
+
+  const res = await getListBooks({
+    sort_by: 'created_at',
+    sort_in: 'desc',
+    limit: limit,
+    skip: skip,
+    title: sp?.title,
+    library_id: libID,
   })
-
-  const res = await getListSubs(
-    {
-      sort_by: 'created_at',
-      sort_in: 'desc',
-      limit: limit,
-      skip: skip,
-      status,
-      ...(library_id ? { library_id } : {}),
-    },
-    {
-      headers,
-    }
-  )
 
   if ('error' in res) {
     console.log(res)
@@ -68,24 +64,24 @@ export default async function Subscriptions({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/subscriptions?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/subscriptions?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/admin/books?skip=${skip + limit}&limit=${limit}`
+  const prevURL = `/admin/books?skip=${prevSkip}&limit=${limit}`
 
   return (
     <div className="space-y-4">
       <nav className="backdrop-blur-sm sticky top-0 z-10">
-        <h1 className="text-2xl font-semibold">Subscriptions</h1>
+        <h1 className="text-2xl font-semibold">Books</h1>
         <div className="flex justify-between items-center">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  Subscriptions
+                  Books{' '}
                   <Badge className="ml-4" variant="outline">
                     {res.meta.total}
                   </Badge>
@@ -94,26 +90,28 @@ export default async function Subscriptions({
             </BreadcrumbList>
           </Breadcrumb>
           <Button asChild>
-            <Link href="/subscriptions/new">New Subscription</Link>
+            <Link href="/admin/books/new">Register New Book</Link>
           </Button>
         </div>
       </nav>
 
-      <TabLink
-        tabs={[
-          { name: 'All', href: '/subscriptions' },
-          { name: 'Active', href: '/subscriptions?status=active' },
-          { name: 'Expired', href: '/subscriptions?status=expired' },
-        ]}
-        activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
-      />
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {res.data.map((sub) => (
-          <ListCardSubscription key={sub.id} subscription={sub} />
-        ))}
+        <DebouncedInput
+          name="title"
+          placeholder="Search by title"
+          className="pl-8 max-w-md"
+        />
       </div>
 
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {res.data.map((book) => (
+          <Link key={book.id} href={`/admin/books/${book.id}`} passHref>
+            <ListBook book={book} />
+          </Link>
+        ))}
+      </div>
       <Pagination>
         <PaginationContent>
           {res.meta.skip > 0 && (

@@ -1,5 +1,5 @@
-import { Borrow, BorrowDetail, Return } from '../types/borrow'
-import { QueryParams, ResList, ResSingle } from '../types/common'
+import { Borrow, BorrowDetail, Return } from '@/lib/types/borrow'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
 import { BASE_URL } from './common'
 
 const BORROW_URL = `${BASE_URL}/borrowings`

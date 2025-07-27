@@ -1,5 +1,5 @@
-import { QueryParams, ResList } from '../types/common'
-import { Notification } from '../types/notification'
+import { QueryParams, ResList } from '@/lib/types/common'
+import { Notification } from '@/lib/types/notification'
 import { BASE_URL } from './common'
 
 const NOTIFICATION_URL = `${BASE_URL}/notifications`

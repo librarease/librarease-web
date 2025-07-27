@@ -1,4 +1,4 @@
-import { User } from '../types/user'
+import { User } from '@/lib/types/user'
 import { BASE_URL } from './common'
 
 const AUTH_URL = `${BASE_URL}/auth`

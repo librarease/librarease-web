@@ -1,5 +1,5 @@
-import { QueryParams, ResList, ResSingle } from '../types/common'
-import { Staff, StaffDetail } from '../types/staff'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
+import { Staff, StaffDetail } from '@/lib/types/staff'
 import { BASE_URL } from './common'
 
 const STAFF_URL = `${BASE_URL}/staffs`

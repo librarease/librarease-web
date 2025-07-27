@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth'
 import { cookies } from 'next/headers'
 import { redirect, RedirectType } from 'next/navigation'
+import { getMe } from '../api/user'
 
 const auth = getAuth(app)
 
@@ -49,6 +50,34 @@ export async function loginAction(
     maxAge,
     httpOnly: true,
   })
+
+  // set active library
+  const me = await getMe(
+    { includeStaff: true },
+    {
+      headers: new Headers({
+        'X-Client-Id': process.env.CLIENT_ID as string,
+        'X-Uid': user.uid,
+      }),
+    }
+  )
+    .then((res) => ('error' in res ? null : res.data))
+    .catch((e) => {
+      console.warn('Error fetching me:', e)
+      return null
+    })
+
+  if (me && me.staffs?.length) {
+    const staffLibraries = me.staffs.map((s) => s.library_id)
+    const activeLibrary = process.env.LIBRARY_COOKIE_NAME as string
+    const existingActiveLibrary = cookieStore.get(activeLibrary)?.value
+    if (
+      !existingActiveLibrary ||
+      !staffLibraries.includes(existingActiveLibrary)
+    ) {
+      cookieStore.set(activeLibrary, me.staffs[0].library_id, {})
+    }
+  }
 
   redirect(formState.from, RedirectType.replace)
 }

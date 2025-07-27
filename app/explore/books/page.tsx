@@ -21,13 +21,12 @@ import { Search } from 'lucide-react'
 import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
-import { Verify } from '@/lib/firebase/firebase'
 
 export const metadata: Metadata = {
-  title: `Books · ${SITE_NAME}`,
+  title: `ExploreBooks · ${SITE_NAME}`,
 }
 
-export default async function UserBooks({
+export default async function ExploreBooks({
   searchParams,
 }: {
   searchParams: Promise<{
@@ -42,18 +41,14 @@ export default async function UserBooks({
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
 
-  const query = {
+  const res = await getListBooks({
     sort_by: 'created_at',
     sort_in: 'desc',
     limit: limit,
     skip: skip,
     title: sp?.title,
     ...(library_id ? { library_id } : {}),
-  } as const
-
-  await Verify({ from: '/books' })
-
-  const res = await getListBooks(query)
+  })
 
   if ('error' in res) {
     console.log(res)
@@ -62,8 +57,8 @@ export default async function UserBooks({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/books?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/books?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/explore/books?skip=${skip + limit}&limit=${limit}`
+  const prevURL = `/explore/books?skip=${prevSkip}&limit=${limit}`
 
   return (
     <div className="space-y-4">
@@ -79,7 +74,7 @@ export default async function UserBooks({
 
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  Books{' '}
+                  Explore{' '}
                   <Badge className="ml-4" variant="outline">
                     {res.meta.total}
                   </Badge>
@@ -102,7 +97,7 @@ export default async function UserBooks({
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {res.data.map((book) => (
-          <Link key={book.id} href={`/books/${book.id}`} passHref>
+          <Link key={book.id} href={`/explore/books/${book.id}`} passHref>
             <ListBook book={book} />
           </Link>
         ))}
