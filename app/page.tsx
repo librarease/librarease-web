@@ -2,13 +2,10 @@ import Link from 'next/link'
 import {
   Library,
   Book,
-  Users,
-  UserCog,
-  CreditCard,
-  ChartSpline,
   BellIcon,
   BookUser,
   Ticket,
+  Settings,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -17,20 +14,15 @@ import { logoutAction } from '@/lib/actions/logout'
 import { ModeToggle } from '@/components/button-toggle-theme'
 
 const menuItems = [
-  { title: 'Dashboard', icon: ChartSpline, href: '/dashboard', level: 3 },
-  { title: 'Libraries', icon: Library, href: '/libraries', level: 1 },
-  { title: 'Notifications', icon: BellIcon, href: '/notifications', level: 2 },
-  { title: 'Books', icon: Book, href: '/books', level: 1 },
-  { title: 'Users', icon: Users, href: '/users', level: 3 },
-  { title: 'Staffs', icon: UserCog, href: '/staffs', level: 3 },
-  { title: 'Memberships', icon: CreditCard, href: '/memberships', level: 1 },
+  { title: 'Libraries', icon: Library, href: '/libraries' },
+  { title: 'Notifications', icon: BellIcon, href: '/notifications' },
+  { title: 'Books', icon: Book, href: '/books' },
   {
-    title: 'Subscriptions',
+    title: 'My Subscriptions',
     icon: Ticket,
     href: '/subscriptions',
-    level: 2,
   },
-  { title: 'Borrows', icon: BookUser, href: '/borrows', level: 2 },
+  { title: 'My Borrows', icon: BookUser, href: '/borrows' },
 ]
 
 export default async function LibraryDashboard() {
@@ -40,16 +32,6 @@ export default async function LibraryDashboard() {
   if (!claim || !claim.librarease) {
     return <Landing />
   }
-
-  const userLvl =
-    claim.librarease.role === 'SUPERADMIN'
-      ? 5
-      : claim.librarease.role === 'ADMIN'
-        ? 4
-        : claim.librarease.admin_libs.length > 0 ||
-            claim.librarease.staff_libs.length > 0
-          ? 3
-          : 2
 
   return (
     <main className="min-h-screen p-8">
@@ -65,7 +47,6 @@ export default async function LibraryDashboard() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {menuItems.map((item) => {
-            if (item.level > userLvl) return null
             const Icon = item.icon
             return (
               <Button
@@ -81,6 +62,19 @@ export default async function LibraryDashboard() {
               </Button>
             )
           })}
+
+          {claim.librarease.admin_libs.concat(claim.librarease.staff_libs)
+            .length > 0 ? (
+            <Button
+              className="w-full h-24 flex flex-col items-center justify-center gap-2"
+              asChild
+            >
+              <Link href="/admin" className="text-sm">
+                <Settings className="size-6" />
+                <span>Admin Dashboard</span>
+              </Link>
+            </Button>
+          ) : null}
         </div>
       </div>
     </main>

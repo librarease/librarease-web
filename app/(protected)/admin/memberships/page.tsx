@@ -22,6 +22,7 @@ import { ListCardMembership } from '@/components/memberships/ListCardMembership'
 import { Search } from 'lucide-react'
 import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
+import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {
   title: `Memberships · ${SITE_NAME}`,
@@ -33,21 +34,24 @@ export default async function Memberships({
   searchParams: Promise<{
     skip?: number
     limit?: number
-    library_id?: string
     name?: string
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
-  const library_id = sp?.library_id
+
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libID = cookieStore.get(cookieName)?.value
+
   const res = await getListMemberships({
     sort_by: 'created_at',
     sort_in: 'desc',
     limit: limit,
     skip: skip,
     name: sp?.name,
-    ...(library_id ? { library_id } : {}),
+    library_id: libID,
   })
 
   if ('error' in res) {
@@ -68,7 +72,7 @@ export default async function Memberships({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -83,7 +87,7 @@ export default async function Memberships({
             </BreadcrumbList>
           </Breadcrumb>
           <Button asChild>
-            <Link href="/memberships/new">New Membership</Link>
+            <Link href="/admin/memberships/new">New Membership</Link>
           </Button>
         </div>
       </nav>

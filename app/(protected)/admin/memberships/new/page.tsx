@@ -99,7 +99,7 @@ export default function ComboboxForm() {
     createMembership(data)
       .then(() => {
         toast('Membership Created')
-        router.push('/memberships')
+        router.push('/admin/memberships')
       })
       .catch((e) => {
         toast.error(e?.error)
@@ -132,11 +132,13 @@ export default function ComboboxForm() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/memberships">Memberships</BreadcrumbLink>
+            <BreadcrumbLink href="/admin/memberships">
+              Memberships
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

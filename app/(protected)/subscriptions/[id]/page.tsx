@@ -19,7 +19,7 @@ export default async function SubscriptionDetailsPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/admin/subscriptions/${id}` })
+  await Verify({ from: `/subscriptions/${id}` })
 
   const [subsRes] = await Promise.all([getSubscription({ id })])
 
@@ -27,10 +27,6 @@ export default async function SubscriptionDetailsPage({
     console.log({ libRes: subsRes })
     return <div>{JSON.stringify(subsRes.message)}</div>
   }
-
-  //   const cookieStore = await cookies()
-  //   const sessionName = process.env.SESSION_COOKIE_NAME as string
-  //   const session = cookieStore.get(sessionName)
 
   return (
     <div className="space-y-4">
@@ -40,11 +36,11 @@ export default async function SubscriptionDetailsPage({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/admin/subscriptions">
+                <BreadcrumbLink href="/subscriptions">
                   Subscriptions
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -67,6 +63,7 @@ export default async function SubscriptionDetailsPage({
           </Badge>
         </div>
       </nav>
+
       <DetailSubscription subscription={subsRes.data} />
     </div>
   )

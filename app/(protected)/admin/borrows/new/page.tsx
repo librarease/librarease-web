@@ -14,7 +14,7 @@ export default async function ComboboxForm() {
   const claim = await IsLoggedIn()
   if (!claim || !claim.librarease) {
     redirect(
-      `/login?from=${encodeURIComponent('/borrows/new')}`,
+      `/login?from=${encodeURIComponent('/admin/borrows/new')}`,
       RedirectType.replace
     )
   }
@@ -25,11 +25,11 @@ export default async function ComboboxForm() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink href="..">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/borrows">Borrows</BreadcrumbLink>
+            <BreadcrumbLink href=".">Borrows</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

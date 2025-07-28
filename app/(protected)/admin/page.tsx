@@ -17,25 +17,23 @@ import { ModeToggle } from '@/components/button-toggle-theme'
 import { redirect, RedirectType } from 'next/navigation'
 
 const menuItems = [
-  { title: 'Dashboard', icon: ChartSpline, href: '/admin', level: 3 },
-  { title: 'Libraries', icon: Library, href: '/admin/libraries', level: 1 },
-  { title: 'Notifications', icon: BellIcon, href: '/notifications', level: 2 },
-  { title: 'Books', icon: Book, href: '/admin/books', level: 1 },
-  { title: 'Users', icon: Users, href: '/admin/users', level: 3 },
-  { title: 'Staffs', icon: UserCog, href: '/admin/staffs', level: 3 },
+  { title: 'Dashboard', icon: ChartSpline, href: './admin/dashboard' },
+  { title: 'Libraries', icon: Library, href: './admin/libraries' },
+  { title: 'Notifications', icon: BellIcon, href: './admin/notifications' },
+  { title: 'Books', icon: Book, href: './admin/books' },
+  { title: 'Users', icon: Users, href: './admin/users' },
+  { title: 'Staffs', icon: UserCog, href: './admin/staffs' },
   {
     title: 'Memberships',
     icon: CreditCard,
-    href: '/admin/memberships',
-    level: 1,
+    href: './admin/memberships',
   },
   {
     title: 'Subscriptions',
     icon: Ticket,
-    href: '/admin/subscriptions',
-    level: 2,
+    href: './admin/subscriptions',
   },
-  { title: 'Borrows', icon: BookUser, href: '/admin/borrows', level: 2 },
+  { title: 'Borrows', icon: BookUser, href: './admin/borrows' },
 ]
 
 export default async function LibraryDashboard() {
@@ -52,16 +50,6 @@ export default async function LibraryDashboard() {
     redirect(`/`, RedirectType.replace)
   }
 
-  const userLvl =
-    claim.librarease.role === 'SUPERADMIN'
-      ? 5
-      : claim.librarease.role === 'ADMIN'
-        ? 4
-        : claim.librarease.admin_libs.length > 0 ||
-            claim.librarease.staff_libs.length > 0
-          ? 3
-          : 2
-
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-2xl mx-auto space-y-4">
@@ -76,7 +64,6 @@ export default async function LibraryDashboard() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {menuItems.map((item) => {
-            if (item.level > userLvl) return null
             const Icon = item.icon
             return (
               <Button

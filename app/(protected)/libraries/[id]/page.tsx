@@ -56,11 +56,11 @@ export default async function LibraryDetail({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="..">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href=".">Libraries</BreadcrumbLink>
+            <BreadcrumbLink href="/libraries">Libraries</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 
@@ -113,7 +113,7 @@ export default async function LibraryDetail({
                 <TableRow key={book.id}>
                   <TableCell className="font-medium">{book.code}</TableCell>
                   <TableCell>
-                    <Link href={`../books/${book.id}`} className="link">
+                    <Link href={`/books/${book.id}`} className="link">
                       {book.title}
                     </Link>
                   </TableCell>

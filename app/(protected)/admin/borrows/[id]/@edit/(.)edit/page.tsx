@@ -10,7 +10,7 @@ export default async function BorrowDetailsPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/borrows/${id}` })
+  await Verify({ from: `/admin/borrows/${id}` })
 
   const [borrowRes] = await Promise.all([getBorrow({ id })])
   if ('error' in borrowRes) {

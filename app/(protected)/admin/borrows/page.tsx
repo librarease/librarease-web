@@ -26,6 +26,8 @@ import { DropdownMenuBorrow } from '@/components/borrows/DropdownMenuBorrow'
 import { BtnScanReturnBorrow } from '@/components/borrows/ModalReturnBorrow'
 import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
+import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
+import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -37,19 +39,21 @@ export default async function Borrows({
   searchParams: Promise<{
     skip?: string
     limit?: string
-    library_id?: string
     status?: string
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
-  const library_id = sp?.library_id
   const status = sp?.status as 'active' | 'overdue' | 'returned'
 
   const headers = await Verify({
-    from: '/borrows',
+    from: '/admin/borrows',
   })
+
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libID = cookieStore.get(cookieName)?.value
 
   const res = await getListBorrows(
     {
@@ -58,7 +62,7 @@ export default async function Borrows({
       limit: limit,
       skip: skip,
       status,
-      ...(library_id ? { library_id } : {}),
+      library_id: libID,
     },
     {
       headers,
@@ -75,12 +79,12 @@ export default async function Borrows({
   const nextParams = new URLSearchParams(sp)
   nextParams.set('skip', String(skip + limit))
   nextParams.set('limit', String(limit))
-  const nextURL = `/borrows?${nextParams.toString()}`
+  const nextURL = `?${nextParams.toString()}`
 
   const prevParams = new URLSearchParams(sp)
   prevParams.set('skip', String(prevSkip))
   prevParams.set('limit', String(limit))
-  const prevURL = `/borrows?${prevParams.toString()}`
+  const prevURL = `?${prevParams.toString()}`
 
   return (
     <div className="space-y-4">
@@ -90,7 +94,7 @@ export default async function Borrows({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href=".">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -115,7 +119,7 @@ export default async function Borrows({
               </>
             </BtnScanReturnBorrow>
             <Button asChild>
-              <Link href="/borrows/new">
+              <Link href="./borrows/new">
                 <BookUser className="mr-2 size-4" />
                 Borrow a book
               </Link>
@@ -126,21 +130,21 @@ export default async function Borrows({
 
       <TabLink
         tabs={[
-          { name: 'All', href: '/borrows' },
-          { name: 'Active', href: '/borrows?status=active' },
-          { name: 'Overdue', href: '/borrows?status=overdue' },
-          { name: 'Returned', href: '/borrows?status=returned' },
+          { name: 'All', href: '/admin/borrows' },
+          { name: 'Active', href: '/admin/borrows?status=active' },
+          { name: 'Overdue', href: '/admin/borrows?status=overdue' },
+          { name: 'Returned', href: '/admin/borrows?status=returned' },
         ]}
-        activeHref={`/borrows${status ? `?status=${status}` : ''}`}
+        activeHref={`/admin/borrows${status ? `?status=${status}` : ''}`}
       />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow, idx) => (
-          <ListCardBorrow
-            key={borrow.id}
-            borrow={borrow}
-            idx={skip + idx + 1}
-          />
+          <ListCardBorrow key={borrow.id} borrow={borrow} idx={skip + idx + 1}>
+            <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
+              Return Book
+            </BtnReturnBook>
+          </ListCardBorrow>
         ))}
       </div>
       <Pagination>

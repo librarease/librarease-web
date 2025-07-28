@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
@@ -22,40 +21,36 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { getListUsers } from '@/lib/api/user'
+import { getListLibraries } from '@/lib/api/library'
+import { SITE_NAME } from '@/lib/consts'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { SITE_NAME } from '@/lib/consts'
-import { cookies } from 'next/headers'
-import { Badge } from '@/components/ui/badge'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: `Users · ${SITE_NAME}`,
+  title: `Libraries · ${SITE_NAME}`,
 }
 
-export default async function Users({
+export default async function Libraries({
   searchParams,
 }: {
   searchParams: Promise<{
     skip?: number
     limit?: number
+    library_id?: string
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
-
-  const cookieStore = await cookies()
-  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
-  const libID = cookieStore.get(cookieName)?.value
-
-  const res = await getListUsers({
+  const library_id = sp?.library_id
+  const res = await getListLibraries({
     sort_by: 'created_at',
     sort_in: 'desc',
-    library_id: libID,
     limit: limit,
     skip: skip,
+    ...(library_id ? { library_id } : {}),
   })
 
   if ('error' in res) {
@@ -65,59 +60,63 @@ export default async function Users({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/users?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/users?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/libraries?skip=${skip + limit}&limit=${limit}`
+  const prevURL = `/libraries?skip=${prevSkip}&limit=${limit}`
 
   return (
     <div>
       <nav className="backdrop-blur-sm sticky top-0 z-10">
-        <h1 className="text-2xl font-semibold">Users</h1>
+        <h1 className="text-2xl font-semibold">Libraries</h1>
         <div className="flex justify-between items-center">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
-                <BreadcrumbPage>
-                  Users
-                  <Badge className="ml-4" variant="outline">
-                    {res.meta.total}
-                  </Badge>
-                </BreadcrumbPage>
+                <BreadcrumbPage>Libraries</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button asChild>
-            <Link href="/admin/users/new">Add User</Link>
-          </Button>
         </div>
       </nav>
-
       <Table>
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
+            <TableHead>Logo</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Created At</TableHead>
+            <TableHead>Creatd At</TableHead>
+            <TableHead>Updated</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {res.data.map((u) => (
-            <TableRow key={u.id}>
-              <TableCell>{u.id}</TableCell>
-              <TableCell>{u.name}</TableCell>
-              <TableCell>{u.email}</TableCell>
-              <TableCell>{formatDate(u.created_at)}</TableCell>
+          {res.data.map((lib) => (
+            <TableRow key={lib.id}>
+              <TableCell>
+                {lib.logo && (
+                  <Image
+                    src={lib.logo}
+                    alt={lib.name + "'s logo"}
+                    width={50}
+                    height={50}
+                    className="rounded"
+                  />
+                )}
+              </TableCell>
+              <TableCell>
+                <Link href={`libraries/${lib.id}`} className="link">
+                  {lib.name}
+                </Link>
+              </TableCell>
+              <TableCell>{formatDate(lib.created_at)}</TableCell>
+              <TableCell>{formatDate(lib.updated_at)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-
       <Pagination>
         <PaginationContent>
           {res.meta.skip > 0 && (

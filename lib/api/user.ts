@@ -5,7 +5,9 @@ import { BASE_URL } from './common'
 
 const USERS_URL = `${BASE_URL}/users`
 
-type GetListUsersQuery = QueryParams<User>
+type GetListUsersQuery = QueryParams<User> & {
+  library_id?: string
+}
 type GetListUsersResponse = Promise<ResList<User>>
 
 export const getListUsers = async (

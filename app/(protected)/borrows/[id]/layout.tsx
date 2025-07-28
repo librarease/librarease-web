@@ -12,7 +12,6 @@ import { getBorrowStatus } from '@/lib/utils'
 
 export default async function BorrowDetailsLayout({
   children,
-  edit,
   params,
 }: Readonly<{
   children: React.ReactNode
@@ -62,7 +61,6 @@ export default async function BorrowDetailsLayout({
           </Badge>
         </div>
       </nav>
-      {edit}
       {children}
     </div>
   )

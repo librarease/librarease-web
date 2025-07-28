@@ -28,6 +28,7 @@ import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { IsLoggedIn } from '@/lib/firebase/firebase'
 
 export const metadata: Metadata = {
   title: `Libraries · ${SITE_NAME}`,
@@ -42,6 +43,8 @@ export default async function Libraries({
     library_id?: string
   }>
 }) {
+  const claims = await IsLoggedIn()
+
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
@@ -51,6 +54,7 @@ export default async function Libraries({
     sort_in: 'desc',
     limit: limit,
     skip: skip,
+    id: claims?.librarease?.id,
     ...(library_id ? { library_id } : {}),
   })
 
@@ -81,9 +85,12 @@ export default async function Libraries({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button asChild>
-            <Link href="/libraries/new">Create a Library</Link>
-          </Button>
+          {claims?.librarease?.role === 'SUPERADMIN' ||
+          claims?.librarease?.role === 'ADMIN' ? (
+            <Button asChild>
+              <Link href="./libraries/new">Create a Library</Link>
+            </Button>
+          ) : null}
         </div>
       </nav>
       <Table>

@@ -21,6 +21,7 @@ import { redirect, RedirectType } from 'next/navigation'
 import { format, subMonths, parse, startOfDay, endOfDay } from 'date-fns'
 import { getListLibraries } from '@/lib/api/library'
 import { DateRange } from 'react-day-picker'
+import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {
   title: `Dashboard · ${SITE_NAME}`,
@@ -30,7 +31,6 @@ export default async function DashboardPage({
   searchParams,
 }: {
   searchParams: Promise<{
-    library_id: string
     from: string
     to: string
     limit: number
@@ -38,7 +38,7 @@ export default async function DashboardPage({
   }>
 }) {
   const claims = await IsLoggedIn()
-  if (!claims) redirect('/login?from=/dashboard')
+  if (!claims) redirect('/login?from=/admin/dashboard')
 
   if (
     claims.librarease.role === 'USER' &&
@@ -48,21 +48,19 @@ export default async function DashboardPage({
     redirect('/', RedirectType.replace)
   }
 
-  const { library_id, from, to, limit = 5, skip = 0 } = await searchParams
+  const { from, to, limit = 5, skip = 0 } = await searchParams
+
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libID = cookieStore.get(cookieName)?.value
 
   if (!to || !from) {
     const now = new Date()
     const to = format(now, 'dd-MM-yyyy')
     const from = format(subMonths(now, 1), 'dd-MM-yyyy')
-    const libID = claims.librarease.admin_libs.concat(
-      claims.librarease.staff_libs
-    )
     const sp = new URLSearchParams()
     sp.set('from', from)
     sp.set('to', to)
-    if (claims.librarease.role === 'USER') {
-      sp.set('library_id', libID[0])
-    }
 
     redirect('?' + sp.toString(), RedirectType.replace)
   }
@@ -73,7 +71,7 @@ export default async function DashboardPage({
       limit,
       from: startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON(),
       to: endOfDay(parse(to, 'dd-MM-yyyy', new Date())).toJSON(),
-      library_id,
+      library_id: libID!,
     }),
     getListLibraries({ limit: 5 }),
   ])
@@ -93,7 +91,7 @@ export default async function DashboardPage({
     const sp = new URLSearchParams(p)
     sp.set('library_id', libraryID)
 
-    redirect('/dashboard?' + sp.toString(), RedirectType.replace)
+    redirect('./?' + sp.toString(), RedirectType.replace)
   }
 
   const fromDate = parse(from, 'dd-MM-yyyy', new Date())
@@ -109,7 +107,7 @@ export default async function DashboardPage({
     if (range.from) sp.set('from', format(range.from, 'dd-MM-yyyy'))
     if (range.to) sp.set('to', format(range.to, 'dd-MM-yyyy'))
 
-    redirect('/dashboard?' + sp.toString(), RedirectType.replace)
+    redirect('./?' + sp.toString(), RedirectType.replace)
   }
 
   return (
@@ -118,7 +116,7 @@ export default async function DashboardPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink href=".">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 
@@ -135,7 +133,7 @@ export default async function DashboardPage({
               .concat(claims.librarease.staff_libs)
               .includes(lib.id)
           )}
-          lib={library_id}
+          lib={libID!}
           onChangeAction={onLibraryChange}
         />
         <DateRangeSelector
