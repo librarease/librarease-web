@@ -3,11 +3,6 @@ import { getBorrow, getListBorrows } from '@/lib/api/borrow'
 import { Borrow } from '@/lib/types/borrow'
 import { redirect, RedirectType } from 'next/navigation'
 import { DetailBorrow } from '@/components/borrows/DetailBorrow'
-import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
-import { Button } from '@/components/ui/button'
-import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
-import Link from 'next/link'
-import { Pen } from 'lucide-react'
 
 export default async function BorrowDetailsPage({
   params,
@@ -16,7 +11,7 @@ export default async function BorrowDetailsPage({
 }) {
   const { id } = await params
 
-  const from = `/admin/borrows/${id}`
+  const from = `/borrows/${id}`
 
   const headers = await Verify({ from })
 
@@ -51,29 +46,5 @@ export default async function BorrowDetailsPage({
     prevBorrows = prevBorrowsRes.data
   }
 
-  return (
-    <DetailBorrow borrow={borrowRes.data} prevBorrows={prevBorrows}>
-      <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-2">
-        {borrowRes.data.returning ? (
-          <BtnUndoReturn
-            variant="outline"
-            className="w-full backdrop-blur-md"
-            borrow={borrowRes.data}
-          />
-        ) : (
-          <BtnReturnBook
-            variant="outline"
-            className="w-full"
-            borrow={borrowRes.data}
-          />
-        )}
-        <Button asChild>
-          <Link href={`./${borrowRes.data.id}/edit`} className="w-full">
-            <Pen />
-            Edit
-          </Link>
-        </Button>
-      </div>
-    </DetailBorrow>
-  )
+  return <DetailBorrow borrow={borrowRes.data} prevBorrows={prevBorrows} />
 }

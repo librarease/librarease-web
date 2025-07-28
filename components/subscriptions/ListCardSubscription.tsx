@@ -21,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import Link from 'next/link'
 import { Subscription } from '@/lib/types/subscription'
 import clsx from 'clsx'
 
@@ -33,10 +32,7 @@ export const ListCardSubscription: React.FC<{ subscription: Subscription }> = ({
   return (
     <Card key={subscription.id}>
       <CardHeader>
-        <Link
-          href={`/subscriptions/${subscription.id}`}
-          className="flex justify-between items-start min-h-20"
-        >
+        <div className="flex justify-between items-start min-h-20">
           <div>
             <CardTitle className="text-lg line-clamp-2">
               {subscription.membership.name}
@@ -56,7 +52,7 @@ export const ListCardSubscription: React.FC<{ subscription: Subscription }> = ({
           >
             {getSubscriptionStatus(subscription)}
           </Badge>
-        </Link>
+        </div>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex items-center gap-2 text-sm">

@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
@@ -15,14 +14,13 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { getListSubs } from '@/lib/api/subscription'
-import { Verify } from '@/lib/firebase/firebase'
-import Link from 'next/link'
+import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { ListCardSubscription } from '@/components/subscriptions/ListCardSubscription'
 import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
-import { cookies } from 'next/headers'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: `Subscriptions · ${SITE_NAME}`,
@@ -43,12 +41,10 @@ export default async function Subscriptions({
   const status = sp?.status
 
   const headers = await Verify({
-    from: '/admin/subscriptions',
+    from: '/subscriptions',
   })
 
-  const cookieStore = await cookies()
-  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
-  const libID = cookieStore.get(cookieName)?.value
+  const claim = await IsLoggedIn()
 
   const res = await getListSubs(
     {
@@ -57,7 +53,7 @@ export default async function Subscriptions({
       limit: limit,
       skip: skip,
       status,
-      library_id: libID,
+      user_id: claim?.librarease?.id,
     },
     {
       headers,
@@ -71,8 +67,8 @@ export default async function Subscriptions({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/admin/subscriptions?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/admin/subscriptions?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/subscriptions?skip=${skip + limit}&limit=${limit}`
+  const prevURL = `/subscriptions?skip=${prevSkip}&limit=${limit}`
 
   return (
     <div className="space-y-4">
@@ -82,7 +78,7 @@ export default async function Subscriptions({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -96,24 +92,21 @@ export default async function Subscriptions({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button asChild>
-            <Link href="/admin/subscriptions/new">New Subscription</Link>
-          </Button>
         </div>
       </nav>
 
       <TabLink
         tabs={[
-          { name: 'All', href: '/admin/subscriptions' },
-          { name: 'Active', href: '/admin/subscriptions?status=active' },
-          { name: 'Expired', href: '/admin/subscriptions?status=expired' },
+          { name: 'All', href: '/subscriptions' },
+          { name: 'Active', href: '/subscriptions?status=active' },
+          { name: 'Expired', href: '/subscriptions?status=expired' },
         ]}
-        activeHref={`/admin/subscriptions${status ? `?status=${status}` : ''}`}
+        activeHref={`/subscriptions${status ? `?status=${status}` : ''}`}
       />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((sub) => (
-          <Link key={sub.id} href={`/admin/subscriptions/${sub.id}`}>
+          <Link key={sub.id} href={`/subscriptions/${sub.id}`}>
             <ListCardSubscription subscription={sub} />
           </Link>
         ))}

@@ -1,4 +1,3 @@
-import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import { Badge } from '@/components/ui/badge'
 import { Borrow } from '@/lib/types/borrow'
 import { isBorrowDue, formatDate, getBorrowStatus } from '@/lib/utils'
@@ -21,10 +20,9 @@ import {
 import clsx from 'clsx'
 import Link from 'next/link'
 
-export const ListCardBorrow: React.FC<{ borrow: Borrow; idx: number }> = ({
-  borrow,
-  idx,
-}) => {
+export const ListCardBorrow: React.FC<
+  React.PropsWithChildren<{ borrow: Borrow; idx: number }>
+> = ({ borrow, idx, children }) => {
   const isDue = isBorrowDue(borrow)
 
   return (
@@ -36,7 +34,7 @@ export const ListCardBorrow: React.FC<{ borrow: Borrow; idx: number }> = ({
     >
       <CardHeader>
         <Link
-          href={`/borrows/${borrow.id}`}
+          href={`./borrows/${borrow.id}`}
           className="flex justify-between items-start min-h-20"
         >
           <div>
@@ -89,11 +87,7 @@ export const ListCardBorrow: React.FC<{ borrow: Borrow; idx: number }> = ({
           </span>
         </div>
       </CardContent>
-      <CardFooter>
-        <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
-          Return Book
-        </BtnReturnBook>
-      </CardFooter>
+      <CardFooter>{children}</CardFooter>
     </Card>
   )
 }
