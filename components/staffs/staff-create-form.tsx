@@ -20,7 +20,7 @@ export const StaffCreateForm: React.FC = () => {
       .then(console.log)
       .then(() => {
         toast(`${data.name} has been assigned to the library.`)
-        router.push('/staffs')
+        router.push('/admin/staffs')
       })
       .catch((e) => {
         toast.error(e?.error)

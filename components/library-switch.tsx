@@ -17,9 +17,7 @@ export const LibrarySwitch: React.FC<{
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center">
-        {activeLibrary.name.length > 15
-          ? activeLibrary.name.slice(0, 15) + '...'
-          : activeLibrary.name}
+        {activeLibrary.name}
         <ChevronsUpDown className="ml-auto size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent

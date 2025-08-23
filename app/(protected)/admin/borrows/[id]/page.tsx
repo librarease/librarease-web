@@ -68,7 +68,10 @@ export default async function BorrowDetailsPage({
           />
         )}
         <Button asChild>
-          <Link href={`./${borrowRes.data.id}/edit`} className="w-full">
+          <Link
+            href={`/admin/borrows/${borrowRes.data.id}/edit`}
+            className="w-full"
+          >
             <Pen />
             Edit
           </Link>

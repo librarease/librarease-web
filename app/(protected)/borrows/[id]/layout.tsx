@@ -15,7 +15,6 @@ export default async function BorrowDetailsLayout({
   params,
 }: Readonly<{
   children: React.ReactNode
-  edit: React.ReactNode
   params: Promise<{ id: string }>
 }>) {
   const { id } = await params
@@ -36,11 +35,11 @@ export default async function BorrowDetailsLayout({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="..">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href=".">Borrows</BreadcrumbLink>
+                <BreadcrumbLink href="/borrows">Borrows</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>{borrowRes.data.book.title}</BreadcrumbItem>

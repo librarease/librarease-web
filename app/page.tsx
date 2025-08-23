@@ -23,7 +23,7 @@ const menuItems = [
     href: '/subscriptions',
   },
   { title: 'My Borrows', icon: BookUser, href: '/borrows' },
-]
+] as const
 
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()

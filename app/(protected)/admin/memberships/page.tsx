@@ -61,8 +61,9 @@ export default async function Memberships({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/memberships?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/memberships?skip=${prevSkip}&limit=${limit}`
+  const nextURL =
+    `/admin/memberships?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/admin/memberships?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">

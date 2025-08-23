@@ -148,11 +148,13 @@ export default function ComboboxForm() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/subscriptions">Subscriptions</BreadcrumbLink>
+            <BreadcrumbLink href="/admin/subscriptions">
+              Subscriptions
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

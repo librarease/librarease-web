@@ -58,8 +58,8 @@ export default async function Notifications({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/notifications?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/notifications?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/notifications?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/notifications?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">

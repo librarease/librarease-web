@@ -65,8 +65,8 @@ export default async function Libraries({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/libraries?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/libraries?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/libraries?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/libraries?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div>
@@ -76,7 +76,7 @@ export default async function Libraries({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -88,7 +88,7 @@ export default async function Libraries({
           {claims?.librarease?.role === 'SUPERADMIN' ||
           claims?.librarease?.role === 'ADMIN' ? (
             <Button asChild>
-              <Link href="./libraries/new">Create a Library</Link>
+              <Link href="/admin/libraries/new">Create a Library</Link>
             </Button>
           ) : null}
         </div>
@@ -118,7 +118,7 @@ export default async function Libraries({
                 )}
               </TableCell>
               <TableCell>
-                <Link href={`libraries/${lib.id}`} className="link">
+                <Link href={`/admin/libraries/${lib.id}`} className="link">
                   {lib.name}
                 </Link>
               </TableCell>

@@ -3,6 +3,8 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   output: 'standalone',
 
+  typedRoutes: true,
+
   experimental: {
     // for event source stream
     proxyTimeout: 0,

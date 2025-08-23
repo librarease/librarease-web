@@ -17,24 +17,24 @@ import { ModeToggle } from '@/components/button-toggle-theme'
 import { redirect, RedirectType } from 'next/navigation'
 
 const menuItems = [
-  { title: 'Dashboard', icon: ChartSpline, href: './admin/dashboard' },
-  { title: 'Libraries', icon: Library, href: './admin/libraries' },
-  { title: 'Notifications', icon: BellIcon, href: './admin/notifications' },
-  { title: 'Books', icon: Book, href: './admin/books' },
-  { title: 'Users', icon: Users, href: './admin/users' },
-  { title: 'Staffs', icon: UserCog, href: './admin/staffs' },
+  { title: 'Dashboard', icon: ChartSpline, href: '/admin/dashboard' },
+  { title: 'Libraries', icon: Library, href: '/admin/libraries' },
+  { title: 'Notifications', icon: BellIcon, href: '/notifications' },
+  { title: 'Books', icon: Book, href: '/admin/books' },
+  { title: 'Users', icon: Users, href: '/admin/users' },
+  { title: 'Staffs', icon: UserCog, href: '/admin/staffs' },
   {
     title: 'Memberships',
     icon: CreditCard,
-    href: './admin/memberships',
+    href: '/admin/memberships',
   },
   {
     title: 'Subscriptions',
     icon: Ticket,
-    href: './admin/subscriptions',
+    href: '/admin/subscriptions',
   },
-  { title: 'Borrows', icon: BookUser, href: './admin/borrows' },
-]
+  { title: 'Borrows', icon: BookUser, href: '/admin/borrows' },
+] as const
 
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()

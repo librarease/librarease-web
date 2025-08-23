@@ -60,8 +60,8 @@ export default async function Libraries({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/libraries?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/libraries?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/libraries?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/libraries?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div>
@@ -107,7 +107,7 @@ export default async function Libraries({
                 )}
               </TableCell>
               <TableCell>
-                <Link href={`libraries/${lib.id}`} className="link">
+                <Link href={`/libraries/${lib.id}`} className="link">
                   {lib.name}
                 </Link>
               </TableCell>

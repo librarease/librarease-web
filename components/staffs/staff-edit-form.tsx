@@ -21,7 +21,7 @@ export const StaffEditForm: React.FC<{ staff: Staff }> = ({ staff }) => {
       .then(console.log)
       .then(() => {
         toast('Staff Updated')
-        router.push('/staffs')
+        router.push('/admin/staffs')
       })
       .catch((e) => {
         toast.error(e?.error)

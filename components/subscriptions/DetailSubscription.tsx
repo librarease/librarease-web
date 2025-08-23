@@ -18,6 +18,7 @@ import {
 import { formatDistanceToNowStrict } from 'date-fns'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
+import { Route } from 'next'
 
 export const DetailSubscription: React.FC<
   React.PropsWithChildren<{ subscription: SubscriptionDetail }>
@@ -108,7 +109,10 @@ export const DetailSubscription: React.FC<
             <span className="font-medium">Library:&nbsp;</span>
             <Link
               className="link"
-              href={`../libraries/${subscription.membership.library.id}`}
+              // FIXME
+              href={
+                `../libraries/${subscription.membership.library.id}` as Route
+              }
             >
               {subscription.membership.library.name}
             </Link>

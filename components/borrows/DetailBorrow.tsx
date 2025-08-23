@@ -27,6 +27,7 @@ import { differenceInDays } from 'date-fns'
 import { Borrow } from '@/lib/types/borrow'
 import { DateTime } from '@/components/common/DateTime'
 import { ThreeDBook } from '@/components/books/three-d-book'
+import { Route } from 'next'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
@@ -43,11 +44,16 @@ export const DetailBorrow: React.FC<
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
           <CardContent className="grid place-self-center md:place-self-auto md:grid-cols-2 gap-4">
-            <Link href={`../books/${borrow.book.id}`}>
+            {/* FIXME */}
+            <Link href={`../books/${borrow.book.id}` as Route}>
               <ThreeDBook book={borrow.book} />
             </Link>
             <div>
-              <Link href={`../books/${borrow.book.id}`} className="link">
+              {/* FIXME */}
+              <Link
+                href={`../books/${borrow.book.id}` as Route}
+                className="link"
+              >
                 <h2 className="text-xl font-semibold">{borrow.book.title}</h2>
               </Link>
               <p className="text-foreground/80">{borrow.book.author}</p>
@@ -73,7 +79,10 @@ export const DetailBorrow: React.FC<
               <span className="font-medium">Library:&nbsp;</span>
               <Link
                 className="link"
-                href={`../libraries/${borrow.subscription.membership.library.id}`}
+                // FIXME
+                href={
+                  `../libraries/${borrow.subscription.membership.library.id}` as Route
+                }
               >
                 {borrow.subscription.membership.library.name}
               </Link>
@@ -182,7 +191,7 @@ export const DetailBorrow: React.FC<
           <p>
             <span className="font-medium">Membership:&nbsp;</span>
             <Link
-              href={`../subscriptions/${borrow.subscription.id}`}
+              href={`../subscriptions/${borrow.subscription.id}` as Route}
               className="link"
             >
               {borrow.subscription.membership.name}
@@ -228,7 +237,8 @@ export const DetailBorrow: React.FC<
           <CardContent className="flex items-end overflow-x-scroll p-6 isolate">
             {prevBorrows.map((b) => (
               <Link
-                href={`./${b.id}`}
+                // FIXME
+                href={`./${b.id}` as Route}
                 key={b.id}
                 className={clsx(
                   'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12 brightness-75',

@@ -65,8 +65,8 @@ export default async function Users({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/users?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/users?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/admin/users?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/admin/users?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div>

@@ -67,8 +67,8 @@ export default async function Subscriptions({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/subscriptions?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/subscriptions?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/subscriptions?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/subscriptions?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">

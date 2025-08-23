@@ -71,8 +71,8 @@ export default async function Staffs({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/staffs?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/staffs?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/admin/staffs?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/admin/staffs?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div>
@@ -82,7 +82,7 @@ export default async function Staffs({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -92,7 +92,7 @@ export default async function Staffs({
             </BreadcrumbList>
           </Breadcrumb>
           <Button asChild>
-            <Link href="/staffs/new">Assign a Staff</Link>
+            <Link href="/admin/staffs/new">Assign a Staff</Link>
           </Button>
         </div>
       </nav>

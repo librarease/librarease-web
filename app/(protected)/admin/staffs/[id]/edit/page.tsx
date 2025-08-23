@@ -32,11 +32,11 @@ export default async function EditStaffPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/staffs">Staffs</BreadcrumbLink>
+            <BreadcrumbLink href="/admin/staffs">Staffs</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

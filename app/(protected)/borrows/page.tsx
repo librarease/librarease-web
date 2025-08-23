@@ -73,12 +73,12 @@ export default async function Borrows({
   const nextParams = new URLSearchParams(sp)
   nextParams.set('skip', String(skip + limit))
   nextParams.set('limit', String(limit))
-  const nextURL = `?${nextParams.toString()}`
+  const nextURL = `?${nextParams.toString()}` as const
 
   const prevParams = new URLSearchParams(sp)
   prevParams.set('skip', String(prevSkip))
   prevParams.set('limit', String(limit))
-  const prevURL = `?${prevParams.toString()}`
+  const prevURL = `?${prevParams.toString()}` as const
 
   return (
     <div className="space-y-4">
@@ -88,7 +88,7 @@ export default async function Borrows({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="..">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 

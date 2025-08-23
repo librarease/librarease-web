@@ -25,11 +25,11 @@ export default async function ComboboxForm() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="..">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href=".">Borrows</BreadcrumbLink>
+            <BreadcrumbLink href="/admin/borrows">Borrows</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 

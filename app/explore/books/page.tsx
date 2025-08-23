@@ -57,8 +57,8 @@ export default async function ExploreBooks({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/explore/books?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/explore/books?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/explore/books?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/explore/books?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">

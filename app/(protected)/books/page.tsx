@@ -62,8 +62,8 @@ export default async function UserBooks({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/books?skip=${skip + limit}&limit=${limit}`
-  const prevURL = `/books?skip=${prevSkip}&limit=${limit}`
+  const nextURL = `/books?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/books?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">

@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/card'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { Route } from 'next'
 
 export const ListCardBorrow: React.FC<
   React.PropsWithChildren<{ borrow: Borrow; idx: number }>
@@ -34,7 +35,8 @@ export const ListCardBorrow: React.FC<
     >
       <CardHeader>
         <Link
-          href={`./borrows/${borrow.id}`}
+          // FIXME
+          href={`./borrows/${borrow.id}` as Route}
           className="flex justify-between items-start min-h-20"
         >
           <div>

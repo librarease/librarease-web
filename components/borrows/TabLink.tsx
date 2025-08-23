@@ -1,12 +1,17 @@
 import { cn } from '@/lib/utils'
 import { ClassValue } from 'clsx'
+import { Route } from 'next'
 import Link from 'next/link'
 
-export const TabLink: React.FC<{
+export const TabLink = <T extends string>({
+  tabs,
+  className,
+  activeHref,
+}: {
   className?: ClassValue
-  tabs: { name: string; href: string }[]
+  tabs: { name: string; href: Route<T> }[]
   activeHref: string
-}> = ({ tabs, className, activeHref }) => {
+}) => {
   return (
     <div
       className={cn(
