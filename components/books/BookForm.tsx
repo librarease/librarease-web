@@ -49,29 +49,29 @@ type BookFormProps = {
 const FormSchema = z.object({
   title: z
     .string({
-      required_error: 'Please enter book title.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please enter book title.' : undefined,
     })
     .nonempty(),
   author: z
     .string({
-      required_error: 'Please enter author name.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please enter author name.' : undefined,
     })
     .nonempty(),
-  year: z.coerce
+  year: z
     .number({
-      required_error: 'Please enter year.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please enter year.' : undefined,
     })
     .gt(1000, 'Please enter valid year.'),
   code: z
     .string({
-      required_error: 'Please set a code for book.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please set a code for book.' : undefined,
     })
     .nonempty(),
-  library_id: z
-    .string({
-      required_error: 'Please select the library.',
-    })
-    .uuid(),
+  library_id: z.uuid(),
   cover: z.string().optional(),
 })
 

@@ -69,13 +69,16 @@ import Image from 'next/image'
 const FormSchema = z.object({
   user_id: z.string().optional(),
   book_id: z.string({
-    required_error: 'Please select a book.',
+    error: (issue) =>
+      issue.input === undefined ? 'Please select a book.' : undefined,
   }),
   subscription_id: z.string({
-    required_error: 'Please select a subscription.',
+    error: (issue) =>
+      issue.input === undefined ? 'Please select a subscription.' : undefined,
   }),
   staff_id: z.string({
-    required_error: 'Please select a staff.',
+    error: (issue) =>
+      issue.input === undefined ? 'Please select a staff.' : undefined,
   }),
 })
 

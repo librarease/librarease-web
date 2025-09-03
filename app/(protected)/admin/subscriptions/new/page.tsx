@@ -47,21 +47,9 @@ import { Membership } from '@/lib/types/membership'
 import { createSubscription } from '@/lib/api/subscription'
 
 const FormSchema = z.object({
-  user_id: z
-    .string({
-      required_error: 'Please select user.',
-    })
-    .uuid(),
-  library_id: z
-    .string({
-      required_error: 'Please select a library.',
-    })
-    .uuid(),
-  membership_id: z
-    .string({
-      required_error: 'Please select a membership.',
-    })
-    .uuid(),
+  user_id: z.uuid(),
+  library_id: z.uuid(),
+  membership_id: z.uuid(),
 })
 
 export default function ComboboxForm() {

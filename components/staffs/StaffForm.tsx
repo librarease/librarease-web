@@ -56,17 +56,20 @@ type StaffFormProps = {
 const FormSchema = z.object({
   user_id: z
     .string({
-      required_error: 'Please select a user.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please select a user.' : undefined,
     })
     .nonempty(),
   library_id: z
     .string({
-      required_error: 'Please select a library.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please select a library.' : undefined,
     })
     .nonempty(),
   name: z
     .string({
-      required_error: 'Please enter staff name.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please enter staff name.' : undefined,
     })
     .nonempty(),
   role: z.union([z.literal('ADMIN'), z.literal('STAFF')]),

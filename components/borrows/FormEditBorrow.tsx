@@ -25,14 +25,15 @@ import { TimeInput } from '../ui/time-input'
 
 const FormSchema = z.object({
   id: z.string({
-    required_error: 'Please select a borrow.',
+    error: (issue) =>
+      issue.input === undefined ? 'Please select a borrow.' : undefined,
   }),
   borrowed_at: z.string(),
   due_at: z.string(),
   returning: z
     .object({
       returned_at: z.string(),
-      fine: z.coerce.number().nonnegative(),
+      fine: z.number().nonnegative(),
     })
     .optional(),
 })

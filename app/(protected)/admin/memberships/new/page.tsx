@@ -47,36 +47,39 @@ import { Library } from '@/lib/types/library'
 import { Input } from '@/components/ui/input'
 
 const FormSchema = z.object({
-  library_id: z
-    .string({
-      required_error: 'Please select a library.',
-    })
-    .uuid(),
+  library_id: z.uuid(),
   name: z
     .string({
-      required_error: 'Please name the membership.',
+      error: (issue) =>
+        issue.input === undefined ? 'Please name the membership.' : undefined,
     })
     .nonempty(),
-  loan_period: z.coerce
+  loan_period: z
     .number({
-      required_error: 'Loan period is required.',
+      error: (issue) =>
+        issue.input === undefined ? 'Loan period is required.' : undefined,
     })
     .min(1),
-  duration: z.coerce
+  duration: z
     .number({
-      required_error: 'Duration is required.',
+      error: (issue) =>
+        issue.input === undefined ? 'Duration is required.' : undefined,
     })
     .min(1),
-  active_loan_limit: z.coerce
+  active_loan_limit: z
     .number({
-      required_error: 'Active loan limit is required.',
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Active loan limit is required.'
+          : undefined,
     })
     .min(1, 'Active loan limit must be at least 1.'),
-  fine_per_day: z.coerce.number({
-    required_error: 'Fine per day is required.',
+  fine_per_day: z.number({
+    error: (issue) =>
+      issue.input === undefined ? 'Fine per day is required.' : undefined,
   }),
-  price: z.coerce.number(),
-  usage_limit: z.coerce.number(),
+  price: z.number(),
+  usage_limit: z.number(),
 })
 
 export default function ComboboxForm() {
