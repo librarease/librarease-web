@@ -33,7 +33,7 @@ const FormSchema = z.object({
   returning: z
     .object({
       returned_at: z.string(),
-      fine: z.number().nonnegative(),
+      fine: z.coerce.number<number>().nonnegative(),
     })
     .optional(),
 })
@@ -103,6 +103,7 @@ export const FormEditBorrow: React.FC<{
                       date > new Date(form.getValues('due_at')) ||
                       date < new Date('1900-01-01')
                     }
+                    captionLayout="dropdown"
                     autoFocus
                   />
                   <Input
@@ -163,6 +164,7 @@ export const FormEditBorrow: React.FC<{
                     disabled={(date) =>
                       date < new Date(form.getValues('borrowed_at'))
                     }
+                    captionLayout="dropdown"
                     autoFocus
                   />
                   <TimeInput value={field.value} onChange={field.onChange} />
@@ -210,6 +212,7 @@ export const FormEditBorrow: React.FC<{
                         disabled={(date) =>
                           date < new Date(form.getValues('borrowed_at'))
                         }
+                        captionLayout="dropdown"
                         autoFocus
                       />
                       <TimeInput
