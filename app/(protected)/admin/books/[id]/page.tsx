@@ -21,7 +21,7 @@ export default async function BookDetailsPage({
 }) {
   const { id } = await params
 
-  const [bookRes] = await Promise.all([getBook({ id })])
+  const [bookRes] = await Promise.all([getBook({ id, include_stats: 'true' })])
 
   if ('error' in bookRes) {
     console.log({ libRes: bookRes })
@@ -74,8 +74,12 @@ export default async function BookDetailsPage({
               {bookRes.data.author}
             </p>
             <div className="flex flex-wrap gap-2 mb-4">
-              <Badge variant={true ? 'default' : 'destructive'}>
-                {true ? 'Available' : 'Borrowed'}
+              <Badge
+                variant={
+                  bookRes.data.stats?.is_available ? 'default' : 'secondary'
+                }
+              >
+                {bookRes.data.stats?.is_available ? 'Available' : 'Borrowed'}
               </Badge>
               <Badge variant="outline">bookRes.data.genre</Badge>
             </div>

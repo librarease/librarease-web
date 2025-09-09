@@ -22,8 +22,8 @@ export const DetailBook: React.FC<
           <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
           <p className="text-xl text-muted-foreground mb-4">{book.author}</p>
           <div className="flex flex-wrap gap-2 mb-4">
-            <Badge variant={true ? 'default' : 'destructive'}>
-              {true ? 'Available' : 'Borrowed'}
+            <Badge variant={book.stats?.is_available ? 'default' : 'secondary'}>
+              {book.stats?.is_available ? 'Available' : 'Borrowed'}
             </Badge>
             <Badge variant="outline">book.genre</Badge>
           </div>

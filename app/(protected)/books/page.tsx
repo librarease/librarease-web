@@ -48,6 +48,7 @@ export default async function UserBooks({
     limit: limit,
     skip: skip,
     title: sp?.title,
+    include_stats: 'true',
     ...(library_id ? { library_id } : {}),
   } as const
 

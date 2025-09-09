@@ -28,7 +28,7 @@ type WithDates<T> = T & { created_at: string; updated_at: string }
 export type WithCommon<T> = WithID<WithDates<T>>
 
 export type QueryParams<T> = {
-  sort_by?: keyof T
+  sort_by?: 'created_at' | 'updated_at' | keyof T
   sort_in?: 'asc' | 'desc'
   limit?: number
   skip?: number

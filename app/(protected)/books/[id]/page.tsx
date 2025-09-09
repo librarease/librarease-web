@@ -18,7 +18,7 @@ export default async function BookDetailsPage({
 }) {
   const { id } = await params
 
-  const [bookRes] = await Promise.all([getBook({ id })])
+  const [bookRes] = await Promise.all([getBook({ id, include_stats: 'true' })])
 
   if ('error' in bookRes) {
     console.log({ libRes: bookRes })

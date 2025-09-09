@@ -55,6 +55,7 @@ export default async function Books({
     skip: skip,
     title: sp?.title,
     library_id: libID,
+    include_stats: 'true',
   })
 
   if ('error' in res) {

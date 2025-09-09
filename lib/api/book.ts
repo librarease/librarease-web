@@ -4,7 +4,11 @@ import { BASE_URL } from './common'
 
 const BOOKS_URL = `${BASE_URL}/books`
 
-type GetListBooksQuery = QueryParams<Book>
+type GetListBooksQuery = QueryParams<
+  Pick<Book, 'id' | 'title' | 'library_id'>
+> & {
+  include_stats?: 'true'
+}
 type GetListBooksResponse = Promise<ResList<Book>>
 
 export const getListBooks = async (
@@ -21,7 +25,7 @@ export const getListBooks = async (
   return response.json()
 }
 
-type GetBookQuery = Pick<Book, 'id'>
+type GetBookQuery = Pick<Book, 'id'> & { include_stats?: 'true' }
 type GetBookResponse = Promise<ResSingle<BookDetail>>
 export const getBook = async (query: GetBookQuery): GetBookResponse => {
   const url = new URL(`${BOOKS_URL}/${query.id}`)
