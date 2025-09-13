@@ -31,7 +31,9 @@ export function NavUser({
 }) {
   useEffect(() => {
     function onMessage(data: Notification) {
-      toast(data.message)
+      toast.info(data.title, {
+        description: data.message,
+      })
     }
     function onError(event: Event) {
       console.warn('Error in notification stream:', event)

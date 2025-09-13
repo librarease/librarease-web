@@ -8,17 +8,24 @@ import {
 } from '@/components/ui/breadcrumb'
 import { getBook } from '@/lib/api/book'
 import { BookDown } from 'lucide-react'
+
+import BtnWatchlist from '@/components/books/BtnWatchlist'
 import { Button } from '@/components/ui/button'
 import { DetailBook } from '@/components/books/DetailBook'
+import { IsLoggedIn } from '@/lib/firebase/firebase'
 
 export default async function BookDetailsPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
+  const claims = await IsLoggedIn()
+
   const { id } = await params
 
-  const [bookRes] = await Promise.all([getBook({ id, include_stats: 'true' })])
+  const [bookRes] = await Promise.all([
+    getBook({ id, include_stats: 'true', user_id: claims?.librarease.id }),
+  ])
 
   if ('error' in bookRes) {
     console.log({ libRes: bookRes })
@@ -45,19 +52,16 @@ export default async function BookDetailsPage({
       </Breadcrumb>
 
       <DetailBook book={bookRes.data}>
-        <Button className="w-full" disabled={true}>
-          {true ? (
-            <>
-              <BookDown className="mr-2 h-4 w-4" />
-              Borrow Book
-            </>
-          ) : (
-            'Currently Borrowed'
-          )}
+        <Button className="w-full" disabled={!bookRes.data.stats?.is_available}>
+          <>
+            <BookDown className="mr-2 h-4 w-4" />
+            Borrow Book
+          </>
         </Button>
-        <Button variant="outline" className="w-full bg-transparent">
-          Add to Wishlist
-        </Button>
+        <BtnWatchlist
+          bookId={bookRes.data.id}
+          isWatched={!!bookRes.data.watchlists?.[0]}
+        />
       </DetailBook>
 
       {/* <div className="place-self-center text-center pt-4 border-t">

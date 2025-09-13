@@ -1,5 +1,6 @@
 import { WithCommon } from './common'
 import { Library } from './library'
+import { Watchlist } from './watchlist'
 
 type BookStats = {
   borrow_count: number
@@ -15,6 +16,7 @@ export type Book = WithCommon<{
   library_id: string
   library?: Pick<Library, 'id' | 'name'>
   stats?: BookStats
+  watchlists?: Watchlist[]
 }>
 
 export type BookDetail = Omit<Book, 'library'> & {

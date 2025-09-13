@@ -17,15 +17,15 @@ import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { BellRing, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
 import { Verify } from '@/lib/firebase/firebase'
-import { Button } from '@/components/ui/button'
+import { getListWatchlist } from '@/lib/api/watchlist'
 
 export const metadata: Metadata = {
-  title: `Books · ${SITE_NAME}`,
+  title: `Watchlist Books · ${SITE_NAME}`,
 }
 
 export default async function UserBooks({
@@ -53,9 +53,9 @@ export default async function UserBooks({
     ...(library_id ? { library_id } : {}),
   } as const
 
-  await Verify({ from: '/books' })
+  const headers = await Verify({ from: '/books' })
 
-  const res = await getListBooks(query)
+  const res = await getListWatchlist(query, { headers })
 
   if ('error' in res) {
     console.log(res)
@@ -89,14 +89,6 @@ export default async function UserBooks({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button variant="secondary" asChild>
-            <Link href="/books/watchlist">
-              <>
-                <BellRing className="mr-2 h-4 w-4" />
-                My Watchlist
-              </>
-            </Link>
-          </Button>
         </div>
       </nav>
 

@@ -25,10 +25,18 @@ export const getListBooks = async (
   return response.json()
 }
 
-type GetBookQuery = Pick<Book, 'id'> & { include_stats?: 'true' }
+type GetBookQuery = Pick<Book, 'id'> & {
+  include_stats?: 'true'
+  user_id?: string
+}
 type GetBookResponse = Promise<ResSingle<BookDetail>>
 export const getBook = async (query: GetBookQuery): GetBookResponse => {
   const url = new URL(`${BOOKS_URL}/${query.id}`)
+  Object.entries(query).forEach(([key, value]) => {
+    if (key !== 'id' && value) {
+      url.searchParams.append(key, String(value))
+    }
+  })
   const response = await fetch(url.toString())
   return response.json()
 }

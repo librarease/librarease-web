@@ -51,7 +51,10 @@ export default async function BookDetailsPage({
         {/* Book Cover */}
         <div className="lg:col-span-1 grid place-items-center gap-4">
           <ThreeDBook book={bookRes.data} />
-          <Button className="w-full" disabled={true}>
+          <Button
+            className="w-full"
+            disabled={!bookRes.data.stats?.is_available}
+          >
             {true ? (
               <>
                 <BookDown className="mr-2 h-4 w-4" />
@@ -60,9 +63,6 @@ export default async function BookDetailsPage({
             ) : (
               'Currently Borrowed'
             )}
-          </Button>
-          <Button variant="outline" className="w-full bg-transparent">
-            Add to Wishlist
           </Button>
         </div>
 
