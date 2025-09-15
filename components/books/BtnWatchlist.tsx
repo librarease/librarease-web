@@ -16,9 +16,12 @@ export default function BtnWatchlist({
 }) {
   const [pending, startTransition] = useTransition()
 
-  const handleAdd = () => startTransition(() => addToWatchlistAction(bookId))
+  const handleAdd = () =>
+    startTransition(async () => {
+      await addToWatchlistAction(bookId)
+    })
   const handleRemove = () =>
-    startTransition(() => removeFromWatchlistAction(bookId))
+    startTransition(async () => await removeFromWatchlistAction(bookId))
 
   if (isWatched) {
     return (

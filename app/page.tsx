@@ -6,6 +6,7 @@ import {
   BookUser,
   Ticket,
   Settings,
+  BookCopy,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -23,6 +24,7 @@ const menuItems = [
     href: '/subscriptions',
   },
   { title: 'My Borrows', icon: BookUser, href: '/borrows' },
+  { title: 'Collections', icon: BookCopy, href: '/collections' },
 ] as const
 
 export default async function LibraryDashboard() {

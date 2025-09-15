@@ -1,10 +1,16 @@
 import { BASE_URL } from './common'
 import { Book } from '@/lib/types/book'
-import { QueryParams, ResList } from '@/lib/types/common'
+import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
+import { Watchlist } from '../types/watchlist'
 
 const WATCHLIST_URL = `${BASE_URL}/users/me/watchlist`
 
-export const addToWatchlist = async (bookId: string, init?: RequestInit) => {
+type AddToWatchlistResponse = Promise<ResSingle<Watchlist>>
+
+export const addToWatchlist = async (
+  bookId: string,
+  init?: RequestInit
+): AddToWatchlistResponse => {
   const headers = new Headers(init?.headers)
   headers.set('Content-Type', 'application/json')
   const url = new URL(WATCHLIST_URL)

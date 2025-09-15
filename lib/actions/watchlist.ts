@@ -9,8 +9,10 @@ export async function addToWatchlistAction(bookId: string) {
 
   try {
     const res = await addToWatchlist(bookId, { headers })
+    if ('error' in res) {
+      return { error: res.message }
+    }
     revalidatePath(`/books/${bookId}`)
-    return res
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
       return { error: e.error as string }
