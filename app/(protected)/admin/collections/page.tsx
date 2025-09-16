@@ -16,7 +16,7 @@ import {
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { BellRing, Heart, Search } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
 import { Verify } from '@/lib/firebase/firebase'
@@ -53,7 +53,7 @@ export default async function UserCollections({
     ...(library_id ? { library_id } : {}),
   } as const
 
-  await Verify({ from: '/collections' })
+  await Verify({ from: '/admin/collections' })
 
   const res = await getListCollections(query)
 
@@ -64,8 +64,9 @@ export default async function UserCollections({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/collections?skip=${skip + limit}&limit=${limit}` as const
-  const prevURL = `/collections?skip=${prevSkip}&limit=${limit}` as const
+  const nextURL =
+    `/admin/collections?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/admin/collections?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">
@@ -75,7 +76,7 @@ export default async function UserCollections({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
 
@@ -89,11 +90,11 @@ export default async function UserCollections({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button variant="secondary" asChild>
-            <Link href="/collections/watchlist">
+          <Button variant="default" asChild>
+            <Link href="/admin/collections/new">
               <>
-                <BellRing className="mr-2 h-4 w-4" />
-                Followings
+                <Plus className="mr-2 h-4 w-4" />
+                New Collection
               </>
             </Link>
           </Button>
@@ -112,20 +113,8 @@ export default async function UserCollections({
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((col) => (
-          <Link key={col.id} href={`/collections/${col.id}`} passHref>
-            <ListCollection collection={col}>
-              <Button
-                size="sm"
-                className="w-full"
-                style={{
-                  backgroundColor: 'var(--accent-bg)',
-                  color: 'var(--accent-text)',
-                }}
-              >
-                <Heart className="mr-2 size-4" />
-                Follow
-              </Button>
-            </ListCollection>
+          <Link key={col.id} href={`/admin/collections/${col.id}`} passHref>
+            <ListCollection collection={col} />
           </Link>
         ))}
       </div>

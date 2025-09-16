@@ -47,27 +47,34 @@ type CreateCollectionResponse = Promise<
   ResSingle<Omit<Collection, 'library' | 'cover'>>
 >
 export const createCollection = async (
-  query: CreateCollectionQuery
+  query: CreateCollectionQuery,
+  init?: RequestInit
 ): CreateCollectionResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
   const res = await fetch(COLLECTION_URL, {
+    ...init,
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(query),
+    headers,
   })
   if (!res.ok) {
     const e = await res.json()
-    throw new Error(e.message)
+    throw new Error(e.error)
   }
   return res.json()
 }
 
 export const deleteCollection = async (
-  id: string
+  id: string,
+  init?: RequestInit
 ): Promise<ResSingle<undefined>> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
   const res = await fetch(`${COLLECTION_URL}/${id}`, {
+    ...init,
     method: 'DELETE',
+    headers,
   })
   if (!res.ok) {
     const e = await res.json()
@@ -81,13 +88,15 @@ type UpdateCollectionQuery = Partial<
 >
 export const updateCollection = async (
   id: string,
-  query: UpdateCollectionQuery
+  query: UpdateCollectionQuery,
+  init?: RequestInit
 ): CreateCollectionResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
   const res = await fetch(`${COLLECTION_URL}/${id}`, {
+    ...init,
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(query),
   })
   if (!res.ok) {

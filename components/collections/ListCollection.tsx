@@ -15,10 +15,10 @@ function getTextColor([r, g, b]: number[]): 'white' | 'black' {
   return luminance > 0.5 ? 'black' : 'white'
 }
 
-export const ListCollection: React.FC<{ collection: Collection }> = ({
-  collection,
-}) => {
-  const colors = collection.cover?.colors || []
+export const ListCollection: React.FC<
+  React.PropsWithChildren<{ collection: Collection }>
+> = ({ collection, children }) => {
+  const colors = collection.cover?.colors ?? []
   const primary = colors[0] || [240, 240, 240]
   const accent = colors[1] || [200, 200, 200]
   const textColor = getTextColor(primary)
@@ -81,18 +81,15 @@ export const ListCollection: React.FC<{ collection: Collection }> = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        {/* <Button
-          size="sm"
-          className="w-full"
-          style={{
-            backgroundColor: `rgb(${accent.join(',')})`,
-            color: accentText,
-          }}
-        >
-          <Heart className="mr-2 size-4" />
-          Follow
-        </Button> */}
+      <CardContent
+        style={
+          {
+            '--accent-bg': `rgb(${accent.join(',')})`,
+            '--accent-text': accentText,
+          } as React.CSSProperties
+        }
+      >
+        {children}
       </CardContent>
     </Card>
   )
