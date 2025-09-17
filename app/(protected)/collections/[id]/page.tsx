@@ -7,36 +7,29 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCollection, getListCollectionBooks } from '@/lib/api/collection'
-import {
-  BookOpen,
-  Calendar,
-  Edit,
-  Heart,
-  Library,
-  Plus,
-  Settings,
-  Trash2,
-  Users,
-} from 'lucide-react'
+import { Book, Calendar, Library, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default async function CollectionDetailsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: { title?: string }
 }) {
   //   const claims = await IsLoggedIn()
 
   const { id } = await params
+  const { title } = searchParams
 
   const [collectionRes, bookRes] = await Promise.all([
     getCollection(id),
     getListCollectionBooks(id, {
       include_book: 'true',
+      book_title: title,
     }),
   ])
 
@@ -91,39 +84,12 @@ export default async function CollectionDetailsPage({
               <span>{collectionRes.data.follower_count} followers</span>
             </div>
             <div className="flex items-center gap-1">
-              <BookOpen className="h-4 w-4" />
+              <Book className="h-4 w-4" />
               <span>{collectionRes.data.book_count} books</span>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Action Buttons */}
-      {/* <div className="flex gap-2 mb-8 flex-wrap">
-        <Button variant={true ? 'secondary' : 'default'}>
-          <Heart className={`mr-2 h-4 w-4 ${true ? 'fill-current' : ''}`} />
-          {true ? 'Following' : 'Follow'}
-        </Button>
-        <Button variant="outline" asChild>
-          <Link href={`/collections/${collectionRes.data.id}/manage-books`}>
-            <Settings className="mr-2 h-4 w-4" />
-            Manage Books
-          </Link>
-        </Button>
-        <Button variant="outline" asChild>
-          <Link href={`/collections/${collectionRes.data.id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
-            Edit
-          </Link>
-        </Button>
-        <Button
-          variant="outline"
-          className="text-red-600 hover:text-red-700 bg-transparent"
-        >
-          <Trash2 className="mr-2 h-4 w-4" />
-          Delete
-        </Button>
-      </div> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Collection Info */}
@@ -149,7 +115,7 @@ export default async function CollectionDetailsPage({
                   <span>{collectionRes.data.follower_count} followers</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <BookOpen className="h-4 w-4 text-muted-foreground" />
+                  <Book className="h-4 w-4 text-muted-foreground" />
                   <span>{bookRes.data.length} books</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -170,37 +136,28 @@ export default async function CollectionDetailsPage({
         <div className="lg:col-span-3">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold">Books in Collection</h2>
-            {/* <Button asChild>
-              <Link href={`/collections/${collectionRes.data.id}/manage-books`}>
-                <Plus className="mr-2 h-4 w-4" />
-                Manage Books
-              </Link>
-            </Button> */}
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookRes.data.map((collectionBook) => (
-              <ListBook book={collectionBook.book!} key={collectionBook.id} />
+              <Link
+                href={`/books/${collectionBook.book?.id}`}
+                key={collectionBook.id}
+              >
+                <ListBook book={collectionBook.book!} />
+              </Link>
             ))}
           </div>
 
           {collectionRes.data.book_count === 0 && (
             <Card className="p-12 text-center">
-              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <Book className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">
                 No books in this collection
               </h3>
               <p className="text-muted-foreground mb-4">
-                Start building your collection by adding some books.
+                Follow this collection to get updates when new books are added.
               </p>
-              {/* <Button asChild>
-                <Link
-                  href={`/collections/${collectionRes.data.id}/manage-books`}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Books
-                </Link>
-              </Button> */}
             </Card>
           )}
         </div>

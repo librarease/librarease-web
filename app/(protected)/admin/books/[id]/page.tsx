@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { getBook } from '@/lib/api/book'
-import { BookDown, Calendar, Hash, Library } from 'lucide-react'
+import { BookDown, Calendar, Hash, Library, Pen } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { Button } from '@/components/ui/button'
@@ -51,18 +51,11 @@ export default async function BookDetailsPage({
         {/* Book Cover */}
         <div className="lg:col-span-1 grid place-items-center gap-4">
           <ThreeDBook book={bookRes.data} />
-          <Button
-            className="w-full"
-            disabled={!bookRes.data.stats?.is_available}
-          >
-            {true ? (
-              <>
-                <BookDown className="mr-2 h-4 w-4" />
-                Borrow Book
-              </>
-            ) : (
-              'Currently Borrowed'
-            )}
+          <Button className="w-full" asChild>
+            <Link href={`/admin/books/${bookRes.data.id}/edit`}>
+              <Pen />
+              Edit
+            </Link>
           </Button>
         </div>
 

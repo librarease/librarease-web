@@ -17,7 +17,7 @@ export default async function EditBookPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/libraries/${id}/edit` })
+  await Verify({ from: `/admin/books/${id}/edit` })
 
   const [bookRes] = await Promise.all([getBook({ id })])
 

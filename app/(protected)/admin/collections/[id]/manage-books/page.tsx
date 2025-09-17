@@ -1,5 +1,4 @@
-import { ListBook } from '@/components/books/ListBook'
-import { BtnDeleteCollection } from '@/components/collections/BtnDeleteCollection'
+import { FormManageCollectionBooks } from '@/components/collections/FormManageCollectionBooks'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,21 +7,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { deleteCollectionAction } from '@/lib/actions/collection'
+import { Card } from '@/components/ui/card'
 import { getCollection, getListCollectionBooks } from '@/lib/api/collection'
-import {
-  BookOpen,
-  Calendar,
-  Edit,
-  Library,
-  Plus,
-  Settings,
-  Users,
-} from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Book } from 'lucide-react'
 
 export default async function CollectionManageBooksPage({
   params,
@@ -34,7 +21,7 @@ export default async function CollectionManageBooksPage({
   const { id } = await params
 
   const [collectionRes, bookRes] = await Promise.all([
-    getCollection(id),
+    getCollection(id, { include_book_ids: 'true' }),
     getListCollectionBooks(id, {
       include_book: 'true',
     }),
@@ -73,32 +60,24 @@ export default async function CollectionManageBooksPage({
 
       {/* Books in Collection */}
       <div className="lg:col-span-3">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {bookRes.data.map((collectionBook) => (
-            <ListBook book={collectionBook.book!} key={collectionBook.id} />
-          ))}
-        </div>
-
-        {collectionRes.data.book_count === 0 && (
-          <Card className="p-12 text-center">
-            <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">
-              No books in this collection
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Start building your collection by adding some books.
-            </p>
-            <Button asChild>
-              <Link
-                href={`/admin/collections/${collectionRes.data.id}/manage-books`}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Books
-              </Link>
-            </Button>
-          </Card>
-        )}
+        <FormManageCollectionBooks
+          initialBooks={bookRes.data.map((b) => b.book!)}
+          libraryID={collectionRes.data.library_id}
+          initialBookIDs={collectionRes.data.book_ids}
+        />
       </div>
+
+      {collectionRes.data.book_count === 0 && (
+        <Card className="p-12 text-center">
+          <Book className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-medium mb-2">
+            No books in this collection yet
+          </h3>
+          <p className="text-muted-foreground mb-4">
+            Start building your collection by adding some books.
+          </p>
+        </Card>
+      )}
     </div>
   )
 }

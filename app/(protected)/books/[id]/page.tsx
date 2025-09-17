@@ -52,12 +52,6 @@ export default async function BookDetailsPage({
       </Breadcrumb>
 
       <DetailBook book={bookRes.data}>
-        <Button className="w-full" disabled={!bookRes.data.stats?.is_available}>
-          <>
-            <BookDown className="mr-2 h-4 w-4" />
-            Borrow Book
-          </>
-        </Button>
         <BtnWatchlist
           bookId={bookRes.data.id}
           isWatched={!!bookRes.data.watchlists?.[0]}

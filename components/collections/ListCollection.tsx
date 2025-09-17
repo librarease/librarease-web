@@ -26,13 +26,13 @@ export const ListCollection: React.FC<
 
   return (
     <Card style={{ backgroundColor: `rgb(${primary.join(',')})` }}>
-      <CardHeader className="p-0">
+      <CardHeader className="p-0 group">
         <div className="relative aspect-[2] overflow-hidden">
           <Image
             src={collection.cover?.path || '/book-placeholder.svg'}
             alt={collection.title}
             fill
-            className="w-full h-full object-cover rounded-t"
+            className="w-full h-full object-cover rounded-t group-hover:scale-105 transition-transform duration-300"
           />
         </div>
         <div className="p-4">

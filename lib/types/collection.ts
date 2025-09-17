@@ -12,6 +12,7 @@ export type Collection = WithCommon<{
 
   book_count: number
   follower_count: number
+  book_ids: string[]
 }>
 
 export type CollectionBook = WithCommon<{

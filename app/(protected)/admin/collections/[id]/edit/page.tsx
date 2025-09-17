@@ -20,7 +20,7 @@ export default async function EditCollectionPage({
   const [collectionRes] = await Promise.all([getCollection(id)])
 
   if ('error' in collectionRes) {
-    console.log({ libRes: collectionRes })
+    console.log(collectionRes)
     return <div>{JSON.stringify(collectionRes.message)}</div>
   }
 

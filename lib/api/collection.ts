@@ -22,7 +22,7 @@ export const getListCollections = async (
   return response.json()
 }
 
-type GetCollectionQuery = { include_books?: 'true' }
+type GetCollectionQuery = { include_books?: 'true'; include_book_ids: 'true' }
 type GetCollectionResponse = Promise<ResSingle<Collection>>
 export const getCollection = async (
   id: string,

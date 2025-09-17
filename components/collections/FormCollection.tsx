@@ -134,13 +134,13 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
             <CardContent>
               {initialData.cover ? (
                 <div className="space-y-4">
-                  <div className="relative aspect-[2/1] rounded-lg overflow-hidden">
+                  <div className="relative aspect-[2] rounded-lg overflow-hidden">
                     <Image
                       src={initialData.cover ?? '/book-placeholder.svg'}
                       alt={initialData.title + "'s cover"}
                       width={160}
                       height={240}
-                      className="shadow-md rounded-lg w-40 h-60 place-self-center object-cover"
+                      className="shadow-md rounded-lg w-full place-self-center object-contain"
                     />
                     <Button
                       type="button"

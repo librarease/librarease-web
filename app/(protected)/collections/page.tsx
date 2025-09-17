@@ -110,7 +110,7 @@ export default async function UserCollections({
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((col) => (
           <Link key={col.id} href={`/collections/${col.id}`} passHref>
             <ListCollection collection={col}>
@@ -121,6 +121,7 @@ export default async function UserCollections({
                   backgroundColor: 'var(--accent-bg)',
                   color: 'var(--accent-text)',
                 }}
+                disabled
               >
                 <Heart className="mr-2 size-4" />
                 Follow

@@ -47,5 +47,5 @@ export const DebouncedInput: React.FC<React.ComponentProps<typeof Input>> = ({
     }
   }, [])
 
-  return <Input {...props} value={value} onChange={handleChange} />
+  return <Input {...props} name={name} value={value} onChange={handleChange} />
 }

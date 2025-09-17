@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { deleteCollectionAction } from '@/lib/actions/collection'
 import { getCollection, getListCollectionBooks } from '@/lib/api/collection'
 import {
-  BookOpen,
+  Book,
   Calendar,
   Edit,
   Library,
@@ -27,21 +27,20 @@ import Link from 'next/link'
 export default async function CollectionDetailsPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string; title?: string }>
 }) {
-  //   const claims = await IsLoggedIn()
-
-  const { id } = await params
+  const { id, title } = await params
 
   const [collectionRes, bookRes] = await Promise.all([
     getCollection(id),
     getListCollectionBooks(id, {
       include_book: 'true',
+      book_title: title,
     }),
   ])
 
   if ('error' in collectionRes) {
-    console.log({ libRes: collectionRes })
+    console.log(collectionRes)
     return <div>{JSON.stringify(collectionRes.message)}</div>
   }
 
@@ -71,9 +70,9 @@ export default async function CollectionDetailsPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="relative aspect-[2] rounded-lg overflow-hidden mb-6">
+      <div className="relative aspect-[2] rounded-lg mb-6">
         <Image
-          src={collectionRes.data.cover?.path || '/book-placeholder.svg'}
+          src={collectionRes.data.cover?.path ?? '/book-placeholder.svg'}
           alt={collectionRes.data.title}
           fill
           className="w-full h-full object-cover rounded-t"
@@ -93,7 +92,7 @@ export default async function CollectionDetailsPage({
               <span>{collectionRes.data.follower_count} followers</span>
             </div>
             <div className="flex items-center gap-1">
-              <BookOpen className="h-4 w-4" />
+              <Book className="h-4 w-4" />
               <span>{collectionRes.data.book_count} books</span>
             </div>
           </div>
@@ -150,7 +149,7 @@ export default async function CollectionDetailsPage({
                   <span>{collectionRes.data.follower_count} followers</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <BookOpen className="h-4 w-4 text-muted-foreground" />
+                  <Book className="h-4 w-4 text-muted-foreground" />
                   <span>{bookRes.data.length} books</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -183,13 +182,18 @@ export default async function CollectionDetailsPage({
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookRes.data.map((collectionBook) => (
-              <ListBook book={collectionBook.book!} key={collectionBook.id} />
+              <Link
+                href={`/admin/books/${collectionBook.book?.id}`}
+                key={collectionBook.id}
+              >
+                <ListBook book={collectionBook.book!} />
+              </Link>
             ))}
           </div>
 
           {collectionRes.data.book_count === 0 && (
             <Card className="p-12 text-center">
-              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <Book className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">
                 No books in this collection
               </h3>
