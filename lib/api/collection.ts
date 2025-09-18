@@ -136,13 +136,15 @@ type UpdateCollectionBooksResponse = Promise<
 >
 export const updateCollectionBooks = async (
   collection_id: string,
-  query: UpdateCollectionBooksQuery
+  query: UpdateCollectionBooksQuery,
+  init?: RequestInit
 ): UpdateCollectionBooksResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
   const res = await fetch(`${COLLECTION_URL}/${collection_id}/books`, {
+    ...init,
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(query),
   })
   if (!res.ok) {

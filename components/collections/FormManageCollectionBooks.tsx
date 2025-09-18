@@ -20,7 +20,8 @@ export const FormManageCollectionBooks: React.FC<{
   initialBooks: Book[]
   libraryID: string
   initialBookIDs: string[]
-}> = ({ initialBooks, libraryID, initialBookIDs }) => {
+  onSubmitAction: (v: string[]) => Promise<string>
+}> = ({ initialBooks, libraryID, initialBookIDs, onSubmitAction }) => {
   const [books, setBooks] = useState<Book[]>([])
   const [selectedBooks, setSelectedBooks] = useState<Book[]>(initialBooks)
   const selectedBookIDs = selectedBooks.map((b) => b.id)
@@ -67,6 +68,11 @@ export const FormManageCollectionBooks: React.FC<{
   )
   const isNoChange = hasSameNumber && hasEveryBook
 
+  const onSubmit = async () => {
+    const result = await onSubmitAction(selectedBookIDs)
+    toast(result)
+  }
+
   return (
     <div className="mx-auto space-y-4">
       <div className="flex flex-col md:flex-row top-4 sticky z-10 gap-4">
@@ -89,11 +95,7 @@ export const FormManageCollectionBooks: React.FC<{
             <X className="mr-2 h-4 w-4" />
             Deselect All ({selectedBooks.length})
           </Button>
-          <Button
-            onClick={console.log}
-            className="h-full"
-            disabled={isNoChange}
-          >
+          <Button onClick={onSubmit} className="h-full" disabled={isNoChange}>
             <Plus className="mr-2 h-4 w-4" />
             Save Selection ({selectedBooks.length})
           </Button>

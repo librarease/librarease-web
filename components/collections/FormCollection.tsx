@@ -158,18 +158,18 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
                   className={`border-2 border-dashed rounded-lg aspect-[2/1] flex flex-col items-center justify-center transition-colors ${
                     dragActive
                       ? 'border-primary bg-primary/5'
-                      : 'border-slate-300'
+                      : 'border-muted-foreground/20'
                   }`}
                   onDragEnter={handleDrag}
                   onDragLeave={handleDrag}
                   onDragOver={handleDrag}
                   onDrop={handleDrop}
                 >
-                  <Upload className="h-12 w-12 text-slate-400 mb-4" />
-                  <p className="text-sm text-slate-600 mb-2">
+                  <Upload className="h-12 w-12 text-muted-foreground mb-4" />
+                  <p className="text-sm text-muted-foreground mb-2">
                     Drag and drop a banner image here, or click to select
                   </p>
-                  <p className="text-xs text-slate-500 mb-4">
+                  <p className="text-xs text-muted-foreground mb-4">
                     Recommended: 800x400px (2:1 aspect ratio)
                   </p>
                   <input
@@ -307,7 +307,7 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting
                 ? 'Submitting...'
-                : 'Submit Collection'}
+                : 'Save Collection'}
             </Button>
           </div>
         </form>

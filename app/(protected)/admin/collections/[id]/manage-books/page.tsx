@@ -8,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Card } from '@/components/ui/card'
+import { updateCollectionBooksAction } from '@/lib/actions/collection'
 import { getCollection, getListCollectionBooks } from '@/lib/api/collection'
 import { Book } from 'lucide-react'
 
@@ -53,7 +54,10 @@ export default async function CollectionManageBooksPage({
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{collectionRes.data.title}</BreadcrumbPage>
+            {/* @ts-expect-error: typegen does not work */}
+            <BreadcrumbLink href={`/admin/collections/${id}`}>
+              {collectionRes.data.title}
+            </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -64,6 +68,7 @@ export default async function CollectionManageBooksPage({
           initialBooks={bookRes.data.map((b) => b.book!)}
           libraryID={collectionRes.data.library_id}
           initialBookIDs={collectionRes.data.book_ids}
+          onSubmitAction={updateCollectionBooksAction.bind(null, id)}
         />
       </div>
 

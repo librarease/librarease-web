@@ -5,6 +5,7 @@ import {
   createCollection,
   deleteCollection,
   updateCollection,
+  updateCollectionBooks,
 } from '../api/collection'
 import { IsLoggedIn, Verify } from '../firebase/firebase'
 
@@ -60,7 +61,7 @@ export async function deleteCollectionAction(
 
 export async function updateCollectionAction(
   id: string,
-  data: Parameters<typeof createCollection>[0]
+  data: Parameters<typeof updateCollection>[1]
 ) {
   const headers = await Verify({
     from: `/admin/collections/${id}/edit`,
@@ -77,5 +78,31 @@ export async function updateCollectionAction(
       return { error: e.message }
     }
     return { error: 'An unknown error occurred.' }
+  }
+}
+
+export async function updateCollectionBooksAction(
+  id: string,
+  bookIDs: string[]
+): Promise<string> {
+  const headers = await Verify({
+    from: `admin/collections/${id}/manage-books`,
+  })
+  try {
+    const res = await updateCollectionBooks(
+      id,
+      { book_ids: bookIDs },
+      { headers }
+    )
+    if ('error' in res) {
+      return res.error
+    }
+    revalidatePath(`/admin/collections/${id}`, 'page')
+    return 'Collection books updated successfully'
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      return e.message
+    }
+    return 'An unknown error occurred.'
   }
 }
