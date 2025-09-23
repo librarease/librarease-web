@@ -24,9 +24,13 @@ import { useMemo } from 'react'
 import { format, parse } from 'date-fns'
 
 const chartConfig = {
-  count: {
-    label: 'Borrowing',
+  total_borrow: {
+    label: 'Borrow',
     color: 'var(--chart-1)',
+  },
+  total_return: {
+    label: 'Return',
+    color: 'var(--chart-2)',
   },
 } satisfies ChartConfig
 
@@ -71,16 +75,29 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
               tickFormatter={(value) => formatDate(value)}
             />
             <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              cursor={true}
+              content={<ChartTooltipContent />}
+              labelFormatter={(value) => formatDate(value)}
             />
             <Line
-              dataKey="count"
+              dataKey="total_borrow"
               type="natural"
-              stroke="var(--color-count)"
+              stroke="var(--color-total_borrow)"
               strokeWidth={2}
               dot={{
-                fill: 'var(--color-count)',
+                fill: 'var(--color-total_borrow)',
+              }}
+              activeDot={{
+                r: 6,
+              }}
+            />
+            <Line
+              dataKey="total_return"
+              type="natural"
+              stroke="var(--color-total_return)"
+              strokeWidth={2}
+              dot={{
+                fill: 'var(--color-total_return)',
               }}
               activeDot={{
                 r: 6,
@@ -90,9 +107,6 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        {/* <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="size-4" />
-        </div> */}
         <div className="leading-none text-muted-foreground">
           Showing total borrows
         </div>

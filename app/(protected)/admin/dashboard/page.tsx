@@ -11,7 +11,7 @@ import { MonthlyRevenueChart } from '@/components/dashboard/MonthlyRevenueChart'
 import { MostBorrowedBookChart } from '@/components/dashboard/MostBorrowedBookChart'
 import { MontlyBorrowChart } from '@/components/dashboard/MontlyBorrowChart'
 import { TopMembershipChart } from '@/components/dashboard/TopMembershipChart'
-import { getAnalysis } from '@/lib/api/analysis'
+import { getAnalysis, getBorrowingHeatmapAnalysis } from '@/lib/api/analysis'
 import { SITE_NAME } from '@/lib/consts'
 import type { Metadata } from 'next'
 import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
@@ -22,6 +22,8 @@ import { format, subMonths, parse, startOfDay, endOfDay } from 'date-fns'
 import { getListLibraries } from '@/lib/api/library'
 import { DateRange } from 'react-day-picker'
 import { cookies } from 'next/headers'
+import { Suspense } from 'react'
+import { BorrowHeatmapChart } from '@/components/dashboard/BorrowHeatmapChart'
 
 export const metadata: Metadata = {
   title: `Dashboard · ${SITE_NAME}`,
@@ -65,7 +67,7 @@ export default async function DashboardPage({
     redirect('?' + sp.toString(), RedirectType.replace)
   }
 
-  const [res, libsRes] = await Promise.all([
+  const [res, libsRes, heatmapRes] = await Promise.all([
     getAnalysis({
       skip,
       limit,
@@ -74,6 +76,11 @@ export default async function DashboardPage({
       library_id: libID!,
     }),
     getListLibraries({ limit: 5 }),
+    getBorrowingHeatmapAnalysis({
+      library_id: libID!,
+      start: startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON(),
+      end: endOfDay(parse(to, 'dd-MM-yyyy', new Date())).toJSON(),
+    }),
   ])
 
   if ('error' in res) {
@@ -144,6 +151,11 @@ export default async function DashboardPage({
         <TopMembershipChart data={res.data.membership} />
         <MontlyBorrowChart data={res.data.borrowing} />
         <MonthlyRevenueChart data={res.data.revenue} />
+        {'error' in heatmapRes ? (
+          <div>{heatmapRes.error}</div>
+        ) : (
+          <BorrowHeatmapChart data={heatmapRes.data} />
+        )}
       </div>
     </div>
   )

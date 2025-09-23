@@ -18,11 +18,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Analysis } from '@/lib/types/analysis'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { format, parse } from 'date-fns'
 
 export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
+  const router = useRouter()
+
   const chartConfig = data.reduce((acc, { title }, index) => {
     acc[title] = {
       label: title,
@@ -30,9 +32,10 @@ export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
     }
     return acc
   }, {} as ChartConfig)
-  const chartData = data.map(({ title, count }) => ({
-    browser: title,
+  const chartData = data.map(({ id, title, count }) => ({
+    title: title,
     total: count,
+    id: id,
     fill: chartConfig[title].color,
   }))
 
@@ -68,7 +71,7 @@ export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
             }}
           >
             <YAxis
-              dataKey="browser"
+              dataKey="title"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -78,18 +81,18 @@ export function MostBorrowedBookChart({ data }: { data: Analysis['book'] }) {
               }
             />
             <XAxis dataKey="total" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <Bar
+              dataKey="total"
+              layout="vertical"
+              radius={5}
+              cursor="pointer"
+              onClick={({ id }) => router.push(`/admin/books/${id}`)}
             />
-            <Bar dataKey="total" layout="vertical" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        {/* <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="size-4" />
-        </div> */}
         <div className="leading-none text-muted-foreground">
           Showing top most borrowed books
         </div>

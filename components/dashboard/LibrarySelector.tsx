@@ -17,7 +17,7 @@ export const LibrarySelector: React.FC<{
   onChangeAction: (libID: string) => void
 }> = ({ libs, lib, onChangeAction: onChange }) => {
   return (
-    <Select value={lib} onValueChange={onChange}>
+    <Select value={lib} onValueChange={onChange} disabled>
       <SelectTrigger className="w-1/2 justify-self-end">
         <SelectValue placeholder="Select a library" />
       </SelectTrigger>

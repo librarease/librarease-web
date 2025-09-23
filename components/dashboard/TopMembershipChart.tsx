@@ -18,11 +18,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Analysis } from '@/lib/types/analysis'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { format, parse } from 'date-fns'
 
 export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
+  const router = useRouter()
+
   const chartConfig = data.reduce((acc, { name }, index) => {
     acc[name] = {
       label: name,
@@ -31,10 +33,11 @@ export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
     return acc
   }, {} as ChartConfig)
 
-  const chartData = data.map(({ name, count }) => ({
-    browser: name,
+  const chartData = data.map(({ id, name, count }) => ({
+    name: name,
     visitors: count,
     fill: chartConfig[name].color,
+    id: id,
   }))
 
   const params = useSearchParams()
@@ -65,14 +68,20 @@ export function TopMembershipChart({ data }: { data: Analysis['membership'] }) {
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" label nameKey="browser" />
+            <Pie
+              data={chartData}
+              dataKey="visitors"
+              label
+              nameKey="name"
+              cursor="pointer"
+              onClick={({ name }) =>
+                router.push(`/admin/memberships?name=${name}`)
+              }
+            />
           </PieChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        {/* <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="size-4" />
-        </div> */}
         <div className="leading-none text-muted-foreground">
           Showing top purchased membership
         </div>
