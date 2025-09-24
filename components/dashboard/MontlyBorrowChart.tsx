@@ -84,9 +84,7 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
               type="natural"
               stroke="var(--color-total_borrow)"
               strokeWidth={2}
-              dot={{
-                fill: 'var(--color-total_borrow)',
-              }}
+              dot={false}
               activeDot={{
                 r: 6,
               }}
@@ -96,9 +94,7 @@ export function MontlyBorrowChart({ data }: { data: Analysis['borrowing'] }) {
               type="natural"
               stroke="var(--color-total_return)"
               strokeWidth={2}
-              dot={{
-                fill: 'var(--color-total_return)',
-              }}
+              dot={false}
               activeDot={{
                 r: 6,
               }}

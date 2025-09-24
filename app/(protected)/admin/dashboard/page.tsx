@@ -7,11 +7,6 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
-import { MonthlyRevenueChart } from '@/components/dashboard/MonthlyRevenueChart'
-import { MostBorrowedBookChart } from '@/components/dashboard/MostBorrowedBookChart'
-import { MontlyBorrowChart } from '@/components/dashboard/MontlyBorrowChart'
-import { TopMembershipChart } from '@/components/dashboard/TopMembershipChart'
-import { getAnalysis, getBorrowingHeatmapAnalysis } from '@/lib/api/analysis'
 import { SITE_NAME } from '@/lib/consts'
 import type { Metadata } from 'next'
 import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
@@ -23,7 +18,17 @@ import { getListLibraries } from '@/lib/api/library'
 import { DateRange } from 'react-day-picker'
 import { cookies } from 'next/headers'
 import { Suspense } from 'react'
-import { BorrowHeatmapChart } from '@/components/dashboard/BorrowHeatmapChart'
+import { AnalysisChartsWrapper } from '@/components/dashboard/AnalysisChartsWrapper'
+import {
+  BorrowHeatmapWrapper,
+  ReturnHeatmapWrapper,
+} from '@/components/dashboard/HeatmapWrapper'
+import { PowerUsersWrapper } from '@/components/dashboard/PowerUsersWrapper'
+import {
+  AnalysisChartsLoading,
+  HeatmapChartLoading,
+  PowerUsersLoading,
+} from '@/components/dashboard/ChartLoadingComponents'
 
 export const metadata: Metadata = {
   title: `Dashboard · ${SITE_NAME}`,
@@ -50,7 +55,7 @@ export default async function DashboardPage({
     redirect('/', RedirectType.replace)
   }
 
-  const { from, to, limit = 5, skip = 0 } = await searchParams
+  const { from, to, skip, limit = 5 } = await searchParams
 
   const cookieStore = await cookies()
   const cookieName = process.env.LIBRARY_COOKIE_NAME as string
@@ -67,25 +72,8 @@ export default async function DashboardPage({
     redirect('?' + sp.toString(), RedirectType.replace)
   }
 
-  const [res, libsRes, heatmapRes] = await Promise.all([
-    getAnalysis({
-      skip,
-      limit,
-      from: startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON(),
-      to: endOfDay(parse(to, 'dd-MM-yyyy', new Date())).toJSON(),
-      library_id: libID!,
-    }),
-    getListLibraries({ limit: 5 }),
-    getBorrowingHeatmapAnalysis({
-      library_id: libID!,
-      start: startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON(),
-      end: endOfDay(parse(to, 'dd-MM-yyyy', new Date())).toJSON(),
-    }),
-  ])
+  const libsRes = await getListLibraries({ limit: 5 })
 
-  if ('error' in res) {
-    return <div>{res.error}</div>
-  }
   if ('error' in libsRes) {
     return <div>{libsRes.error}</div>
   }
@@ -117,6 +105,9 @@ export default async function DashboardPage({
     redirect('./?' + sp.toString(), RedirectType.replace)
   }
 
+  const start = startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON()
+  const end = endOfDay(parse(to, 'dd-MM-yyyy', new Date())).toJSON()
+
   return (
     <div>
       <h1 className="text-2xl font-semibold">Libraries</h1>
@@ -147,15 +138,30 @@ export default async function DashboardPage({
           range={{ from: fromDate, to: toDate }}
           onChangeAction={onDateRangeChange}
         />
-        <MostBorrowedBookChart data={res.data.book} />
-        <TopMembershipChart data={res.data.membership} />
-        <MontlyBorrowChart data={res.data.borrowing} />
-        <MonthlyRevenueChart data={res.data.revenue} />
-        {'error' in heatmapRes ? (
-          <div>{heatmapRes.error}</div>
-        ) : (
-          <BorrowHeatmapChart data={heatmapRes.data} />
-        )}
+        <Suspense fallback={<AnalysisChartsLoading />}>
+          <AnalysisChartsWrapper
+            libraryId={libID!}
+            from={start}
+            to={end}
+            limit={5}
+            skip={0}
+          />
+        </Suspense>
+        <Suspense fallback={<HeatmapChartLoading />}>
+          <BorrowHeatmapWrapper libraryId={libID!} start={start} end={end} />
+        </Suspense>
+        <Suspense fallback={<HeatmapChartLoading />}>
+          <ReturnHeatmapWrapper libraryId={libID!} start={start} end={end} />
+        </Suspense>
+        <Suspense fallback={<PowerUsersLoading />}>
+          <PowerUsersWrapper
+            libraryId={libID!}
+            from={start}
+            to={end}
+            limit={limit}
+            skip={skip}
+          />
+        </Suspense>
       </div>
     </div>
   )

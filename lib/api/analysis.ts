@@ -93,10 +93,34 @@ export const getBorrowingHeatmapAnalysis = async (query: {
   ResList<{
     day_of_week: number
     hour_of_day: number
+    minute_of_hour: number
     count: number
   }>
 > => {
   const url = new URL(`${ANSLYSIS_URL}/borrowing-heatmap`)
+  Object.entries(query).forEach(([key, value]) => {
+    if (value) {
+      url.searchParams.append(key, String(value))
+    }
+  })
+
+  const response = await fetch(url.toString())
+  return response.json()
+}
+
+export const getReturningHeatmapAnalysis = async (query: {
+  library_id: string
+  start?: string
+  end?: string
+}): Promise<
+  ResList<{
+    day_of_week: number
+    hour_of_day: number
+    minute_of_hour: number
+    count: number
+  }>
+> => {
+  const url = new URL(`${ANSLYSIS_URL}/returning-heatmap`)
   Object.entries(query).forEach(([key, value]) => {
     if (value) {
       url.searchParams.append(key, String(value))
