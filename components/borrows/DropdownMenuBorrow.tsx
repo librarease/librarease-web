@@ -24,7 +24,7 @@ export function DropdownMenuBorrow() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <BookUser className="mr-2 size-4" />
-            <Link href="/borrows/new">Borrow a book</Link>
+            <Link href="/admin/borrows/new">Borrow a book</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
