@@ -7,10 +7,8 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { getBook } from '@/lib/api/book'
-import { BookDown } from 'lucide-react'
 
 import BtnWatchlist from '@/components/books/BtnWatchlist'
-import { Button } from '@/components/ui/button'
 import { DetailBook } from '@/components/books/DetailBook'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 

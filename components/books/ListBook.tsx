@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import clsx from 'clsx'
+import { unstable_ViewTransition as ViewTransition } from 'react'
 
 export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
   return (
@@ -19,26 +20,28 @@ export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
       )}
     >
       <CardHeader className="pb-3">
-        <div className="grid place-items-center">
-          {/* 3D Book Effect */}
-          <div className="flex my-12">
-            <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-4">
-              <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-16px)] origin-top-left"></span>
+        <ViewTransition name={book.id}>
+          <div className="grid place-items-center">
+            {/* 3D Book Effect */}
+            <div className="flex my-12">
+              <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-4">
+                <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-16px)] origin-top-left"></span>
+              </div>
+              <Image
+                src={book?.cover ?? '/book-placeholder.svg'}
+                alt={book.title + "'s cover"}
+                width={128}
+                height={192}
+                className={clsx(
+                  'shadow-xl rounded-r-md w-32 h-48 object-cover',
+                  '[transform:perspective(800px)_rotateY(14deg)]',
+                  !book.stats?.is_available && 'grayscale'
+                )}
+                priority
+              />
             </div>
-            <Image
-              src={book?.cover ?? '/book-placeholder.svg'}
-              alt={book.title + "'s cover"}
-              width={128}
-              height={192}
-              className={clsx(
-                'shadow-xl rounded-r-md w-32 h-48 object-cover',
-                '[transform:perspective(800px)_rotateY(14deg)]',
-                !book.stats?.is_available && 'grayscale'
-              )}
-              priority
-            />
           </div>
-        </div>
+        </ViewTransition>
         <CardTitle className="text-lg line-clamp-1">{book.title}</CardTitle>
         <CardDescription className="line-clamp-1">
           {book.author}

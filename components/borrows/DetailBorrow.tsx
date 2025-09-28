@@ -28,6 +28,7 @@ import { Borrow } from '@/lib/types/borrow'
 import { DateTime } from '@/components/common/DateTime'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { Route } from 'next'
+import { unstable_ViewTransition as ViewTransition } from 'react'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
@@ -46,7 +47,9 @@ export const DetailBorrow: React.FC<
           <CardContent className="grid place-self-center md:place-self-auto md:grid-cols-2 gap-4">
             {/* FIXME */}
             <Link href={`../books/${borrow.book.id}` as Route}>
-              <ThreeDBook book={borrow.book} />
+              <ViewTransition name={borrow.book.id}>
+                <ThreeDBook book={borrow.book} />
+              </ViewTransition>
             </Link>
             <div>
               {/* FIXME */}

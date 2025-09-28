@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // for event source stream
     proxyTimeout: 0,
+    viewTransition: true,
   },
 
   logging: {

@@ -4,6 +4,7 @@ import { ThreeDBook } from '@/components/books/three-d-book'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { BookDetail } from '@/lib/types/book'
+import { unstable_ViewTransition as ViewTransition } from 'react'
 
 export const DetailBook: React.FC<
   React.PropsWithChildren<{ book: BookDetail }>
@@ -12,7 +13,9 @@ export const DetailBook: React.FC<
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Book Cover */}
       <div className="lg:col-span-1 grid place-items-center gap-4">
-        <ThreeDBook book={book} />
+        <ViewTransition name={book.id}>
+          <ThreeDBook book={book} />
+        </ViewTransition>
         {children}
       </div>
 
