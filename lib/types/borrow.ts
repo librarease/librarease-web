@@ -10,6 +10,7 @@ export type Borrow = WithCommon<{
   borrowed_at: string
   due_at: string
   returning?: Return
+  lost?: Lost
   book: Pick<Book, 'id' | 'title' | 'code' | 'cover'>
   subscription: Pick<
     Subscription,
@@ -29,4 +30,12 @@ export type Return = WithCommon<{
   returned_at: string
   fine: number
   staff: Pick<Staff, 'id' | 'name'>
+}>
+
+export type Lost = WithCommon<{
+  borrowing_id: string
+  reported_at: string
+  fine: number
+  staff: Pick<Staff, 'id' | 'name'>
+  note: string
 }>

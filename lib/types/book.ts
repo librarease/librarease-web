@@ -2,9 +2,12 @@ import { WithCommon } from './common'
 import { Library } from './library'
 import { Watchlist } from './watchlist'
 
-type BookStats = {
+export type BookStats = {
   borrow_count: number
-  is_available: boolean
+  borrowing?: {
+    returning?: { returned_at?: string }
+    lost?: { reported_at?: string }
+  }
 }
 
 export type Book = WithCommon<{

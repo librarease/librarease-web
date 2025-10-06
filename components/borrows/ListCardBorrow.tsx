@@ -55,9 +55,9 @@ export const ListCardBorrow: React.FC<
             variant={
               getBorrowStatus(borrow) === 'overdue'
                 ? 'destructive'
-                : getBorrowStatus(borrow) === 'returned'
-                  ? 'secondary'
-                  : 'default'
+                : getBorrowStatus(borrow) === 'active'
+                  ? 'default'
+                  : 'secondary'
             }
             className="capitalize"
           >

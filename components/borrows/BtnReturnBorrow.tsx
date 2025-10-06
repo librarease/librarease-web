@@ -44,6 +44,14 @@ export const BtnReturnBook: React.FC<
     })
   }
 
+  if (borrow.lost) {
+    return (
+      <Button {...props} variant="destructive" disabled>
+        Lost on {formatDate(borrow.lost.reported_at)}
+      </Button>
+    )
+  }
+
   if (clientBorrow.returning)
     return (
       <Button {...props} variant="secondary" disabled>

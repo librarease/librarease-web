@@ -1,4 +1,4 @@
-import { Borrow, BorrowDetail, Return } from '@/lib/types/borrow'
+import { Borrow, BorrowDetail, Lost, Return } from '@/lib/types/borrow'
 import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
 import { BASE_URL } from './common'
 
@@ -131,6 +131,48 @@ export const deleteReturn = async (
   headers.set('Content-Type', 'application/json')
 
   const response = await fetch(`${BORROW_URL}/${data.id}/return`, {
+    ...init,
+    method: 'DELETE',
+    body: JSON.stringify(data),
+    headers,
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}
+
+export const lostBorrow = async (
+  data: Pick<Borrow, 'id'> & Pick<Lost, 'reported_at' | 'fine' | 'note'>,
+  init?: RequestInit
+): Promise<ResSingle<Lost>> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${BORROW_URL}/${data.id}/lost`, {
+    ...init,
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers,
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}
+
+export const deleteLost = async (
+  data: Pick<Borrow, 'id'>,
+  init?: RequestInit
+): GetBorrowResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${BORROW_URL}/${data.id}/lost`, {
     ...init,
     method: 'DELETE',
     body: JSON.stringify(data),

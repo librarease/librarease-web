@@ -10,13 +10,15 @@ import {
 } from '@/components/ui/card'
 import clsx from 'clsx'
 import { unstable_ViewTransition as ViewTransition } from 'react'
+import { getBookStatus } from '@/lib/utils'
 
 export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
+  const status = getBookStatus(book.stats)
+
   return (
     <Card
       className={clsx(
-        'group cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1',
-        book.stats?.is_available && ''
+        'group cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1'
       )}
     >
       <CardHeader className="pb-3">
@@ -35,7 +37,8 @@ export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
                 className={clsx(
                   'shadow-xl rounded-r-md w-32 h-48 object-cover',
                   '[transform:perspective(800px)_rotateY(14deg)]',
-                  !book.stats?.is_available && 'grayscale'
+                  status === 'borrowed' && 'grayscale-75',
+                  status === 'lost' && 'grayscale opacity-50'
                 )}
                 priority
               />
@@ -63,18 +66,20 @@ export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
                       </Badge>
                     )} */}
 
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            {book.stats?.is_available ? (
-              <>
-                <BadgeCheck className="h-3 w-3 text-primary" />
-                <span>Available</span>
-              </>
-            ) : (
-              <>
-                <BadgeMinus className="h-3 w-3" />
-                <span>Borrowed</span>
-              </>
+          <div
+            className={clsx(
+              'flex capitalize items-center gap-2 text-sm',
+              status === 'available' && 'text-primary',
+              status === 'borrowed' && 'text-muted-foreground',
+              status === 'lost' && 'text-destructive'
             )}
+          >
+            {status === 'available' ? (
+              <BadgeCheck className="h-3 w-3" />
+            ) : (
+              <BadgeMinus className="h-3 w-3" />
+            )}
+            <span>{status}</span>
           </div>
         </div>
       </CardContent>

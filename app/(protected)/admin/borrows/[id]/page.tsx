@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
 import Link from 'next/link'
 import { Pen } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { FormLostBorrow } from '@/components/borrows/FormLostBorrow'
 
 export default async function BorrowDetailsPage({
   params,
@@ -53,30 +55,42 @@ export default async function BorrowDetailsPage({
 
   return (
     <DetailBorrow borrow={borrowRes.data} prevBorrows={prevBorrows}>
-      <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-2">
-        {borrowRes.data.returning ? (
-          <BtnUndoReturn
-            variant="outline"
-            className="w-full backdrop-blur-md"
-            borrow={borrowRes.data}
-          />
-        ) : (
-          <BtnReturnBook
-            variant="outline"
-            className="w-full"
-            borrow={borrowRes.data}
-          />
+      <>
+        {borrowRes.data.returning || borrowRes.data.lost ? null : (
+          <Card className="bg-destructive/10 border-destructive/20">
+            <CardHeader>
+              <CardTitle>Mark as Lost</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FormLostBorrow id={borrowRes.data.id} />
+            </CardContent>
+          </Card>
         )}
-        <Button asChild>
-          <Link
-            href={`/admin/borrows/${borrowRes.data.id}/edit`}
-            className="w-full"
-          >
-            <Pen />
-            Edit
-          </Link>
-        </Button>
-      </div>
+        <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-2">
+          {borrowRes.data.returning ? (
+            <BtnUndoReturn
+              variant="outline"
+              className="w-full backdrop-blur-md"
+              borrow={borrowRes.data}
+            />
+          ) : (
+            <BtnReturnBook
+              variant="outline"
+              className="w-full"
+              borrow={borrowRes.data}
+            />
+          )}
+          <Button asChild>
+            <Link
+              href={`/admin/borrows/${borrowRes.data.id}/edit`}
+              className="w-full"
+            >
+              <Pen />
+              Edit
+            </Link>
+          </Button>
+        </div>
+      </>
     </DetailBorrow>
   )
 }

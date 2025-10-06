@@ -5,10 +5,14 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { BookDetail } from '@/lib/types/book'
 import { unstable_ViewTransition as ViewTransition } from 'react'
+import { getBookStatus } from '@/lib/utils'
 
 export const DetailBook: React.FC<
   React.PropsWithChildren<{ book: BookDetail }>
 > = ({ book, children }) => {
+  const status = getBookStatus(book.stats)
+  const isAvailable = status === 'available'
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Book Cover */}
@@ -25,8 +29,11 @@ export const DetailBook: React.FC<
           <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
           <p className="text-xl text-muted-foreground mb-4">{book.author}</p>
           <div className="flex flex-wrap gap-2 mb-4">
-            <Badge variant={book.stats?.is_available ? 'default' : 'secondary'}>
-              {book.stats?.is_available ? 'Available' : 'Borrowed'}
+            <Badge
+              className="uppercase"
+              variant={isAvailable ? 'default' : 'secondary'}
+            >
+              {status}
             </Badge>
             <Badge variant="outline">book.genre</Badge>
           </div>

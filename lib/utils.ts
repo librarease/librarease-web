@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Borrow } from './types/borrow'
 import { Subscription } from './types/subscription'
+import { BookStats } from './types/book'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -30,6 +31,8 @@ export const isBorrowDue = (borrow: Borrow) => {
 
 export const getBorrowStatus = (borrow: Borrow) => {
   if (borrow.returning?.returned_at) return 'returned'
+
+  if (borrow.lost?.reported_at) return 'lost'
 
   return isBorrowDue(borrow) ? 'overdue' : 'active'
 }
@@ -60,4 +63,11 @@ export const getBorrowProgressPercent = (borrow: Borrow): number => {
       ((end - start) / (new Date(borrow.due_at).getTime() - start)) * 100
     )
   )
+}
+
+export function getBookStatus(stat: BookStats | undefined) {
+  if (!stat) return 'available'
+  if (stat.borrowing?.returning?.returned_at) return 'available'
+  if (stat.borrowing?.lost?.reported_at) return 'lost'
+  return 'borrowed'
 }

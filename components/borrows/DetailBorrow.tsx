@@ -18,6 +18,7 @@ import {
   CreditCard,
   Gavel,
   Library,
+  Pen,
   Tally5,
   User,
   UserCog,
@@ -29,6 +30,7 @@ import { DateTime } from '@/components/common/DateTime'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { Route } from 'next'
 import { unstable_ViewTransition as ViewTransition } from 'react'
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
@@ -173,6 +175,33 @@ export const DetailBorrow: React.FC<
           </CardContent>
         </Card>
       </div>
+
+      {borrow.lost ? (
+        <Alert variant="destructive" className="bg-destructive/10">
+          <AlertTitle className="font-semibold mb-4">
+            Borrow Marked as Lost
+          </AlertTitle>
+          <AlertDescription>
+            <div className="grid gap-2 grid-cols-[max-content_1fr] items-center">
+              <Pen className="size-4 text-muted-foreground" />
+              <p>
+                <span className="font-medium">Note:&nbsp;</span>
+                {borrow.lost.note}
+              </p>
+              <Calendar className="size-4 text-muted-foreground" />
+              <p>
+                <span className="font-medium">Reported:&nbsp;</span>
+                <DateTime dateTime={borrow.lost.reported_at} />
+              </p>
+              <Gavel className="size-4 text-muted-foreground" />
+              <p>
+                <span className="font-medium">Fine:&nbsp;</span>3 pts
+              </p>
+            </div>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">

@@ -63,28 +63,6 @@ export const getOverdueAnalysis = async (
   return response.json()
 }
 
-export const getBookUtilizationAnalysis = async (
-  query: AnalysisQueryParams
-): Promise<
-  ResList<{
-    book_id: string
-    book_title: string
-    copies: number
-    total_borrowings: number
-    utilization_rate: number
-  }>
-> => {
-  const url = new URL(`${ANSLYSIS_URL}/book-utilization`)
-  Object.entries(query).forEach(([key, value]) => {
-    if (value) {
-      url.searchParams.append(key, String(value))
-    }
-  })
-
-  const response = await fetch(url.toString())
-  return response.json()
-}
-
 export const getBorrowingHeatmapAnalysis = async (query: {
   library_id: string
   start?: string

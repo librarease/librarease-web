@@ -50,11 +50,11 @@ export default async function BorrowDetailsLayout({
 
           <Badge
             variant={
-              getBorrowStatus(borrowRes.data) === 'overdue'
-                ? 'destructive'
-                : getBorrowStatus(borrowRes.data) === 'returned'
-                  ? 'secondary'
-                  : 'default'
+              getBorrowStatus(borrowRes.data) === 'active'
+                ? 'default'
+                : getBorrowStatus(borrowRes.data) === 'overdue'
+                  ? 'destructive'
+                  : 'secondary'
             }
             className="uppercase h-8 min-w-24 justify-center"
           >
