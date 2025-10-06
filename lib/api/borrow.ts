@@ -9,7 +9,7 @@ type GetListBorrowsQuery = QueryParams<
     is_active?: boolean
     is_expired?: boolean
     library_id?: string
-    status?: 'active' | 'overdue' | 'returned'
+    status?: 'active' | 'overdue' | 'returned' | 'lost'
     user_id?: string
   }
 >
@@ -33,6 +33,8 @@ export const getListBorrows = async (
       url.searchParams.append('is_overdue', 'true')
     } else if (status === 'returned') {
       url.searchParams.append('is_returned', 'true')
+    } else if (status === 'lost') {
+      url.searchParams.append('is_lost', 'true')
     }
   }
 

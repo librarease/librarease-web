@@ -33,7 +33,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createBorrow } from '@/lib/api/borrow'
 import {
   Command,
-  // CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -42,7 +41,6 @@ import {
 import {
   Form,
   FormControl,
-  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -102,10 +100,13 @@ export const FormBorrow: React.FC<FormBorrowProps> = (props) => {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     createBorrow(data)
-      .then(console.log)
-      .then(() => {
+      .then((res) => {
+        if ('error' in res) {
+          toast.error(res.error)
+          return
+        }
         toast('Borrow created successfully')
-        router.push('/borrows')
+        router.push(`/admin/borrows/${res.data.id}`)
       })
       .catch((e) => {
         toast.error(e?.error)

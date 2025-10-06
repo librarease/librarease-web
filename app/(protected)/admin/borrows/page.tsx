@@ -45,7 +45,7 @@ export default async function Borrows({
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
-  const status = sp?.status as 'active' | 'overdue' | 'returned'
+  const status = sp?.status as 'active' | 'overdue' | 'returned' | 'lost'
 
   const headers = await Verify({
     from: '/admin/borrows',
@@ -134,6 +134,7 @@ export default async function Borrows({
           { name: 'Active', href: '/admin/borrows?status=active' },
           { name: 'Overdue', href: '/admin/borrows?status=overdue' },
           { name: 'Returned', href: '/admin/borrows?status=returned' },
+          { name: 'Lost', href: '/admin/borrows?status=lost' },
         ]}
         activeHref={`/admin/borrows${status ? `?status=${status}` : ''}`}
       />
