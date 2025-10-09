@@ -2,6 +2,7 @@ import { BorrowDetail } from '@/lib/types/borrow'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import {
+  getBorrowStatus,
   getSubscriptionStatus,
   isBorrowDue,
   isSubscriptionActive,
@@ -38,7 +39,8 @@ export const DetailBorrow: React.FC<
     prevBorrows: Borrow[]
   }>
 > = ({ borrow, prevBorrows, children }) => {
-  const isDue = isBorrowDue(borrow)
+  const status = getBorrowStatus(borrow)
+  const isDue = status === 'overdue'
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -121,10 +123,7 @@ export const DetailBorrow: React.FC<
             <Calendar className="size-4 text-muted-foreground" />
             <p>
               <span className="font-medium">Borrowed:&nbsp;</span>
-              <DateTime
-                dateTime={borrow.borrowed_at}
-                relative={!borrow.returning}
-              />
+              <DateTime dateTime={borrow.borrowed_at} relative={isDue} />
             </p>
             {isDue ? (
               <>
@@ -156,7 +155,7 @@ export const DetailBorrow: React.FC<
             )}
             <p className={clsx({ 'text-destructive': isDue })}>
               <span className="font-medium">Due:&nbsp;</span>
-              <DateTime dateTime={borrow.due_at} relative={!borrow.returning} />
+              <DateTime dateTime={borrow.due_at} relative={isDue} />
             </p>
             {borrow.returning ? (
               <>
@@ -183,11 +182,6 @@ export const DetailBorrow: React.FC<
           </AlertTitle>
           <AlertDescription>
             <div className="grid gap-2 grid-cols-[max-content_1fr] items-center">
-              <Pen className="size-4 text-muted-foreground" />
-              <p>
-                <span className="font-medium">Note:&nbsp;</span>
-                {borrow.lost.note}
-              </p>
               <Calendar className="size-4 text-muted-foreground" />
               <p>
                 <span className="font-medium">Reported:&nbsp;</span>
@@ -195,7 +189,18 @@ export const DetailBorrow: React.FC<
               </p>
               <Gavel className="size-4 text-muted-foreground" />
               <p>
-                <span className="font-medium">Fine:&nbsp;</span>3 pts
+                <span className="font-medium">Fine:&nbsp;</span>
+                {borrow.lost.fine ?? '-'} Pts
+              </p>
+              <UserCog className="size-4 text-muted-foreground" />
+              <p>
+                <span className="font-medium">Staff:&nbsp;</span>
+                {borrow.lost.staff.name}
+              </p>
+              <Pen className="size-4 text-muted-foreground" />
+              <p>
+                <span className="font-medium">Note:&nbsp;</span>
+                {borrow.lost.note}
               </p>
             </div>
           </AlertDescription>
@@ -264,12 +269,11 @@ export const DetailBorrow: React.FC<
       {prevBorrows.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Previous Borrows</CardTitle>
+            <CardTitle>Recent Borrows</CardTitle>
           </CardHeader>
           <CardContent className="flex items-end overflow-x-scroll p-6 isolate">
             {prevBorrows.map((b) => (
               <Link
-                // FIXME
                 href={`./${b.id}` as Route}
                 key={b.id}
                 className={clsx(

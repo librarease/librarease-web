@@ -22,6 +22,8 @@ import { Input } from '../ui/input'
 import { useCallback, useTransition } from 'react'
 import { updateBorrowAction } from '@/lib/actions/update-borrow'
 import { TimeInput } from '../ui/time-input'
+import { Textarea } from '../ui/textarea'
+import { Separator } from '../ui/separator'
 
 const FormSchema = z.object({
   id: z.string({
@@ -34,6 +36,13 @@ const FormSchema = z.object({
     .object({
       returned_at: z.string(),
       fine: z.coerce.number<number>().nonnegative(),
+    })
+    .optional(),
+  lost: z
+    .object({
+      reported_at: z.string(),
+      fine: z.coerce.number<number>().nonnegative(),
+      note: z.string(),
     })
     .optional(),
 })
@@ -177,6 +186,7 @@ export const FormEditBorrow: React.FC<{
         />
         {borrow.returning ? (
           <>
+            <Separator className="my-2 col-span-2" />
             <FormField
               control={form.control}
               name="returning.returned_at"
@@ -236,6 +246,95 @@ export const FormEditBorrow: React.FC<{
                     <Input
                       placeholder="Pts"
                       type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        ) : null}
+        {borrow.lost ? (
+          <>
+            <Separator className="my-2 col-span-2" />
+            <FormField
+              control={form.control}
+              name="lost.reported_at"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Lost Reported Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value ? (
+                            formatDate(field.value, {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={new Date(field.value)}
+                        onSelect={(v) => field.onChange(v?.toISOString())}
+                        disabled={(date) =>
+                          date < new Date(form.getValues('borrowed_at'))
+                        }
+                        captionLayout="dropdown"
+                        autoFocus
+                      />
+                      <TimeInput
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lost.fine"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Fine</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Pts"
+                      type="number"
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lost.note"
+              render={({ field }) => (
+                <FormItem className="flex flex-col col-span-2">
+                  <FormLabel>Note</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Note"
                       {...field}
                       onChange={field.onChange}
                     />

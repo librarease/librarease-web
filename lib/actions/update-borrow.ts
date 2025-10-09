@@ -8,7 +8,7 @@ export async function updateBorrowAction(
   data: Parameters<typeof updateBorrow>[0]
 ) {
   const headers = await Verify({
-    from: '/borrows',
+    from: `/admin/borrows/${data.id}/edit`,
   })
 
   try {
@@ -22,6 +22,6 @@ export async function updateBorrowAction(
     }
     return { error: 'failed to update borrow' }
   } finally {
-    revalidatePath(`/borrows/${data.id}`)
+    revalidatePath(`/admin/borrows/${data.id}`)
   }
 }

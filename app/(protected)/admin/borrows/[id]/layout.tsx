@@ -21,7 +21,7 @@ export default async function BorrowDetailsLayout({
 }>) {
   const { id } = await params
 
-  await Verify({ from: `/borrows/${id}` })
+  await Verify({ from: `/admin/borrows/${id}` })
 
   const [borrowRes] = await Promise.all([getBorrow({ id })])
 
