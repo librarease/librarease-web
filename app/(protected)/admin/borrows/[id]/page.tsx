@@ -3,13 +3,12 @@ import { getBorrow, getListBorrows } from '@/lib/api/borrow'
 import { Borrow } from '@/lib/types/borrow'
 import { redirect, RedirectType } from 'next/navigation'
 import { DetailBorrow } from '@/components/borrows/DetailBorrow'
-import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import { Button } from '@/components/ui/button'
 import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
 import Link from 'next/link'
-import { Pen } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { FormLostBorrow } from '@/components/borrows/FormLostBorrow'
+import { CornerUpLeft, Pen, PenOff } from 'lucide-react'
+import { BtnUndoLost } from '@/components/borrows/BtnUndoLost'
+import { ButtonGroup } from '@/components/ui/button-group'
 
 export default async function BorrowDetailsPage({
   params,
@@ -55,42 +54,53 @@ export default async function BorrowDetailsPage({
 
   return (
     <DetailBorrow borrow={borrowRes.data} prevBorrows={prevBorrows}>
-      <>
-        {borrowRes.data.returning || borrowRes.data.lost ? null : (
-          <Card className="bg-destructive/10 border-destructive/20">
-            <CardHeader>
-              <CardTitle>Mark as Lost</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <FormLostBorrow id={borrowRes.data.id} />
-            </CardContent>
-          </Card>
+      <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-2">
+        {borrowRes.data.returning ? (
+          <BtnUndoReturn
+            variant="outline"
+            className="w-full backdrop-blur-md"
+            borrow={borrowRes.data}
+          />
+        ) : null}
+        {borrowRes.data.lost ? (
+          <BtnUndoLost
+            variant="outline"
+            className="w-full backdrop-blur-md"
+            borrow={borrowRes.data}
+          />
+        ) : null}
+        {borrowRes.data.lost || borrowRes.data.returning ? null : (
+          <ButtonGroup className="w-full backdrop-blur-md">
+            <Button variant="secondary" asChild>
+              <Link
+                href={`/admin/borrows/${borrowRes.data.id}/return`}
+                className="w-1/2 bg-secondary"
+              >
+                <CornerUpLeft />
+                Return
+              </Link>
+            </Button>
+            <Button asChild variant="secondary" className="text-destructive">
+              <Link
+                href={`/admin/borrows/${borrowRes.data.id}/lost`}
+                className="w-1/2"
+              >
+                <PenOff />
+                Mark as Lost
+              </Link>
+            </Button>
+          </ButtonGroup>
         )}
-        <div className="bottom-0 sticky py-2 grid md:grid-cols-2 gap-2">
-          {borrowRes.data.returning ? (
-            <BtnUndoReturn
-              variant="outline"
-              className="w-full backdrop-blur-md"
-              borrow={borrowRes.data}
-            />
-          ) : (
-            <BtnReturnBook
-              variant="outline"
-              className="w-full"
-              borrow={borrowRes.data}
-            />
-          )}
-          <Button asChild>
-            <Link
-              href={`/admin/borrows/${borrowRes.data.id}/edit`}
-              className="w-full"
-            >
-              <Pen />
-              Edit
-            </Link>
-          </Button>
-        </div>
-      </>
+        <Button asChild>
+          <Link
+            href={`/admin/borrows/${borrowRes.data.id}/edit`}
+            className="w-full"
+          >
+            <Pen />
+            Edit
+          </Link>
+        </Button>
+      </div>
     </DetailBorrow>
   )
 }

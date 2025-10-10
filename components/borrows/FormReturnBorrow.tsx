@@ -14,45 +14,62 @@ import {
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import { useCallback, useTransition } from 'react'
-import { lostBorrowAction } from '@/lib/actions/lost-borrow'
-import { Textarea } from '../ui/textarea'
+import { useCallback, useEffect, useTransition } from 'react'
+import { returnBorrowAction } from '@/lib/actions/return-borrow'
 import { Spinner } from '../ui/spinner'
+import { BorrowDetail } from '@/lib/types/borrow'
+import { differenceInDays } from 'date-fns'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { cn, formatDate } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '../ui/calendar'
 import { TimeInput } from '../ui/time-input'
-import { BorrowDetail } from '@/lib/types/borrow'
 
 const FormSchema = z.object({
   id: z.uuid(),
-  reported_at: z.date(),
-  note: z.string().nonempty(),
+  returned_at: z.date(),
   fine: z.coerce.number<number>().nonnegative(),
 })
 
-export const FormLostBorrow: React.FC<{
+export const FormReturnBorrow: React.FC<{
   borrow: BorrowDetail
 }> = ({ borrow }) => {
+  const estimatedFine =
+    differenceInDays(new Date(), new Date(borrow.due_at)) *
+    (borrow.subscription.fine_per_day ?? 0)
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: borrow.id,
-      reported_at: new Date(),
-      note: '',
-      fine: 0,
+      returned_at: new Date(),
+      fine: Math.max(estimatedFine, 0),
     },
   })
 
   const [isPending, startTransition] = useTransition()
 
+  const returnedAt = form.watch('returned_at')
+
+  // Calculate fine based on returned_at
+  const calculatedFine = returnedAt
+    ? Math.max(
+        differenceInDays(new Date(returnedAt), new Date(borrow.due_at)) *
+          (borrow.subscription.fine_per_day ?? 0),
+        0
+      )
+    : 0
+
+  // Update fine field when calculatedFine changes
+  useEffect(() => {
+    form.setValue('fine', calculatedFine)
+  }, [calculatedFine, form])
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     startTransition(async () => {
-      const msg = await lostBorrowAction({
+      const msg = await returnBorrowAction({
         id: data.id,
-        reported_at: new Date().toJSON(),
-        note: data.note,
+        returned_at: data.returned_at.toJSON(),
         fine: data.fine,
       })
       if ('error' in msg) {
@@ -72,10 +89,10 @@ export const FormLostBorrow: React.FC<{
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
         <FormField
           control={form.control}
-          name="reported_at"
+          name="returned_at"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Reported Date</FormLabel>
+              <FormLabel>Return Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -110,24 +127,6 @@ export const FormLostBorrow: React.FC<{
                   />
                 </PopoverContent>
               </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="note"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Note</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Remarks"
-                  {...field}
-                  onChange={field.onChange}
-                  rows={3}
-                />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}

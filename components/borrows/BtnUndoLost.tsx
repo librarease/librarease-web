@@ -4,17 +4,15 @@ import { Borrow } from '@/lib/types/borrow'
 import { useTransition, useState } from 'react'
 import { Button } from '../ui/button'
 import { Lock, Unlock, Loader } from 'lucide-react'
-import { returnBorrowAction } from '@/lib/actions/return-borrow'
-import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
+import { undoLostAction } from '@/lib/actions/undo-lost'
 
-export const BtnReturnBook: React.FC<
+export const BtnUndoLost: React.FC<
   React.ComponentProps<typeof Button> & {
     borrow: Borrow
   }
 > = ({ borrow, ...props }) => {
   const [confirmTimeout, setConfirmTimeout] = useState<NodeJS.Timeout>()
-  const [clientBorrow, setClientBorrow] = useState<Borrow>(borrow)
   const [isPending, startTransition] = useTransition()
 
   const onUnlock = () => {
@@ -28,50 +26,33 @@ export const BtnReturnBook: React.FC<
     startTransition(async () => {
       clearTimeout(confirmTimeout)
       setConfirmTimeout(undefined)
-      const res = await returnBorrowAction({ id: borrow.id })
+      const res = await undoLostAction(borrow.id)
       if ('error' in res) {
         toast.error(res.error)
         return
       }
-      // optimistic update
-      setClientBorrow((prev) => ({
-        ...prev,
-        returning: {
-          returned_at: new Date().toISOString(),
-        } as Borrow['returning'],
-      }))
-      toast('Book returned successfully')
+      toast.success(res.message)
     })
   }
-
-  if (borrow.lost) {
-    return (
-      <Button {...props} variant="destructive" disabled>
-        Lost on {formatDate(borrow.lost.reported_at)}
-      </Button>
-    )
-  }
-
-  if (clientBorrow.returning)
-    return (
-      <Button {...props} variant="secondary" disabled>
-        {formatDate(clientBorrow.returning.returned_at)}
-      </Button>
-    )
 
   if (!confirmTimeout) {
     return (
       <Button onClick={onUnlock} {...props}>
         <Lock />
-        Return
+        Undo Lost
       </Button>
     )
   }
 
   return (
-    <Button onClick={onClick} {...props} variant="default" disabled={isPending}>
+    <Button
+      onClick={onClick}
+      {...props}
+      variant="destructive"
+      disabled={isPending}
+    >
       {isPending ? <Loader className="animate-spin" /> : <Unlock />}
-      Click again to return book
+      Click again to confirm
     </Button>
   )
 }

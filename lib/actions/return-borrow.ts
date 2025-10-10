@@ -4,28 +4,38 @@ import { returnBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 
 // server action to return a borrow
-export async function returnBorrowAction(id: string) {
+export async function returnBorrowAction({
+  id,
+  returned_at = new Date().toISOString(),
+  ...data
+}: Parameters<typeof returnBorrow>[0]) {
   const headers = await Verify({
-    from: '/borrows',
+    from: `/admin/borrows/${id}`,
   })
 
   try {
     const res = await returnBorrow(
       {
-        id: id,
-        returned_at: new Date().toISOString(),
+        id,
+        returned_at,
+        ...data,
       },
       {
         headers,
       }
     )
-    return res
+    if ('error' in res) {
+      return {
+        error: res.error,
+      }
+    }
+    return { message: 'borrow returned' }
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
       return { error: e.error as string }
     }
     return { error: 'failed to return borrow' }
   } finally {
-    revalidatePath('/borrows')
+    revalidatePath(`/admin/borrows/${id}`)
   }
 }

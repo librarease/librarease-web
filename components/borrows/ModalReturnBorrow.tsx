@@ -3,26 +3,30 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Scanner } from '@/components/common/Scanner'
 import { toast } from 'sonner'
 import { returnBorrowAction } from '@/lib/actions/return-borrow'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { ArrowRight } from 'lucide-react'
+import { FormReturnBorrow } from './FormReturnBorrow'
+import { usePathname, useRouter } from 'next/navigation'
+import { BorrowDetail } from '@/lib/types/borrow'
 
-export const ModalReturnBorrow: React.FC<{
+export const ModalScanReturnBorrow: React.FC<{
   open: boolean
   onOpenChange: (open: boolean) => void
 }> = ({ open, onOpenChange }) => {
   const [id, setId] = useState<string>()
 
   const onChange = async (id: string) => {
-    const res = await returnBorrowAction(id)
+    const res = await returnBorrowAction({ id })
     if ('error' in res) {
       toast.error(res.error)
     } else {
@@ -70,7 +74,35 @@ export const BtnScanReturnBorrow: React.FC<
       <Button onClick={() => setOpen(true)} variant="outline" {...props}>
         {children}
       </Button>
-      <ModalReturnBorrow open={open} onOpenChange={setOpen} />
+      <ModalScanReturnBorrow open={open} onOpenChange={setOpen} />
     </>
+  )
+}
+export const ModalReturnBorrow: React.FC<{ borrow: BorrowDetail }> = ({
+  borrow,
+}) => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [open, setOpen] = useState(true)
+  const prevPathRef = useRef(pathname)
+
+  useEffect(() => {
+    if (pathname !== prevPathRef.current) {
+      setOpen(false)
+    }
+    prevPathRef.current = pathname
+  }, [pathname])
+
+  return (
+    <Dialog open={open} onOpenChange={router.back} modal={false}>
+      <DialogContent className="bg-background/5 backdrop-blur-md">
+        <DialogHeader>
+          <DialogTitle>{borrow.book.title}</DialogTitle>
+          <DialogDescription>{borrow.subscription.user.name}</DialogDescription>
+        </DialogHeader>
+
+        <FormReturnBorrow borrow={borrow} />
+      </DialogContent>
+    </Dialog>
   )
 }
