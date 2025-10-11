@@ -23,6 +23,7 @@ import { readAllNotificationsAction } from '@/lib/actions/notification'
 import { TabLink } from '@/components/borrows/TabLink'
 import { CheckCircle } from 'lucide-react'
 import { Notification } from '@/components/notifications/Notification'
+import { Badge } from '@/components/ui/badge'
 
 export const metadata: Metadata = {
   title: `Notifications · ${SITE_NAME}`,
@@ -78,7 +79,12 @@ export default async function Notifications({
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
-                <BreadcrumbPage>Notifications</BreadcrumbPage>
+                <BreadcrumbPage>
+                  Notifications
+                  <Badge className="ml-4" variant="outline">
+                    {res.meta.total}
+                  </Badge>
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

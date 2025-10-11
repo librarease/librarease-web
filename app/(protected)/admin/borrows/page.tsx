@@ -28,6 +28,8 @@ import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
 import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import { cookies } from 'next/headers'
+import { ModelFilter } from '@/components/common/ModelFilter'
+import { UserFilter, BookFilter, DateFilter } from '@/components/common/filters'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -40,12 +42,24 @@ export default async function Borrows({
     skip?: string
     limit?: string
     status?: string
+    user_id?: string
+    book_id?: string
+    borrowed_at?: string
+    due_at?: string
+    returned_at?: string
+    lost_at?: string
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
   const status = sp?.status as 'active' | 'overdue' | 'returned' | 'lost'
+  const user_id = sp?.user_id
+  const book_id = sp?.book_id
+  const borrowed_at = sp?.borrowed_at
+  const due_at = sp?.due_at
+  const returned_at = sp?.returned_at
+  const lost_at = sp?.lost_at
 
   const headers = await Verify({
     from: '/admin/borrows',
@@ -63,6 +77,12 @@ export default async function Borrows({
       skip: skip,
       status,
       library_id: libID,
+      user_id,
+      book_id,
+      borrowed_at,
+      due_at,
+      returned_at,
+      lost_at,
     },
     {
       headers,
@@ -128,16 +148,36 @@ export default async function Borrows({
         </div>
       </nav>
 
-      <TabLink
-        tabs={[
-          { name: 'All', href: '/admin/borrows' },
-          { name: 'Active', href: '/admin/borrows?status=active' },
-          { name: 'Overdue', href: '/admin/borrows?status=overdue' },
-          { name: 'Returned', href: '/admin/borrows?status=returned' },
-          { name: 'Lost', href: '/admin/borrows?status=lost' },
-        ]}
-        activeHref={`/admin/borrows${status ? `?status=${status}` : ''}`}
-      />
+      <div className="flex flex-col gap-2 md:flex-row justify-between">
+        <TabLink
+          tabs={[
+            { name: 'All', href: '/admin/borrows' },
+            { name: 'Active', href: '/admin/borrows?status=active' },
+            { name: 'Overdue', href: '/admin/borrows?status=overdue' },
+            { name: 'Returned', href: '/admin/borrows?status=returned' },
+            { name: 'Lost', href: '/admin/borrows?status=lost' },
+          ]}
+          activeHref={`/admin/borrows${status ? `?status=${status}` : ''}`}
+        />
+
+        <ModelFilter
+          filterKeys={[
+            'user_id',
+            'book_id',
+            'borrowed_at',
+            'due_at',
+            'returned_at',
+            'lost_at',
+          ]}
+        >
+          <UserFilter />
+          <BookFilter />
+          <DateFilter filterKey="borrowed_at" placeholder="Borrow Date" />
+          <DateFilter filterKey="due_at" placeholder="Due Date" />
+          <DateFilter filterKey="returned_at" placeholder="Returned Date" />
+          <DateFilter filterKey="lost_at" placeholder="Lost Date" />
+        </ModelFilter>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow, idx) => (

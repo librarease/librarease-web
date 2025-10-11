@@ -16,7 +16,10 @@ type GetListBorrowsQuery = QueryParams<
 type GetListBorrowsResponse = Promise<ResList<Borrow>>
 
 export const getListBorrows = async (
-  { status, ...query }: GetListBorrowsQuery,
+  {
+    status,
+    ...query
+  }: GetListBorrowsQuery & { returned_at?: string; lost_at?: string },
   init?: RequestInit
 ): GetListBorrowsResponse => {
   const url = new URL(BORROW_URL)

@@ -21,6 +21,8 @@ import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
+import { ModelFilter } from '@/components/common/ModelFilter'
+import { BookFilter, DateFilter } from '@/components/common/filters'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -34,6 +36,11 @@ export default async function Borrows({
     limit?: string
     library_id?: string
     status?: string
+    book_id?: string
+    borrowed_at?: string
+    due_at?: string
+    returned_at?: string
+    lost_at?: string
   }>
 }) {
   const sp = await searchParams
@@ -41,6 +48,11 @@ export default async function Borrows({
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
   const status = sp?.status as 'active' | 'overdue' | 'returned' | 'lost'
+  const book_id = sp?.book_id
+  const borrowed_at = sp?.borrowed_at
+  const due_at = sp?.due_at
+  const returned_at = sp?.returned_at
+  const lost_at = sp?.lost_at
 
   const headers = await Verify({
     from: '/borrows',
@@ -57,6 +69,11 @@ export default async function Borrows({
       status,
       ...(library_id ? { library_id } : {}),
       user_id: claims?.librarease?.id,
+      book_id,
+      borrowed_at,
+      due_at,
+      returned_at,
+      lost_at,
     },
     {
       headers,
@@ -105,16 +122,34 @@ export default async function Borrows({
         </div>
       </nav>
 
-      <TabLink
-        tabs={[
-          { name: 'All', href: '/borrows' },
-          { name: 'Active', href: '/borrows?status=active' },
-          { name: 'Overdue', href: '/borrows?status=overdue' },
-          { name: 'Returned', href: '/borrows?status=returned' },
-          { name: 'Lost', href: '/borrows?status=lost' },
-        ]}
-        activeHref={`/borrows${status ? `?status=${status}` : ''}`}
-      />
+      <div className="flex flex-col gap-2 md:flex-row justify-between">
+        <TabLink
+          tabs={[
+            { name: 'All', href: '/borrows' },
+            { name: 'Active', href: '/borrows?status=active' },
+            { name: 'Overdue', href: '/borrows?status=overdue' },
+            { name: 'Returned', href: '/borrows?status=returned' },
+            { name: 'Lost', href: '/borrows?status=lost' },
+          ]}
+          activeHref={`/borrows${status ? `?status=${status}` : ''}`}
+        />
+
+        <ModelFilter
+          filterKeys={[
+            'book_id',
+            'borrowed_at',
+            'due_at',
+            'returned_at',
+            'lost_at',
+          ]}
+        >
+          <BookFilter />
+          <DateFilter filterKey="borrowed_at" placeholder="Borrow Date" />
+          <DateFilter filterKey="due_at" placeholder="Due Date" />
+          <DateFilter filterKey="returned_at" placeholder="Returned Date" />
+          <DateFilter filterKey="lost_at" placeholder="Lost Date" />
+        </ModelFilter>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow, idx) => (

@@ -23,6 +23,8 @@ import { ListCardSubscription } from '@/components/subscriptions/ListCardSubscri
 import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
 import { cookies } from 'next/headers'
+import { ModelFilter } from '@/components/common/ModelFilter'
+import { DateFilter, UserFilter } from '@/components/common/filters'
 
 export const metadata: Metadata = {
   title: `Subscriptions · ${SITE_NAME}`,
@@ -35,12 +37,16 @@ export default async function Subscriptions({
     skip?: number
     limit?: number
     status?: 'active' | 'expired'
+    user_id?: string
+    // subscribed_at?: string
   }>
 }) {
   const sp = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
   const status = sp?.status
+  const user_id = sp?.user_id
+  // const subscribed_at = sp?.subscribed_at
 
   const headers = await Verify({
     from: '/admin/subscriptions',
@@ -58,6 +64,8 @@ export default async function Subscriptions({
       skip: skip,
       status,
       library_id: libID,
+      user_id,
+      // created_at: subscribed_at,
     },
     {
       headers,
@@ -103,15 +111,21 @@ export default async function Subscriptions({
           </Button>
         </div>
       </nav>
+      <div className="flex flex-col gap-2 md:flex-row justify-between">
+        <TabLink
+          tabs={[
+            { name: 'All', href: '/admin/subscriptions' },
+            { name: 'Active', href: '/admin/subscriptions?status=active' },
+            { name: 'Expired', href: '/admin/subscriptions?status=expired' },
+          ]}
+          activeHref={`/admin/subscriptions${status ? `?status=${status}` : ''}`}
+        />
 
-      <TabLink
-        tabs={[
-          { name: 'All', href: '/admin/subscriptions' },
-          { name: 'Active', href: '/admin/subscriptions?status=active' },
-          { name: 'Expired', href: '/admin/subscriptions?status=expired' },
-        ]}
-        activeHref={`/admin/subscriptions${status ? `?status=${status}` : ''}`}
-      />
+        <ModelFilter filterKeys={['user_id']}>
+          <UserFilter />
+          {/* <DateFilter filterKey="created_at" placeholder="Subscribed Date" /> */}
+        </ModelFilter>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((sub) => (
