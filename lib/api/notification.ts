@@ -37,7 +37,7 @@ export const streamNotification = (
 type GetListNotificationsResponse = Promise<ResList<Notification>>
 
 export const getListNotifications = async (
-  query: Pick<QueryParams<unknown>, 'skip' | 'limit'>,
+  query: Pick<QueryParams<unknown>, 'skip' | 'limit'> & { is_unread?: 'true' },
   init?: RequestInit
 ): GetListNotificationsResponse => {
   const url = new URL(NOTIFICATION_URL)
@@ -63,14 +63,13 @@ export const getListNotifications = async (
 
 export const readNotification = async (id: string, init?: RequestInit) => {
   const url = new URL(`${NOTIFICATION_URL}/${id}/read`)
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
   try {
     const response = await fetch(url.toString(), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ read: true }),
-      ...init,
     })
     if (!response.ok) {
       const e = await response.json()

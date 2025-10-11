@@ -21,6 +21,7 @@ import { User } from '@/lib/types/user'
 import { Badge } from './ui/badge'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { ButtonToggleTheme } from './button-toggle-theme'
 
 export function NavUser({
   user,
@@ -162,6 +163,8 @@ export function NavUser({
           <LogOutIcon />
           Log out
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <ButtonToggleTheme />
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -16,11 +16,13 @@ import {
 } from '@/components/ui/pagination'
 
 import { Verify } from '@/lib/firebase/firebase'
-import { CheckCircle } from 'lucide-react'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { getListNotifications } from '@/lib/api/notification'
 import { readAllNotificationsAction } from '@/lib/actions/notification'
+import { TabLink } from '@/components/borrows/TabLink'
+import { CheckCircle } from 'lucide-react'
+import { Notification } from '@/components/notifications/Notification'
 
 export const metadata: Metadata = {
   title: `Notifications · ${SITE_NAME}`,
@@ -32,6 +34,7 @@ export default async function Notifications({
   searchParams: Promise<{
     skip?: number
     limit?: number
+    is_unread?: 'true'
   }>
 }) {
   const sp = await searchParams
@@ -46,6 +49,7 @@ export default async function Notifications({
     {
       limit: limit,
       skip: skip,
+      is_unread: sp?.is_unread,
     },
     {
       headers,
@@ -88,21 +92,20 @@ export default async function Notifications({
           </Button>
         </div>
       </nav>
-      <ul className="space-y-2">
-        {res.data.map((notification) => (
-          <li key={notification.id} className="p-4 border rounded-md">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold">{notification.title}</h2>
-                <p className="text-sm text-gray-500">{notification.message}</p>
-              </div>
-              <span className="text-xs text-gray-400">
-                {new Date(notification.created_at).toLocaleDateString()}
-              </span>
-            </div>
-          </li>
+      <TabLink
+        tabs={[
+          { name: 'Unread', href: '/notifications?is_unread=true' },
+          { name: 'All', href: '/notifications' },
+        ]}
+        activeHref={`/notifications${sp?.is_unread ? `?is_unread=${sp.is_unread}` : ''}`}
+      />
+
+      <div className="space-y-2">
+        {res.data.map((noti) => (
+          <Notification key={noti.id} noti={noti} />
         ))}
-      </ul>
+      </div>
+
       <Pagination>
         <PaginationContent>
           {res.meta.skip > 0 && (

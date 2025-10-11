@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { Borrow } from '@/lib/types/borrow'
-import { isBorrowDue, formatDate, getBorrowStatus } from '@/lib/utils'
+import { formatDate, getBorrowStatus, cn, isBorrowDue } from '@/lib/utils'
 import {
   Calendar,
   CalendarClock,
@@ -17,21 +17,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import clsx from 'clsx'
 import Link from 'next/link'
 import { Route } from 'next'
 
 export const ListCardBorrow: React.FC<
   React.PropsWithChildren<{ borrow: Borrow; idx: number }>
 > = ({ borrow, idx, children }) => {
+  const status = getBorrowStatus(borrow)
   const isDue = isBorrowDue(borrow)
 
   return (
     <Card
       key={borrow.id}
-      className={clsx('relative', {
-        'bg-destructive/5': isDue,
-      })}
+      className={cn('relative', status === 'lost' && 'bg-destructive/5')}
     >
       <CardHeader>
         <Link
@@ -84,7 +82,7 @@ export const ListCardBorrow: React.FC<
           ) : (
             <CalendarClock className="size-4 text-muted-foreground" />
           )}
-          <span className={`${isDue ? 'text-destructive' : ''}`}>
+          <span className={cn(isDue && 'text-destructive')}>
             Due: {formatDate(borrow.due_at)}
           </span>
         </div>
