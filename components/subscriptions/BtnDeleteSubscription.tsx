@@ -1,18 +1,18 @@
 'use client'
 
-import { Borrow } from '@/lib/types/borrow'
 import { useTransition, useState } from 'react'
 import { Button } from '../ui/button'
 import { Unlock, Loader, Trash } from 'lucide-react'
-import { deleteBorrowAction } from '@/lib/actions/delete-borrow'
 import { toast } from 'sonner'
 import { redirect } from 'next/navigation'
+import { Subscription } from '@/lib/types/subscription'
+import { deleteSubscriptionAction } from '@/lib/actions/delete-subscription'
 
-export const BtnDeleteBorrow: React.FC<
+export const BtnDeleteSubscription: React.FC<
   React.ComponentProps<typeof Button> & {
-    borrow: Borrow
+    sub: Subscription
   }
-> = ({ borrow, ...props }) => {
+> = ({ sub, ...props }) => {
   const [confirmTimeout, setConfirmTimeout] = useState<NodeJS.Timeout>()
   const [isPending, startTransition] = useTransition()
 
@@ -27,14 +27,14 @@ export const BtnDeleteBorrow: React.FC<
     startTransition(async () => {
       clearTimeout(confirmTimeout)
       setConfirmTimeout(undefined)
-      const res = await deleteBorrowAction(borrow.id)
+      const res = await deleteSubscriptionAction(sub.id)
       if ('error' in res) {
-        toast.error(res.error)
+        toast.error(res.error, { richColors: true })
         return
       }
       toast.success(res.message)
     })
-    redirect('/admin/borrows')
+    redirect('/admin/subscriptions')
   }
 
   if (!confirmTimeout) {

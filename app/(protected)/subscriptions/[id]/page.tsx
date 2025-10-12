@@ -19,9 +19,9 @@ export default async function SubscriptionDetailsPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/subscriptions/${id}` })
+  const headers = await Verify({ from: `/subscriptions/${id}` })
 
-  const [subsRes] = await Promise.all([getSubscription({ id })])
+  const [subsRes] = await Promise.all([getSubscription({ id }, { headers })])
 
   if ('error' in subsRes) {
     console.log({ libRes: subsRes })

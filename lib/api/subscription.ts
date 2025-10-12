@@ -52,10 +52,14 @@ type GetSubscriptionQuery = Pick<Subscription, 'id'>
 type GetSubscriptionResponse = Promise<ResSingle<SubscriptionDetail>>
 
 export const getSubscription = async (
-  query: GetSubscriptionQuery
+  query: GetSubscriptionQuery,
+  init?: RequestInit
 ): GetSubscriptionResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+  init = { ...init, headers }
   const url = new URL(`${SUBSCRIPTIONS_URL}/${query.id}`)
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
   return response.json()
 }
 
@@ -76,4 +80,56 @@ export const createSubscription = async (
     throw e
   }
   return res.json()
+}
+
+export type UpdateSubscriptionData = Pick<
+  Subscription,
+  | 'id'
+  | 'amount'
+  | 'expires_at'
+  | 'fine_per_day'
+  | 'loan_period'
+  | 'active_loan_limit'
+  | 'usage_limit'
+>
+
+export const updateSubscription = async (
+  { id, ...data }: UpdateSubscriptionData,
+  init?: RequestInit
+): Promise<ResSingle<Subscription>> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${SUBSCRIPTIONS_URL}/${id}`, {
+    ...init,
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers,
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}
+
+export const deleteSubscription = async (
+  id: string,
+  init?: RequestInit
+): Promise<ResSingle<null> | null> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${SUBSCRIPTIONS_URL}/${id}`, {
+    ...init,
+    method: 'DELETE',
+    headers,
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return null
 }

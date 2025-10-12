@@ -8,7 +8,7 @@ import { BtnUndoReturn } from '@/components/borrows/BtnUndoReturn'
 import Link from 'next/link'
 import { CornerUpLeft, Pen, PenOff } from 'lucide-react'
 import { BtnUndoLost } from '@/components/borrows/BtnUndoLost'
-import { ButtonGroup } from '@/components/ui/button-group'
+import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 
 export default async function BorrowDetailsPage({
   params,
@@ -80,6 +80,7 @@ export default async function BorrowDetailsPage({
                 Return
               </Link>
             </Button>
+            <ButtonGroupSeparator />
             <Button asChild variant="secondary" className="text-destructive">
               <Link
                 href={`/admin/borrows/${borrowRes.data.id}/lost`}

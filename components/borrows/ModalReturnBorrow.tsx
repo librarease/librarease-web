@@ -95,7 +95,7 @@ export const ModalReturnBorrow: React.FC<{ borrow: BorrowDetail }> = ({
   }, [pathname])
 
   return (
-    <Dialog open={open} onOpenChange={router.back}>
+    <Dialog open={open} onOpenChange={router.back} modal={false}>
       <DialogContent className="bg-background/5 backdrop-blur-md">
         <DialogHeader>
           <DialogTitle>{borrow.book.title}</DialogTitle>

@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEditBorrow } from '@/components/borrows/FormEditBorrow'
+import { FormEditSubscription } from '@/components/subscriptions/FormEditSubscription'
 import {
   Dialog,
   DialogContent,
@@ -8,13 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { BorrowDetail } from '@/lib/types/borrow'
+import { SubscriptionDetail } from '@/lib/types/subscription'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
-export const ModalEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
-  borrow,
-}) => {
+export const ModalEditSubscription: React.FC<{
+  subscription: SubscriptionDetail
+}> = ({ subscription }) => {
   const router = useRouter()
   const pathname = usePathname()
   const [open, setOpen] = useState(true)
@@ -31,11 +31,11 @@ export const ModalEditBorrow: React.FC<{ borrow: BorrowDetail }> = ({
     <Dialog open={open} onOpenChange={router.back} modal={false} defaultOpen>
       <DialogContent className="bg-background/5 backdrop-blur-md">
         <DialogHeader>
-          <DialogTitle>{borrow.book.title}</DialogTitle>
-          <DialogDescription>{borrow.subscription.user.name}</DialogDescription>
+          <DialogTitle>{subscription.user.name}</DialogTitle>
+          <DialogDescription>{subscription.membership.name}</DialogDescription>
         </DialogHeader>
 
-        <FormEditBorrow borrow={borrow} />
+        <FormEditSubscription sub={subscription} />
       </DialogContent>
     </Dialog>
   )

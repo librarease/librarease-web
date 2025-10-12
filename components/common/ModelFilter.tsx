@@ -7,7 +7,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   ComponentProps,
@@ -83,7 +82,7 @@ export const ModelFilter: React.FC<ModelFilterProps> = ({
         newSearchParams.delete(key)
       }
     })
-    router.push(`${path}?${newSearchParams.toString()}` as Route)
+    router.replace(`${path}?${newSearchParams.toString()}` as Route)
     setOpen(false)
   }
 
@@ -93,32 +92,30 @@ export const ModelFilter: React.FC<ModelFilterProps> = ({
     filterKeys.forEach((key) => {
       newSearchParams.delete(key)
     })
-    router.push(`${path}?${newSearchParams.toString()}` as Route)
+    router.replace(`${path}?${newSearchParams.toString()}` as Route)
   }
 
   const isFilterActive = filterKeys.some((key) => searchParams.get(key))
 
   return (
     <FilterContext.Provider value={{ filters, setFilter, resetFilters }}>
+      <ButtonGroup>
+        <Button
+          {...props}
+          variant={isFilterActive ? 'default' : 'outline'}
+          onClick={() => setOpen(true)}
+          className={cn(props.className)}
+        >
+          Filter
+        </Button>
+        {isFilterActive && (
+          <Button size="icon" variant="outline" onClick={handleClear}>
+            <X className="size-4" />
+          </Button>
+        )}
+      </ButtonGroup>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <ButtonGroup>
-            <Button
-              {...props}
-              variant={isFilterActive ? 'default' : 'outline'}
-              onClick={() => setOpen(true)}
-              className={cn(props.className)}
-            >
-              Filter
-            </Button>
-            {isFilterActive && (
-              <Button size="icon" variant="outline" onClick={handleClear}>
-                <X className="size-4" />
-              </Button>
-            )}
-          </ButtonGroup>
-        </DialogTrigger>
-        <DialogContent className="bg-background/5 backdrop-blur-md">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Filter</DialogTitle>
             <DialogDescription>Filter your search results</DialogDescription>

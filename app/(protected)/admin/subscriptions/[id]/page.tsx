@@ -11,6 +11,9 @@ import { Badge } from '@/components/ui/badge'
 import { getSubscriptionStatus } from '@/lib/utils'
 import { getSubscription } from '@/lib/api/subscription'
 import { DetailSubscription } from '@/components/subscriptions/DetailSubscription'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { Pen } from 'lucide-react'
 
 export default async function SubscriptionDetailsPage({
   params,
@@ -19,18 +22,14 @@ export default async function SubscriptionDetailsPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/admin/subscriptions/${id}` })
+  const headers = await Verify({ from: `/admin/subscriptions/${id}` })
 
-  const [subsRes] = await Promise.all([getSubscription({ id })])
+  const [subsRes] = await Promise.all([getSubscription({ id }, { headers })])
 
   if ('error' in subsRes) {
     console.log({ libRes: subsRes })
     return <div>{JSON.stringify(subsRes.message)}</div>
   }
-
-  //   const cookieStore = await cookies()
-  //   const sessionName = process.env.SESSION_COOKIE_NAME as string
-  //   const session = cookieStore.get(sessionName)
 
   return (
     <div className="space-y-4">
@@ -67,7 +66,17 @@ export default async function SubscriptionDetailsPage({
           </Badge>
         </div>
       </nav>
-      <DetailSubscription subscription={subsRes.data} />
+      <DetailSubscription subscription={subsRes.data}>
+        <Button asChild>
+          <Link
+            href={`/admin/subscriptions/${subsRes.data.id}/edit`}
+            className="w-full"
+          >
+            <Pen />
+            Edit
+          </Link>
+        </Button>
+      </DetailSubscription>
     </div>
   )
 }

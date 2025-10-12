@@ -30,6 +30,7 @@ import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import { cookies } from 'next/headers'
 import { ModelFilter } from '@/components/common/ModelFilter'
 import { UserFilter, BookFilter, DateFilter } from '@/components/common/filters'
+import { BorrowCardErrorBoundary } from '@/components/borrows/BorrowCardErrorBoundary'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -179,11 +180,17 @@ export default async function Borrows({
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow, idx) => (
-          <ListCardBorrow key={borrow.id} borrow={borrow} idx={skip + idx + 1}>
-            <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
-              Return Book
-            </BtnReturnBook>
-          </ListCardBorrow>
+          <BorrowCardErrorBoundary key={borrow.id} idx={skip + idx + 1}>
+            <ListCardBorrow borrow={borrow} idx={skip + idx + 1}>
+              <BtnReturnBook
+                variant="outline"
+                className="w-full"
+                borrow={borrow}
+              >
+                Return Book
+              </BtnReturnBook>
+            </ListCardBorrow>
+          </BorrowCardErrorBoundary>
         ))}
       </div>
       <Pagination>
