@@ -7,6 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { useEffect, useRef, useState } from 'react'
 import { Scanner } from '@/components/common/Scanner'
@@ -18,12 +19,15 @@ import { ArrowRight } from 'lucide-react'
 import { FormReturnBorrow } from './FormReturnBorrow'
 import { usePathname, useRouter } from 'next/navigation'
 import { BorrowDetail } from '@/lib/types/borrow'
+import { Checkbox } from '../ui/checkbox'
+import { Label } from '../ui/label'
 
-export const ModalScanReturnBorrow: React.FC<{
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}> = ({ open, onOpenChange }) => {
+export const BtnScanReturnBorrow: React.FC<
+  React.PropsWithChildren<Parameters<typeof Button>[0]>
+> = ({ children, ...props }) => {
+  const [open, setOpen] = useState(false)
   const [id, setId] = useState<string>()
+  const [quickScan, setQuickScan] = useState(false)
 
   const onChange = async (id: string) => {
     const res = await returnBorrowAction({ id })
@@ -31,25 +35,36 @@ export const ModalScanReturnBorrow: React.FC<{
       toast.error(res.error)
     } else {
       toast('Book returned successfully')
-      setId(id)
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button onClick={() => setOpen(true)} variant="outline" {...props}>
+          {children}
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Scan to Return</DialogTitle>
         </DialogHeader>
-
         <Scanner
           title="Return a Book"
-          onChange={onChange}
-          value={''}
+          onChange={quickScan ? onChange : setId}
+          value=""
           initialFocus
         />
 
-        <DialogFooter>
+        <DialogFooter className="sm:justify-between">
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="quick-scan"
+              checked={quickScan}
+              onCheckedChange={(v) => setQuickScan(!!v)}
+            />
+            <Label htmlFor="quick-scan">Quick Scan</Label>
+          </div>
           {id && (
             <Button variant="ghost" asChild>
               <Link href={`/borrows/${id}`}>
@@ -64,20 +79,6 @@ export const ModalScanReturnBorrow: React.FC<{
   )
 }
 
-export const BtnScanReturnBorrow: React.FC<
-  React.PropsWithChildren<Parameters<typeof Button>[0]>
-> = ({ children, ...props }) => {
-  const [open, setOpen] = useState(false)
-
-  return (
-    <>
-      <Button onClick={() => setOpen(true)} variant="outline" {...props}>
-        {children}
-      </Button>
-      <ModalScanReturnBorrow open={open} onOpenChange={setOpen} />
-    </>
-  )
-}
 export const ModalReturnBorrow: React.FC<{ borrow: BorrowDetail }> = ({
   borrow,
 }) => {
@@ -94,7 +95,7 @@ export const ModalReturnBorrow: React.FC<{ borrow: BorrowDetail }> = ({
   }, [pathname])
 
   return (
-    <Dialog open={open} onOpenChange={router.back} modal={false}>
+    <Dialog open={open} onOpenChange={router.back}>
       <DialogContent className="bg-background/5 backdrop-blur-md">
         <DialogHeader>
           <DialogTitle>{borrow.book.title}</DialogTitle>

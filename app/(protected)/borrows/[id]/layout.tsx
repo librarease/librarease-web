@@ -19,9 +19,9 @@ export default async function BorrowDetailsLayout({
 }>) {
   const { id } = await params
 
-  await Verify({ from: `/borrows/${id}` })
+  const headers = await Verify({ from: `/borrows/${id}` })
 
-  const [borrowRes] = await Promise.all([getBorrow({ id })])
+  const [borrowRes] = await Promise.all([getBorrow({ id }, { headers })])
 
   if ('error' in borrowRes) {
     console.log({ libRes: borrowRes })

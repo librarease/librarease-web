@@ -52,9 +52,18 @@ export const getListBorrows = async (
 
 type GetBorrowQuery = Pick<Borrow, 'id'>
 type GetBorrowResponse = Promise<ResSingle<BorrowDetail>>
-export const getBorrow = async (query: GetBorrowQuery): GetBorrowResponse => {
+export const getBorrow = async (
+  query: GetBorrowQuery,
+  init?: RequestInit
+): GetBorrowResponse => {
   const url = new URL(`${BORROW_URL}/${query.id}`)
-  const response = await fetch(url.toString())
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+  init = {
+    ...init,
+    headers,
+  }
+  const response = await fetch(url.toString(), init)
   if (!response.ok) {
     const e = await response.json()
     throw e
@@ -73,6 +82,27 @@ export const createBorrow = async (
     body: JSON.stringify(data),
   })
 
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}
+
+export const deleteBorrow = async (
+  data: Pick<Borrow, 'id'>,
+  init?: RequestInit
+): GetBorrowResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${BORROW_URL}/${data.id}`, {
+    ...init,
+    method: 'DELETE',
+    body: JSON.stringify(data),
+    headers,
+  })
   if (!response.ok) {
     const e = await response.json()
     throw e

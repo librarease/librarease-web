@@ -24,6 +24,7 @@ import { updateBorrowAction } from '@/lib/actions/update-borrow'
 import { TimeInput } from '../ui/time-input'
 import { Textarea } from '../ui/textarea'
 import { Separator } from '../ui/separator'
+import { BtnDeleteBook } from './BtnDeleteBorrow'
 
 const FormSchema = z.object({
   id: z.string({
@@ -345,6 +346,13 @@ export const FormEditBorrow: React.FC<{
             />
           </>
         ) : null}
+        <Separator className="my-2 col-span-2" />
+        <BtnDeleteBook
+          type="button"
+          className="col-span-2"
+          borrow={borrow}
+          variant="secondary"
+        />
         <Button type="reset" variant="ghost" onClick={onReset}>
           Reset
         </Button>

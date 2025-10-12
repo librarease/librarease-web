@@ -15,7 +15,7 @@ export default async function BorrowDetailsPage({
 
   const headers = await Verify({ from })
 
-  const [borrowRes] = await Promise.all([getBorrow({ id })])
+  const [borrowRes] = await Promise.all([getBorrow({ id }, { headers })])
 
   if ('error' in borrowRes) {
     return <div>{JSON.stringify(borrowRes.message)}</div>

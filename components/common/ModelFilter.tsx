@@ -7,6 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   ComponentProps,
@@ -99,22 +100,24 @@ export const ModelFilter: React.FC<ModelFilterProps> = ({
 
   return (
     <FilterContext.Provider value={{ filters, setFilter, resetFilters }}>
-      <ButtonGroup>
-        <Button
-          {...props}
-          variant={isFilterActive ? 'default' : 'outline'}
-          onClick={() => setOpen(true)}
-          className={cn(props.className)}
-        >
-          Filter
-        </Button>
-        {isFilterActive && (
-          <Button size="icon" variant="outline" onClick={handleClear}>
-            <X className="size-4" />
-          </Button>
-        )}
-      </ButtonGroup>
-      <Dialog open={open} onOpenChange={setOpen} modal={false}>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <ButtonGroup>
+            <Button
+              {...props}
+              variant={isFilterActive ? 'default' : 'outline'}
+              onClick={() => setOpen(true)}
+              className={cn(props.className)}
+            >
+              Filter
+            </Button>
+            {isFilterActive && (
+              <Button size="icon" variant="outline" onClick={handleClear}>
+                <X className="size-4" />
+              </Button>
+            )}
+          </ButtonGroup>
+        </DialogTrigger>
         <DialogContent className="bg-background/5 backdrop-blur-md">
           <DialogHeader>
             <DialogTitle>Filter</DialogTitle>

@@ -133,10 +133,8 @@ export default async function Borrows({
           </div>
           <div className="hidden md:flex gap-2">
             <BtnScanReturnBorrow>
-              <>
-                <Scan className="mr-2 size-4" />
-                Scan to Return
-              </>
+              <Scan className="mr-2 size-4" />
+              Scan to Return
             </BtnScanReturnBorrow>
             <Button asChild>
               <Link href="/admin/borrows/new">

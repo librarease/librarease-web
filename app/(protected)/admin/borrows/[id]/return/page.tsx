@@ -9,9 +9,9 @@ export default async function BorrowReturnPage({
 }) {
   const { id } = await params
 
-  await Verify({ from: `/admin/borrows/${id}/return` })
+  const headers = await Verify({ from: `/admin/borrows/${id}/return` })
 
-  const [borrowRes] = await Promise.all([getBorrow({ id })])
+  const [borrowRes] = await Promise.all([getBorrow({ id }, { headers })])
 
   if ('error' in borrowRes) {
     console.log({ libRes: borrowRes })
