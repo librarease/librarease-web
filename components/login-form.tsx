@@ -45,14 +45,14 @@ export function LoginForm({
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
+      <Card className="backdrop-blur-md bg-background/40">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
           {state.error && (
-            <div className="text-sm text-red-400">{state.error}</div>
+            <div className="text-sm text-destructive">{state.error}</div>
           )}
         </CardHeader>
         <CardContent>
@@ -107,11 +107,7 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{' '}
-              <Link
-                href="/signup"
-                className="underline underline-offset-4"
-                replace
-              >
+              <Link href="/signup" className="underline underline-offset-4">
                 Sign up
               </Link>
             </div>
