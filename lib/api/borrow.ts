@@ -220,3 +220,38 @@ export const deleteLost = async (
 
   return response.json()
 }
+
+export type ExportBorrowingsData = {
+  library_id: string
+  is_active?: boolean
+  is_overdue?: boolean
+  is_returned?: boolean
+  is_lost?: boolean
+  borrowed_at_from: string
+  borrowed_at_to: string
+}
+
+export const exportBorrows = async (
+  data: ExportBorrowingsData,
+  init?: RequestInit
+): Promise<
+  ResSingle<{
+    id: string
+  }>
+> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(`${BORROW_URL}/export`, {
+    ...init,
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers,
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+
+  return response.json()
+}

@@ -31,6 +31,7 @@ import { cookies } from 'next/headers'
 import { ModelFilter } from '@/components/common/ModelFilter'
 import { UserFilter, BookFilter, DateFilter } from '@/components/common/filters'
 import { BorrowCardErrorBoundary } from '@/components/borrows/BorrowCardErrorBoundary'
+import { ModalExportBorrow } from '@/components/borrows/ModalExportBorrow'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -159,23 +160,27 @@ export default async function Borrows({
           activeHref={`/admin/borrows${status ? `?status=${status}` : ''}`}
         />
 
-        <ModelFilter
-          filterKeys={[
-            'user_id',
-            'book_id',
-            'borrowed_at',
-            'due_at',
-            'returned_at',
-            'lost_at',
-          ]}
-        >
-          <UserFilter />
-          <BookFilter />
-          <DateFilter filterKey="borrowed_at" placeholder="Borrow Date" />
-          <DateFilter filterKey="due_at" placeholder="Due Date" />
-          <DateFilter filterKey="returned_at" placeholder="Returned Date" />
-          <DateFilter filterKey="lost_at" placeholder="Lost Date" />
-        </ModelFilter>
+        <div className="self-end inline-flex gap-2">
+          <ModelFilter
+            filterKeys={[
+              'user_id',
+              'book_id',
+              'borrowed_at',
+              'due_at',
+              'returned_at',
+              'lost_at',
+            ]}
+          >
+            <UserFilter />
+            <BookFilter />
+            <DateFilter filterKey="borrowed_at" placeholder="Borrow Date" />
+            <DateFilter filterKey="due_at" placeholder="Due Date" />
+            <DateFilter filterKey="returned_at" placeholder="Returned Date" />
+            <DateFilter filterKey="lost_at" placeholder="Lost Date" />
+          </ModelFilter>
+
+          <ModalExportBorrow />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

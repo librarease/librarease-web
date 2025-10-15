@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge'
 import {
   getBorrowStatus,
   getSubscriptionStatus,
-  isBorrowDue,
   isSubscriptionActive,
 } from '@/lib/utils'
 import Image from 'next/image'

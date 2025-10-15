@@ -10,6 +10,7 @@ import {
   BookUser,
   Ticket,
   BookCopy,
+  Workflow,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -36,6 +37,7 @@ const menuItems = [
   },
   { title: 'Borrows', icon: BookUser, href: '/admin/borrows' },
   { title: 'Collections', icon: BookCopy, href: '/admin/collections' },
+  { title: 'Jobs', icon: Workflow, href: '/admin/jobs' },
 ] as const
 
 export default async function LibraryDashboard() {

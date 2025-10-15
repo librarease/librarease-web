@@ -1,7 +1,7 @@
 import { Notification as TNotification } from '@/lib/types/notification'
 import { cn, formatDate } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
-import { Bell, BookHeart, BookUser, CreditCard } from 'lucide-react'
+import { Bell, BookHeart, BookUser, CreditCard, Workflow } from 'lucide-react'
 import { NotificationAction } from './NotificationAction'
 import Link from 'next/link'
 import { Route } from 'next'
@@ -22,7 +22,10 @@ export const Notification: React.FC<{ noti: TNotification }> = ({ noti }) => {
             {noti.title}
           </h3>
           <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
-            {formatDate(noti.created_at, {})}
+            {formatDate(noti.created_at, {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
           </span>
         </div>
         <p className="text-sm text-muted-foreground">{noti.message}</p>
@@ -41,7 +44,7 @@ export const Notification: React.FC<{ noti: TNotification }> = ({ noti }) => {
   )
 }
 
-const getIcon = (type: string) => {
+const getIcon = (type: TNotification['reference_type']) => {
   switch (type) {
     case 'BOOK':
       return <BookHeart className="h-5 w-5 text-yellow-500" />
@@ -49,12 +52,14 @@ const getIcon = (type: string) => {
       return <BookUser className="h-5 w-5 text-blue-500" />
     case 'SUBSCRIPTION':
       return <CreditCard className="h-5 w-5 text-green-500" />
+    case 'EXPORT_BORROWING':
+      return <Workflow className="h-5 w-5 text-purple-500" />
     default:
       return <Bell className="h-5 w-5 text-gray-500" />
   }
 }
 
-const getLink = (type: string, id: string): Route => {
+const getLink = (type: TNotification['reference_type'], id: string): Route => {
   switch (type) {
     case 'BOOK':
       return `/books/${id}` as Route
@@ -62,6 +67,8 @@ const getLink = (type: string, id: string): Route => {
       return `/borrows/${id}` as Route
     case 'SUBSCRIPTION':
       return `/subscriptions/${id}` as Route
+    case 'EXPORT_BORROWING':
+      return `/admin/jobs/${id}` as Route
     default:
       return `/notifications#${id}` as Route
   }
