@@ -1,4 +1,4 @@
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import { PowerUsersChart } from './RankingChart'
 import { getPowerUsersAnalysis } from '@/lib/api/analysis'
 

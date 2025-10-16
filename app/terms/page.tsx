@@ -1,7 +1,6 @@
 import { getTermsDoc } from '@/lib/api/docs'
-import { Calendar, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
 
 export default async function TermsPage() {

@@ -24,7 +24,7 @@ import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
 import { cookies } from 'next/headers'
 import { ModelFilter } from '@/components/common/ModelFilter'
-import { DateFilter, UserFilter } from '@/components/common/filters'
+import { UserFilter } from '@/components/common/filters'
 
 export const metadata: Metadata = {
   title: `Subscriptions · ${SITE_NAME}`,

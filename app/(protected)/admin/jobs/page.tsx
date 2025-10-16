@@ -15,7 +15,6 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Verify } from '@/lib/firebase/firebase'
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { TabLink } from '@/components/borrows/TabLink'
@@ -105,7 +104,7 @@ export default async function Jobs({
 
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  Subscriptions
+                  Jobs
                   <Badge className="ml-4" variant="outline">
                     {res.meta.total}
                   </Badge>
