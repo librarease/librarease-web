@@ -7,11 +7,8 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { getBook } from '@/lib/api/book'
-import { BookDown, Calendar, Hash, Library, Pen } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ThreeDBook } from '@/components/books/three-d-book'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Pen } from 'lucide-react'
 import Link from 'next/link'
 import { DetailBook } from '@/components/books/DetailBook'
 

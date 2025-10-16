@@ -37,7 +37,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          mask-password: 'true'
+          mask-password: "true"
 
       # This is a separate action that sets up buildx runner
       - name: Setup Docker Buildx
@@ -51,6 +51,10 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+
+      # Create cache directory if it doesn't exist
+      - name: Ensure cache directory exists
+        run: mkdir -p /tmp/.buildx-cache
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
