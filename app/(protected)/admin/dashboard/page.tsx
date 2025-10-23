@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/breadcrumb'
 
 import { SITE_NAME } from '@/lib/consts'
-import type { Metadata } from 'next'
+import type { Metadata, Route } from 'next'
 import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
 import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -69,7 +69,7 @@ export default async function DashboardPage({
     sp.set('from', from)
     sp.set('to', to)
 
-    redirect('?' + sp.toString(), RedirectType.replace)
+    redirect(('?' + sp.toString()) as Route, RedirectType.replace)
   }
 
   const libsRes = await getListLibraries({ limit: 5 })
@@ -86,7 +86,7 @@ export default async function DashboardPage({
     const sp = new URLSearchParams(p)
     sp.set('library_id', libraryID)
 
-    redirect('./?' + sp.toString(), RedirectType.replace)
+    redirect(('./?' + sp.toString()) as Route, RedirectType.replace)
   }
 
   const fromDate = parse(from, 'dd-MM-yyyy', new Date())
@@ -102,7 +102,7 @@ export default async function DashboardPage({
     if (range.from) sp.set('from', format(range.from, 'dd-MM-yyyy'))
     if (range.to) sp.set('to', format(range.to, 'dd-MM-yyyy'))
 
-    redirect('./?' + sp.toString(), RedirectType.replace)
+    redirect(('./?' + sp.toString()) as Route, RedirectType.replace)
   }
 
   const start = startOfDay(parse(from, 'dd-MM-yyyy', new Date())).toJSON()

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { NextRequest, MiddlewareConfig } from 'next/server'
+import { NextRequest, ProxyConfig } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   if (!request.cookies.has(process.env.SESSION_COOKIE_NAME!)) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('from', request.nextUrl.pathname)
@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   }
 }
 
-export const config: MiddlewareConfig = {
+export const config: ProxyConfig = {
   matcher: [
     '/subscriptions/:path*',
     '/borrows/:path*',

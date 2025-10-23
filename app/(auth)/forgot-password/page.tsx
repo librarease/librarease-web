@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { ForgotPasswordForm } from '@/components/forgot-password-form'
+import { Route } from 'next'
 
 export const metadata: Metadata = {
   title: `Forgot Password · ${SITE_NAME}`,
@@ -11,7 +12,7 @@ export default async function Page({
 }: {
   searchParams: Promise<{
     email?: string
-    from?: string
+    from?: Route
   }>
 }) {
   const { email, from = '/' } = await searchParams

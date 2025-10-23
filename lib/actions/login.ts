@@ -9,6 +9,7 @@ import {
 import { cookies } from 'next/headers'
 import { redirect, RedirectType } from 'next/navigation'
 import { getMe } from '../api/user'
+import { Route } from 'next'
 
 const auth = getAuth(app)
 
@@ -16,7 +17,7 @@ type formState = {
   error: string
   email: string
   password: string
-  from: string
+  from: Route
 }
 
 export async function loginAction(

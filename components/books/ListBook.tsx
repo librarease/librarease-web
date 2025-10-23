@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import clsx from 'clsx'
-import { unstable_ViewTransition as ViewTransition } from 'react'
+import { ViewTransition } from 'react'
 import { getBookStatus } from '@/lib/utils'
 
 export const ListBook: React.FC<{ book: Book }> = ({ book }) => {

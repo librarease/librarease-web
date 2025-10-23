@@ -24,7 +24,7 @@ export default function NewUser() {
       email,
     })
 
-    redirect('/users')
+    redirect('/admin/users')
   }
 
   return (

@@ -14,11 +14,12 @@ import { Label } from '@/components/ui/label'
 import { useActionState, useEffect } from 'react'
 import { loginAction } from '@/lib/actions/login'
 import Link from 'next/link'
+import { Route } from 'next'
 
 export function ForgotPasswordForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<'div'> & { email?: string; from: string }) {
+}: React.ComponentPropsWithoutRef<'div'> & { email?: string; from: Route }) {
   const initialState = {
     error: '',
     email: props.email ?? '',

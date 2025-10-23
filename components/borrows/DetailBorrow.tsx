@@ -29,7 +29,7 @@ import { Borrow } from '@/lib/types/borrow'
 import { DateTime } from '@/components/common/DateTime'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { Route } from 'next'
-import { unstable_ViewTransition as ViewTransition } from 'react'
+import { ViewTransition } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 
 export const DetailBorrow: React.FC<

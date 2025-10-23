@@ -1,5 +1,5 @@
 import { LoginForm } from '@/components/login-form'
-import type { Metadata } from 'next'
+import type { Metadata, Route } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { AnimatedBooksBackground } from '@/components/ui/animated-books-background'
 
@@ -12,7 +12,7 @@ export default async function Page({
 }: {
   searchParams: Promise<{
     email?: string
-    from?: string
+    from?: Route
   }>
 }) {
   const { email, from = '/' } = await searchParams

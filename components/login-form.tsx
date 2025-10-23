@@ -15,11 +15,12 @@ import { useActionState, useEffect, useState } from 'react'
 import { loginAction } from '@/lib/actions/login'
 import Link from 'next/link'
 import { Checkbox } from './ui/checkbox'
+import { Route } from 'next'
 
 export function LoginForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<'div'> & { email?: string; from: string }) {
+}: React.ComponentPropsWithoutRef<'div'> & { email?: string; from: Route }) {
   const initialState = {
     error: '',
     email: props.email ?? '',

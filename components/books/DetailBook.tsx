@@ -4,7 +4,7 @@ import { ThreeDBook } from '@/components/books/three-d-book'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { BookDetail } from '@/lib/types/book'
-import { unstable_ViewTransition as ViewTransition } from 'react'
+import { ViewTransition } from 'react'
 import { getBookStatus } from '@/lib/utils'
 
 export const DetailBook: React.FC<
