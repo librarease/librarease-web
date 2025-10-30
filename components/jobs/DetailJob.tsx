@@ -5,6 +5,8 @@ import {
   getStatusColor,
   parseJobPayload,
   parseJobResult,
+  ImportPayload,
+  canJobAssetDownload,
 } from '@/lib/job-utils'
 import { JobDetail } from '@/lib/types/job'
 import {
@@ -28,7 +30,7 @@ import { getStatusIcon } from './ListCardJob'
 import { Badge } from '../ui/badge'
 import { Separator } from '../ui/separator'
 import { format } from 'date-fns'
-import { BtnDownloadJobResult } from './BtnDownloadJobResult'
+import { BtnDownloadJobAsset } from './BtnDownloadJobResult'
 
 export const DetailJob: React.FC<{ job: JobDetail }> = ({ job }) => {
   return (
@@ -38,7 +40,7 @@ export const DetailJob: React.FC<{ job: JobDetail }> = ({ job }) => {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-4 mb-2">
                 {getStatusIcon(job.status)}
                 <CardTitle className="text-2xl">
                   {getJobTypeLabel(job.type)}
@@ -132,7 +134,7 @@ export const DetailJob: React.FC<{ job: JobDetail }> = ({ job }) => {
       {/* Payload */}
       <Card>
         <CardHeader>
-          <CardTitle>Request Parameters</CardTitle>
+          <CardTitle>Payload</CardTitle>
         </CardHeader>
         <CardContent>{renderPayload(job)}</CardContent>
       </Card>
@@ -149,12 +151,12 @@ export const DetailJob: React.FC<{ job: JobDetail }> = ({ job }) => {
 
       {/* Error */}
       {job.status === 'FAILED' && job.error && (
-        <Card className="border-red-200">
+        <Card className="border-destructive/50">
           <CardHeader>
-            <CardTitle className="text-red-600">Error</CardTitle>
+            <CardTitle className="text-destructive">Error</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-red-600">{job.error}</p>
+            <p className="text-destructive">{job.error}</p>
           </CardContent>
         </Card>
       )}
@@ -225,38 +227,40 @@ const renderPayload = (job: JobDetail) => {
       )
     }
 
-    // case 'import:books': {
-    //   const importPayload = payload as ImportBooksPayload
-    //   return (
-    //     <div className="space-y-4">
-    //       <div>
-    //         <h4 className="font-medium mb-2 flex items-center gap-2">
-    //           <Package className="h-4 w-4" />
-    //           Import Settings
-    //         </h4>
-    //         <div className="space-y-2 text-sm">
-    //           <div>
-    //             <span className="text-muted-foreground">File: </span>
-    //             <span className="font-mono">{importPayload.file_path}</span>
-    //           </div>
-    //           <div>
-    //             <span className="text-muted-foreground">
-    //               Overwrite Existing:{' '}
-    //             </span>
-    //             <span>{importPayload.overwrite_existing ? 'Yes' : 'No'}</span>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   )
-    // }
-
-    default:
+    case 'import:books': {
+      const importPayload = payload as ImportPayload
       return (
-        <pre className="text-xs bg-muted p-4 rounded overflow-auto">
-          {JSON.stringify(payload, null, 2)}
-        </pre>
+        <div className="space-y-4">
+          <div>
+            <h4 className="font-medium mb-2 flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Import File
+            </h4>
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="text-muted-foreground">Path: </span>
+                <span className="font-mono text-xs">{importPayload.path}</span>
+              </div>
+            </div>
+          </div>
+          {canJobAssetDownload(job) && (
+            <BtnDownloadJobAsset job={job} className="w-full" />
+          )}
+        </div>
       )
+    }
+
+    default: {
+      const hasDownload = canJobAssetDownload(job)
+      return (
+        <div className="space-y-4">
+          <pre className="text-xs bg-muted p-4 rounded overflow-auto">
+            {JSON.stringify(payload, null, 2)}
+          </pre>
+          {hasDownload && <BtnDownloadJobAsset job={job} className="w-full" />}
+        </div>
+      )
+    }
   }
 }
 
@@ -292,50 +296,10 @@ const renderResult = (job: JobDetail) => {
               </div>
             </div>
           </div>
-          <BtnDownloadJobResult job={job} className="w-full" />
+          <BtnDownloadJobAsset job={job} className="w-full" />
         </div>
       )
     }
-
-    //   case "import:books": {
-    //     const importResult = result as ImportResult
-    //     return (
-    //       <div className="space-y-4">
-    //         <div>
-    //           <h4 className="font-medium mb-2 flex items-center gap-2">
-    //             <CheckCircle2 className="h-4 w-4" />
-    //             Import Summary
-    //           </h4>
-    //           <div className="grid grid-cols-3 gap-4 text-sm">
-    //             <div className="text-center p-3 bg-green-50 rounded-lg">
-    //               <div className="text-2xl font-bold text-green-600">{importResult.imported_count}</div>
-    //               <div className="text-muted-foreground">Imported</div>
-    //             </div>
-    //             <div className="text-center p-3 bg-blue-50 rounded-lg">
-    //               <div className="text-2xl font-bold text-blue-600">{importResult.updated_count}</div>
-    //               <div className="text-muted-foreground">Updated</div>
-    //             </div>
-    //             <div className="text-center p-3 bg-red-50 rounded-lg">
-    //               <div className="text-2xl font-bold text-red-600">{importResult.failed_count}</div>
-    //               <div className="text-muted-foreground">Failed</div>
-    //             </div>
-    //           </div>
-    //           {importResult.errors && importResult.errors.length > 0 && (
-    //             <div className="mt-4">
-    //               <p className="text-sm font-medium text-red-600 mb-2">Errors:</p>
-    //               <ul className="text-sm space-y-1">
-    //                 {importResult.errors.map((error, i) => (
-    //                   <li key={i} className="text-red-600">
-    //                     • {error}
-    //                   </li>
-    //                 ))}
-    //               </ul>
-    //             </div>
-    //           )}
-    //         </div>
-    //       </div>
-    //     )
-    //   }
 
     default:
       return (

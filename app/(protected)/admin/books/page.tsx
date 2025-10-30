@@ -18,7 +18,7 @@ import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { Search } from 'lucide-react'
+import { Plus, Search, Upload } from 'lucide-react'
 import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
@@ -90,9 +90,20 @@ export default async function Books({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button asChild>
-            <Link href="/admin/books/new">Register New Book</Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/admin/books/import">
+                <Upload className="mr-2 h-4 w-4" />
+                Import Books
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/admin/books/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Book
+              </Link>
+            </Button>
+          </div>
         </div>
       </nav>
 

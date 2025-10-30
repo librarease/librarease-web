@@ -1,13 +1,13 @@
 'use server'
 
-import { downloadJobResult } from '../api/job'
+import { downloadJobAsset } from '../api/job'
 import { Verify } from '../firebase/firebase'
 
-export async function downloadJobResultAction(id: string) {
+export async function downloadJobAssetAction(id: string) {
   const headers = await Verify({ from: `/admin/jobs/${id}` })
 
   try {
-    const res = await downloadJobResult(id, { headers })
+    const res = await downloadJobAsset(id, { headers })
     if ('error' in res) {
       return { error: res.error }
     }

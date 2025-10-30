@@ -46,7 +46,7 @@ export const getJob = async (
   return response.json()
 }
 
-export const downloadJobResult = async (
+export const downloadJobAsset = async (
   id: string,
   init?: RequestInit
 ): Promise<ResSingle<{ url: string }>> => {

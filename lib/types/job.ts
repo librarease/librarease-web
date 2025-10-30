@@ -1,7 +1,7 @@
 import { WithCommon } from './common'
 import { Staff } from './staff'
 
-export type JobType = 'export:borrowings'
+export type JobType = 'export:borrowings' | 'import:books'
 export type JobStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
 
 export type Job = WithCommon<{

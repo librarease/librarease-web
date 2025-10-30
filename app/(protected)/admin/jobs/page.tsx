@@ -43,7 +43,7 @@ export default async function Jobs({
     skip?: number
     limit?: number
     status?: 'pending' | 'processing' | 'completed' | 'failed'
-    type?: 'export:borrowings'
+    type?: 'export:borrowings' | 'import:books'
   }>
 }) {
   const sp = await searchParams

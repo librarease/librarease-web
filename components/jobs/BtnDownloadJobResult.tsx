@@ -4,10 +4,10 @@ import { Job } from '@/lib/types/job'
 import { useTransition } from 'react'
 import { Button } from '../ui/button'
 import { Loader, Download } from 'lucide-react'
-import { downloadJobResultAction } from '@/lib/actions/download-job-result'
+import { downloadJobAssetAction } from '@/lib/actions/download-job-asset'
 import { toast } from 'sonner'
 
-export const BtnDownloadJobResult: React.FC<
+export const BtnDownloadJobAsset: React.FC<
   React.ComponentProps<typeof Button> & {
     job: Job
   }
@@ -16,7 +16,7 @@ export const BtnDownloadJobResult: React.FC<
 
   const onClick = () => {
     startTransition(async () => {
-      const res = await downloadJobResultAction(job.id)
+      const res = await downloadJobAssetAction(job.id)
       if ('error' in res) {
         toast.error(res.error)
         return

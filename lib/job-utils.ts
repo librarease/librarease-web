@@ -9,6 +9,10 @@ export interface ExportResult {
   name: string
 }
 
+export interface ImportPayload {
+  path: string
+}
+
 export function parseJobPayload(job: Job) {
   try {
     const payload = JSON.parse(job.payload)
@@ -16,6 +20,8 @@ export function parseJobPayload(job: Job) {
     switch (job.type) {
       case 'export:borrowings':
         return payload as ExportBorrowingsData
+      case 'import:books':
+        return payload as ImportPayload
       default:
         return payload
     }
@@ -51,9 +57,42 @@ export function formatFileSize(bytes: number): string {
 
 export function getJobTypeLabel(type: string): string {
   const labels: Record<string, string> = {
-    'export:borrowings': 'Export Borrowings',
+    'export:borrowings': 'Export Borrows',
+    'import:books': 'Import Books',
   }
-  return labels[type] || type
+  return labels[type] ?? type
+}
+
+export function canJobAssetDownload(job: Job): boolean {
+  // For export jobs, check if result has path
+  if (job.type.startsWith('export:')) {
+    const result = parseJobResult(job)
+    return job.status === 'COMPLETED' && result !== null && 'path' in result
+  }
+
+  // For import jobs, check if payload has path
+  if (job.type.startsWith('import:')) {
+    const payload = parseJobPayload(job)
+    return payload !== null && 'path' in payload
+  }
+
+  return false
+}
+
+export function getJobAssetPath(job: Job): string | null {
+  // For export jobs, get path from result
+  if (job.type.startsWith('export:')) {
+    const result = parseJobResult(job)
+    return result && 'path' in result ? result.path : null
+  }
+
+  // For import jobs, get path from payload
+  if (job.type.startsWith('import:')) {
+    const payload = parseJobPayload(job)
+    return payload && 'path' in payload ? payload.path : null
+  }
+
+  return null
 }
 
 export function getStatusColor(status: string): Extract<ClassValue, string> {

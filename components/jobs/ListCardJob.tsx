@@ -8,100 +8,73 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import {
+  BadgeCheck,
   CheckCircle2,
   ChevronRight,
   Clock,
   Download,
   FileText,
   Loader2,
+  Upload,
   XCircle,
 } from 'lucide-react'
 import {
   getJobTypeLabel,
   getStatusColor,
   parseJobResult,
+  canJobAssetDownload,
 } from '@/lib/job-utils'
 import { Badge } from '../ui/badge'
 import { formatDate } from '@/lib/utils'
 import { Button } from '../ui/button'
 import Link from 'next/link'
-import { BtnDownloadJobResult } from './BtnDownloadJobResult'
+import { BtnDownloadJobAsset } from './BtnDownloadJobResult'
 
 export const ListCardJob: React.FC<{ job: Job }> = ({ job }) => {
-  const result = parseJobResult(job)
-  const isExport = job.type.startsWith('export:')
-  const canDownload =
-    job.status === 'COMPLETED' && isExport && result && 'path' in result
+  const canDownload = canJobAssetDownload(job)
 
   return (
     <Card key={job.id} className="hover:shadow-md transition-shadow">
       <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex items-start gap-3 flex-1">
-            <div className="mt-1">{getJobIcon(job.type)}</div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <CardTitle className="text-lg">
+        <Link href={`/admin/jobs/${job.id}`}>
+          <div className="flex items-start justify-between">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="mt-1">{getJobIcon(job.type)}</div>
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg link">
                   {getJobTypeLabel(job.type)}
                 </CardTitle>
-                <Badge className={getStatusColor(job.status)}>
-                  {getStatusIcon(job.status)}
-                  <span className="ml-1">{job.status}</span>
-                </Badge>
+                <CardDescription className="text-sm">
+                  {job.staff.name}
+                </CardDescription>
               </div>
-              <CardDescription className="text-sm">
-                Created{' '}
-                {formatDate(job.created_at, {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}{' '}
-                by {job.staff.name}
-              </CardDescription>
             </div>
+            <Badge className={getStatusColor(job.status)}>
+              {getStatusIcon(job.status)}
+              <span className="ml-1">{job.status}</span>
+            </Badge>
           </div>
-          <div className="flex items-center gap-2">
-            {canDownload && <BtnDownloadJobResult job={job} size="sm" />}
-            <Button variant="ghost" size="sm" asChild>
-              <Link href={`/admin/jobs/${job.id}`}>
-                View Details
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Link>
-            </Button>
-          </div>
-        </div>
+        </Link>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground mb-1">Job ID</p>
-            <p className="font-mono text-xs truncate">{job.id}</p>
+            <p className="font-mono text-xs truncate">{job.id.slice(0, 8)}</p>
           </div>
-          {job.started_at && (
-            <div>
-              <p className="text-muted-foreground mb-1">Started</p>
-              <p>
-                {formatDate(job.started_at, {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </p>
-            </div>
-          )}
-          {job.finished_at && (
-            <div>
-              <p className="text-muted-foreground mb-1">Finished</p>
-              <p>
-                {formatDate(job.finished_at, {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </p>
-            </div>
-          )}
-          {job.error && (
+          <div>
+            <p className="text-muted-foreground mb-1">Created</p>
+            <p>
+              {formatDate(job.created_at, {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
+          </div>
+          {job.status === 'FAILED' && job.error && (
             <div className="col-span-2 md:col-span-4">
               <p className="text-muted-foreground mb-1">Error</p>
-              <p className="text-red-600 text-sm">{job.error}</p>
+              <p className="text-destructive text-sm">{job.error}</p>
             </div>
           )}
         </div>
@@ -112,9 +85,14 @@ export const ListCardJob: React.FC<{ job: Job }> = ({ job }) => {
 
 export const getJobIcon = (type: string) => {
   if (type.startsWith('export:')) {
-    return <Download className="h-5 w-5 text-emerald-600" />
+    return (
+      <Download className="size-5 text-emerald-600 dark:text-emerald-400" />
+    )
   }
-  return <FileText className="h-5 w-5 text-gray-600" />
+  if (type.startsWith('import:')) {
+    return <Upload className="size-5 text-blue-600 dark:text-blue-400" />
+  }
+  return <FileText className="size-5 text-gray-600 dark:text-gray-400" />
 }
 
 export const getStatusIcon = (status: JobStatus) => {
