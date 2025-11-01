@@ -38,6 +38,7 @@ export function NavUser({
     function getAction(noti: Notification): Action | undefined {
       switch (noti.reference_type) {
         case 'EXPORT_BORROWING':
+        case 'IMPORT_BOOKS':
           return {
             label: 'View Job',
             onClick: () => router.push(`/admin/jobs/${noti.reference_id}`),

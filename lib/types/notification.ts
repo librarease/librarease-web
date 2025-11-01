@@ -5,5 +5,10 @@ export type Notification = WithCommon<{
   message: string
   read_at?: Date
   reference_id?: string
-  reference_type: 'BOOK' | 'BORROWING' | 'SUBSCRIPTION' | 'EXPORT_BORROWING'
+  reference_type:
+    | 'BOOK'
+    | 'BORROWING'
+    | 'SUBSCRIPTION'
+    | 'EXPORT_BORROWING'
+    | 'IMPORT_BOOKS'
 }>

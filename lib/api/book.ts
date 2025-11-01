@@ -1,6 +1,7 @@
-import { Book, BookDetail } from '@/lib/types/book'
+import { Book, BookDetail, ImportBookPreview } from '@/lib/types/book'
 import { QueryParams, ResList, ResSingle } from '@/lib/types/common'
 import { BASE_URL } from './common'
+import { GetUploadURLResponse } from './file'
 
 const BOOKS_URL = `${BASE_URL}/books`
 
@@ -60,5 +61,50 @@ export const createBook = async (
     const e = await response.json()
     throw e
   }
+  return response.json()
+}
+
+type ImportBookQuery = Pick<GetUploadURLResponse, 'path'> & {
+  library_id: string
+}
+type PreviewBookImportResponse = Promise<ResSingle<ImportBookPreview>>
+export const previewBookImport = async (
+  query: ImportBookQuery,
+  init?: RequestInit
+): PreviewBookImportResponse => {
+  const url = new URL(`${BOOKS_URL}/import`)
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+  init = {
+    ...init,
+    headers,
+  }
+  Object.entries(query).forEach(([key, value]) => {
+    if (value) {
+      url.searchParams.append(key, String(value))
+    }
+  })
+  const response = await fetch(url.toString(), init)
+  return response.json()
+}
+
+export const importBooks = async (
+  body: ImportBookQuery,
+  init?: RequestInit
+): Promise<
+  ResSingle<{
+    id: string
+  }>
+> => {
+  const url = new URL(`${BOOKS_URL}/import`)
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+  init = {
+    ...init,
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  }
+  const response = await fetch(url.toString(), init)
   return response.json()
 }

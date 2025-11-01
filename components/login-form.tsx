@@ -78,7 +78,7 @@ export function LoginForm({
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="e.g. mypassword"
-                  // defaultValue={state.password}
+                  defaultValue={state.password}
                   required
                 />
               </div>

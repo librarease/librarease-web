@@ -1,3 +1,4 @@
+import { GetUploadURLResponse } from '../api/file'
 import { WithCommon } from './common'
 import { Library } from './library'
 import { Watchlist } from './watchlist'
@@ -24,4 +25,19 @@ export type Book = WithCommon<{
 
 export type BookDetail = Omit<Book, 'library'> & {
   library: Library
+}
+
+export type ImportBookPreview = Pick<GetUploadURLResponse, 'path'> & {
+  summary: {
+    created_count: number
+    updated_count: number
+    invalid_count: number
+  }
+  rows: Array<
+    Pick<Book, 'code' | 'title' | 'author'> & {
+      status: 'create' | 'update' | 'invalid'
+      id?: string
+      error?: string
+    }
+  >
 }

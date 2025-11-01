@@ -1,7 +1,15 @@
 import { Notification as TNotification } from '@/lib/types/notification'
 import { cn, formatDate } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
-import { Bell, BookHeart, BookUser, CreditCard, Workflow } from 'lucide-react'
+import {
+  Bell,
+  BookHeart,
+  BookUser,
+  CreditCard,
+  Download,
+  Upload,
+  Workflow,
+} from 'lucide-react'
 import { NotificationAction } from './NotificationAction'
 import Link from 'next/link'
 import { Route } from 'next'
@@ -53,7 +61,9 @@ const getIcon = (type: TNotification['reference_type']) => {
     case 'SUBSCRIPTION':
       return <CreditCard className="h-5 w-5 text-green-500" />
     case 'EXPORT_BORROWING':
-      return <Workflow className="h-5 w-5 text-purple-500" />
+      return <Download className="h-5 w-5 text-purple-500" />
+    case 'IMPORT_BOOKS':
+      return <Upload className="h-5 w-5 text-purple-500" />
     default:
       return <Bell className="h-5 w-5 text-gray-500" />
   }
@@ -68,6 +78,7 @@ const getLink = (type: TNotification['reference_type'], id: string): Route => {
     case 'SUBSCRIPTION':
       return `/subscriptions/${id}` as Route
     case 'EXPORT_BORROWING':
+    case 'IMPORT_BOOKS':
       return `/admin/jobs/${id}` as Route
     default:
       return `/notifications#${id}` as Route
