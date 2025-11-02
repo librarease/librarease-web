@@ -10,6 +10,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Verify } from '@/lib/firebase/firebase'
 import { Download, FileText } from 'lucide-react'
+import { DownloadTemplateButton } from '@/components/books/DownloadTemplateButton'
+import { cookies } from 'next/headers'
 
 export default async function BorrowDetailsLayout({
   children,
@@ -19,6 +21,10 @@ export default async function BorrowDetailsLayout({
   params: Promise<{}>
 }>) {
   const headers = await Verify({ from: `/admin/books/import` })
+
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libraryId = cookieStore.get(cookieName)?.value
 
   return (
     <div className="space-y-4">
@@ -63,10 +69,7 @@ export default async function BorrowDetailsLayout({
                 <strong>year</strong> - Year of publication (optional)
               </li>
             </ul>
-            <Button variant="link" className="p-0 h-auto">
-              <Download className="h-3 w-3 mr-1" />
-              Download template
-            </Button>
+            <DownloadTemplateButton libraryId={libraryId} />
           </div>
         </AlertDescription>
       </Alert>
