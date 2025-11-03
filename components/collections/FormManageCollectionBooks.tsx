@@ -8,7 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useEffect, useState, useRef } from 'react'
+import {
+  useEffect,
+  useState,
+  useRef,
+  ViewTransition,
+  useTransition,
+} from 'react'
 import { getListBooks } from '@/lib/api/book'
 import { toast } from 'sonner'
 import { Input } from '../ui/input'
@@ -23,8 +29,15 @@ export const FormManageCollectionBooks: React.FC<{
   onSubmitAction: (v: string[]) => Promise<string>
 }> = ({ initialBooks, libraryID, initialBookIDs, onSubmitAction }) => {
   const [books, setBooks] = useState<Book[]>([])
-  const [selectedBooks, setSelectedBooks] = useState<Book[]>(initialBooks)
+  const [, startTransition] = useTransition()
+  const [selectedBooks, _setSelectedBooks] = useState<Book[]>(initialBooks)
   const selectedBookIDs = selectedBooks.map((b) => b.id)
+
+  function setSelectedBooks(books: Parameters<typeof _setSelectedBooks>[0]) {
+    startTransition(() => {
+      _setSelectedBooks(books)
+    })
+  }
 
   const [bookQ, setBookQ] = useState<
     Pick<Parameters<typeof getListBooks>[0], 'title' | 'library_id'>
@@ -106,46 +119,47 @@ export const FormManageCollectionBooks: React.FC<{
         {selectedBooks
           .concat(books.filter((book) => !selectedBookIDs.includes(book.id)))
           .map((book) => (
-            <Card
-              key={book.id}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
-                selectedBookIDs.includes(book.id)
-                  ? 'ring-1 ring-primary bg-primary/5'
-                  : ''
-              }`}
-              onClick={() => toggleBookSelection(book)}
-            >
-              <CardHeader className="pb-3">
-                <div className="relative mx-auto mb-4 flex justify-center">
-                  <Image
-                    src={book.cover ?? '/book-placeholder.svg'}
-                    alt={`${book.title} cover`}
-                    width={100}
-                    height={150}
-                  />
-                  {selectedBookIDs.includes(book.id) && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                      <Check className="h-3 w-3 text-white" />
-                    </div>
-                  )}
-                </div>
-                <CardTitle className="text-base line-clamp-2">
-                  {book.title}
-                </CardTitle>
-                <CardDescription className="line-clamp-1">
-                  {book.author}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span>{book.year}</span>
-                    <span>•</span>
-                    <span>{book.code}</span>
+            <ViewTransition name={book.id} key={book.id}>
+              <Card
+                className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
+                  selectedBookIDs.includes(book.id)
+                    ? 'ring-1 ring-primary bg-primary/5'
+                    : ''
+                }`}
+                onClick={() => toggleBookSelection(book)}
+              >
+                <CardHeader className="pb-3">
+                  <div className="relative mx-auto mb-4 flex justify-center">
+                    <Image
+                      src={book.cover ?? '/book-placeholder.svg'}
+                      alt={`${book.title} cover`}
+                      width={100}
+                      height={150}
+                    />
+                    {selectedBookIDs.includes(book.id) && (
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                        <Check className="h-3 w-3 text-white" />
+                      </div>
+                    )}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                  <CardTitle className="text-base line-clamp-2">
+                    {book.title}
+                  </CardTitle>
+                  <CardDescription className="line-clamp-1">
+                    {book.author}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span>{book.year}</span>
+                      <span>•</span>
+                      <span>{book.code}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </ViewTransition>
           ))}
       </div>
     </div>
