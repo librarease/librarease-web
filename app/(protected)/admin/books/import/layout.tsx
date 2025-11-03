@@ -1,5 +1,4 @@
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,21 +6,16 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
-import { Verify } from '@/lib/firebase/firebase'
-import { Download, FileText } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { DownloadTemplateButton } from '@/components/books/DownloadTemplateButton'
 import { cookies } from 'next/headers'
 
 export default async function BorrowDetailsLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode
   params: Promise<{}>
 }>) {
-  const headers = await Verify({ from: `/admin/books/import` })
-
   const cookieStore = await cookies()
   const cookieName = process.env.LIBRARY_COOKIE_NAME as string
   const libraryId = cookieStore.get(cookieName)?.value

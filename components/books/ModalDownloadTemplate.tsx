@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Download, FileDown, X, Check, ChevronsUpDown } from 'lucide-react'
+import { Download, Check, ChevronsUpDown } from 'lucide-react'
 import { getListBooks } from '@/lib/api/book'
 import { Book } from '@/lib/types/book'
 import { toast } from 'sonner'

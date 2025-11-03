@@ -55,7 +55,7 @@ export default async function LibraryDashboard() {
   }
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-[calc(100vh-4rem)] p-8">
       <div className="max-w-2xl mx-auto space-y-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Librarease</h1>

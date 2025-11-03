@@ -16,6 +16,7 @@ import { loginAction } from '@/lib/actions/login'
 import Link from 'next/link'
 import { Checkbox } from './ui/checkbox'
 import { Route } from 'next'
+import { Spinner } from './ui/spinner'
 
 export function LoginForm({
   className,
@@ -100,6 +101,7 @@ export function LoginForm({
                 </Link>
               </div>
               <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending && <Spinner />}
                 Login
               </Button>
               {/* <Button variant="outline" className="w-full">

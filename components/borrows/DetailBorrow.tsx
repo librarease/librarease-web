@@ -6,7 +6,6 @@ import {
   getSubscriptionStatus,
   isSubscriptionActive,
 } from '@/lib/utils'
-import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Book,
@@ -25,19 +24,18 @@ import {
 } from 'lucide-react'
 import clsx from 'clsx'
 import { differenceInDays } from 'date-fns'
-import { Borrow } from '@/lib/types/borrow'
 import { DateTime } from '@/components/common/DateTime'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { Route } from 'next'
 import { ViewTransition } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
+import { CardPrevBorrows } from './CardPrevBorrows'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
     borrow: BorrowDetail
-    prevBorrows: Borrow[]
   }>
-> = ({ borrow, prevBorrows, children }) => {
+> = ({ borrow, children }) => {
   const status = getBorrowStatus(borrow)
   const isDue = status === 'overdue'
   return (
@@ -265,39 +263,9 @@ export const DetailBorrow: React.FC<
           </p>
         </CardContent>
       </Card>
-      {prevBorrows.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Borrows</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-end overflow-x-scroll p-6 isolate">
-            {prevBorrows.map((b) => (
-              <Link
-                href={`./${b.id}` as Route}
-                key={b.id}
-                className={clsx(
-                  'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12 brightness-75',
-                  'hover:transition-all hover:-translate-y-4 hover:transform-none hover:brightness-100',
-                  'peer peer-hover:left-12 peer-hover:transition-all',
-                  '[transform:perspective(800px)_rotateY(20deg)]',
-                  {
-                    'z-10 -translate-y-4 brightness-100 transform-none':
-                      b.id === borrow.id,
-                  }
-                )}
-              >
-                <Image
-                  src={b.book?.cover ?? '/book-placeholder.svg'}
-                  alt={b.book.title + "'s cover"}
-                  width={160}
-                  height={240}
-                  className="shadow-md rounded-lg w-40 h-60 place-self-center object-cover"
-                />
-              </Link>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+
+      <CardPrevBorrows borrow={borrow} />
+
       {children}
     </>
   )

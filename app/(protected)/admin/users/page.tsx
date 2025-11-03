@@ -23,12 +23,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getListUsers } from '@/lib/api/user'
-import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
 import { cookies } from 'next/headers'
 import { Badge } from '@/components/ui/badge'
+import { DateTime } from '@/components/common/DateTime'
 
 export const metadata: Metadata = {
   title: `Users · ${SITE_NAME}`,
@@ -100,19 +100,23 @@ export default async function Users({
         {/* <TableCaption>List of books available in the library.</TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Created At</TableHead>
+            <TableHead>ID</TableHead>
+            <TableHead>Joined At</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {res.data.map((u) => (
             <TableRow key={u.id}>
-              <TableCell>{u.id}</TableCell>
               <TableCell>{u.name}</TableCell>
               <TableCell>{u.email}</TableCell>
-              <TableCell>{formatDate(u.created_at)}</TableCell>
+              <TableCell>
+                <pre>{u.id}</pre>
+              </TableCell>
+              <TableCell>
+                <DateTime dateTime={u.created_at} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

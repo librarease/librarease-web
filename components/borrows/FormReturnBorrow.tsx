@@ -152,7 +152,7 @@ export const FormReturnBorrow: React.FC<{
         <Button type="reset" variant="ghost" onClick={onReset}>
           Reset
         </Button>
-        <Button type="submit" disabled={!form.formState.isDirty || isPending}>
+        <Button type="submit" disabled={isPending}>
           {isPending && <Spinner />}
           Submit
         </Button>

@@ -28,6 +28,7 @@ import { Verify } from '@/lib/firebase/firebase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
+import { DateTime } from '@/components/common/DateTime'
 
 export const metadata: Metadata = {
   title: `Staffs · ${SITE_NAME}`,
@@ -105,7 +106,7 @@ export default async function Staffs({
             <TableHead>User</TableHead>
             <TableHead>Library</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead>Registered At</TableHead>
+            <TableHead>Joined At</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -117,7 +118,9 @@ export default async function Staffs({
               <TableCell>
                 <Badge variant="outline">{s.role}</Badge>
               </TableCell>
-              <TableCell>{s.created_at}</TableCell>
+              <TableCell>
+                <DateTime dateTime={s.created_at} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

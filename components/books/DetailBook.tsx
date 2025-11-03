@@ -35,7 +35,7 @@ export const DetailBook: React.FC<
             >
               {status}
             </Badge>
-            <Badge variant="outline">book.genre</Badge>
+            {/* <Badge variant="outline">book.genre</Badge> */}
           </div>
         </div>
 
@@ -57,7 +57,7 @@ export const DetailBook: React.FC<
             <Library className="size-4" />
             <p>
               <span className="font-medium">Library:&nbsp;</span>
-              <Link href={`/libraries/${book.library.id}`}>
+              <Link href={`/libraries/${book.library.id}`} className="link">
                 {book.library.name}
               </Link>
             </p>
@@ -69,7 +69,7 @@ export const DetailBook: React.FC<
             <CardTitle>Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm leading-relaxed">book.description</p>
+            {/* <p className="text-sm leading-relaxed">book.description</p> */}
           </CardContent>
         </Card>
       </div>

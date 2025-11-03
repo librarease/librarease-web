@@ -8,9 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import {
-  BadgeCheck,
   CheckCircle2,
-  ChevronRight,
   Clock,
   Download,
   FileText,
@@ -18,21 +16,12 @@ import {
   Upload,
   XCircle,
 } from 'lucide-react'
-import {
-  getJobTypeLabel,
-  getStatusColor,
-  parseJobResult,
-  canJobAssetDownload,
-} from '@/lib/job-utils'
+import { getJobTypeLabel, getStatusColor } from '@/lib/job-utils'
 import { Badge } from '../ui/badge'
 import { formatDate } from '@/lib/utils'
-import { Button } from '../ui/button'
 import Link from 'next/link'
-import { BtnDownloadJobAsset } from './BtnDownloadJobResult'
 
 export const ListCardJob: React.FC<{ job: Job }> = ({ job }) => {
-  const canDownload = canJobAssetDownload(job)
-
   return (
     <Card key={job.id} className="hover:shadow-md transition-shadow">
       <CardHeader>

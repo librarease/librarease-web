@@ -1,6 +1,5 @@
 import { Notification as TNotification } from '@/lib/types/notification'
 import { cn, formatDate } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
 import {
   Bell,
   BookHeart,
@@ -8,7 +7,6 @@ import {
   CreditCard,
   Download,
   Upload,
-  Workflow,
 } from 'lucide-react'
 import { NotificationAction } from './NotificationAction'
 import Link from 'next/link'
@@ -24,7 +22,11 @@ export const Notification: React.FC<{ noti: TNotification }> = ({ noti }) => {
       )}
     >
       <div className="mt-1">{getIcon(noti.reference_type)}</div>
-      <div className="flex-1 min-w-0">
+
+      <Link
+        href={getLink(noti.reference_type, noti.reference_id ?? '')}
+        className="flex-1 min-w-0"
+      >
         <div className="flex justify-between items-start">
           <h3 className={cn('font-medium', !noti.read_at && 'font-semibold')}>
             {noti.title}
@@ -37,16 +39,7 @@ export const Notification: React.FC<{ noti: TNotification }> = ({ noti }) => {
           </span>
         </div>
         <p className="text-sm text-muted-foreground">{noti.message}</p>
-        {noti.reference_id && (
-          <div className="mt-2">
-            <Badge variant="outline" className="text-xs uppercase">
-              <Link href={getLink(noti.reference_type, noti.reference_id)}>
-                {noti.reference_type}_{noti.reference_id.slice(0, 8)}
-              </Link>
-            </Badge>
-          </div>
-        )}
-      </div>
+      </Link>
       <NotificationAction noti={noti} />
     </div>
   )

@@ -9,7 +9,6 @@ import {
 
 import { SITE_NAME } from '@/lib/consts'
 import type { Metadata, Route } from 'next'
-import { LibrarySelector } from '@/components/dashboard/LibrarySelector'
 import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import { redirect, RedirectType } from 'next/navigation'
@@ -78,17 +77,6 @@ export default async function DashboardPage({
     return <div>{libsRes.error}</div>
   }
 
-  async function onLibraryChange(libraryID: string) {
-    'use server'
-
-    const p = await searchParams
-    // @ts-expect-error: skip and imit are not used now
-    const sp = new URLSearchParams(p)
-    sp.set('library_id', libraryID)
-
-    redirect(('./?' + sp.toString()) as Route, RedirectType.replace)
-  }
-
   const fromDate = parse(from, 'dd-MM-yyyy', new Date())
   const toDate = parse(to, 'dd-MM-yyyy', new Date())
 
@@ -125,16 +113,8 @@ export default async function DashboardPage({
       </Breadcrumb>
 
       <div className="grid my-4 grid-cols-1 gap-4 md:grid-cols-2">
-        <LibrarySelector
-          libs={libsRes.data.filter((lib) =>
-            claims.librarease.admin_libs
-              .concat(claims.librarease.staff_libs)
-              .includes(lib.id)
-          )}
-          lib={libID!}
-          onChangeAction={onLibraryChange}
-        />
         <DateRangeSelector
+          className="col-span-2"
           range={{ from: fromDate, to: toDate }}
           onChangeAction={onDateRangeChange}
         />

@@ -1,6 +1,5 @@
 import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
-import { getBorrow, getListBorrows } from '@/lib/api/borrow'
-import { Borrow } from '@/lib/types/borrow'
+import { getBorrow } from '@/lib/api/borrow'
 import { redirect, RedirectType } from 'next/navigation'
 import { DetailBorrow } from '@/components/borrows/DetailBorrow'
 
@@ -26,25 +25,5 @@ export default async function BorrowDetailsPage({
     redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
   }
 
-  let prevBorrows: Borrow[] = []
-  const [prevBorrowsRes] = await Promise.all([
-    getListBorrows(
-      {
-        subscription_id: borrowRes.data.subscription.id,
-        sort_in: 'asc',
-        limit: 20,
-      },
-      {
-        headers,
-      }
-    ),
-  ])
-
-  if ('error' in prevBorrowsRes) {
-    prevBorrows = []
-  } else {
-    prevBorrows = prevBorrowsRes.data
-  }
-
-  return <DetailBorrow borrow={borrowRes.data} prevBorrows={prevBorrows} />
+  return <DetailBorrow borrow={borrowRes.data} />
 }

@@ -14,6 +14,10 @@ export const LibrarySwitch: React.FC<{
   activeLibrary: Pick<Library, 'id' | 'name'>
   setActiveLibraryAction: (id: string) => void
 }> = ({ libraries, activeLibrary, setActiveLibraryAction }) => {
+  if (libraries.length <= 1) {
+    return <>{activeLibrary.name}</>
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center">
