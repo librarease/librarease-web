@@ -22,13 +22,13 @@ export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
       )}
     >
       <CardHeader className="pb-3">
-        <ViewTransition name={book.id}>
-          <div className="grid place-items-center">
-            {/* 3D Book Effect */}
-            <div className="flex my-12">
-              <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-4">
-                <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-16px)] origin-top-left"></span>
-              </div>
+        <div className="grid place-items-center">
+          {/* 3D Book Effect */}
+          <div className="flex my-12">
+            <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-4">
+              <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-16px)] origin-top-left"></span>
+            </div>
+            <ViewTransition name={book.id}>
               <Image
                 src={book?.cover ?? '/book-placeholder.svg'}
                 alt={book.title + "'s cover"}
@@ -42,9 +42,9 @@ export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
                 )}
                 priority
               />
-            </div>
+            </ViewTransition>
           </div>
-        </ViewTransition>
+        </div>
         <CardTitle className="text-lg line-clamp-1">{book.title}</CardTitle>
         <CardDescription className="line-clamp-1">
           {book.author}

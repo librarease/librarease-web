@@ -4,10 +4,25 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Input } from '../ui/input'
 
-export const DebouncedInput: React.FC<React.ComponentProps<typeof Input>> = ({
+type InputLikeProps = React.ComponentProps<'input'>
+type InputComponent = React.ComponentType<InputLikeProps>
+
+interface DebouncedInputProps {
+  component?: InputComponent
+  name?: string
+  debounceMs?: number
+}
+
+/**
+ *
+ * @deprecated: Use SearchInput instead
+ */
+export const DebouncedInput = ({
+  component: Component = Input,
   name = 'q',
+  debounceMs = 400,
   ...props
-}) => {
+}: DebouncedInputProps & Omit<InputLikeProps, keyof DebouncedInputProps>) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [value, setValue] = useState(searchParams?.get(name) ?? '')
@@ -36,9 +51,9 @@ export const DebouncedInput: React.FC<React.ComponentProps<typeof Input>> = ({
           params.delete(name)
         }
         router.replace(`?${params.toString()}`)
-      }, 400)
+      }, debounceMs)
     },
-    [router, searchParams, name]
+    [router, searchParams, name, debounceMs]
   )
 
   useEffect(() => {
@@ -47,5 +62,7 @@ export const DebouncedInput: React.FC<React.ComponentProps<typeof Input>> = ({
     }
   }, [])
 
-  return <Input {...props} name={name} value={value} onChange={handleChange} />
+  return (
+    <Component {...props} name={name} value={value} onChange={handleChange} />
+  )
 }
