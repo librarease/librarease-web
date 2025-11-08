@@ -9,18 +9,23 @@ type GetListBooksQuery = QueryParams<
   Pick<Book, 'id' | 'title' | 'library_id'>
 > & {
   include_stats?: 'true'
+  ids?: string[]
 }
 type GetListBooksResponse = Promise<ResList<Book>>
 
-export const getListBooks = async (
-  query: GetListBooksQuery
-): GetListBooksResponse => {
+export const getListBooks = async ({
+  ids,
+  ...query
+}: GetListBooksQuery): GetListBooksResponse => {
   const url = new URL(BOOKS_URL)
   Object.entries(query).forEach(([key, value]) => {
     if (value) {
       url.searchParams.append(key, String(value))
     }
   })
+  if (ids && ids.length > 0) {
+    url.searchParams.append('ids', ids.join(','))
+  }
 
   const response = await fetch(url.toString())
   return response.json()

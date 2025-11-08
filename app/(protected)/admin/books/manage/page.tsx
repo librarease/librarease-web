@@ -15,15 +15,71 @@ import {
 } from '@/components/ui/pagination'
 import { getListBooks } from '@/lib/api/book'
 import type { Metadata } from 'next'
-import { SITE_NAME } from '@/lib/consts'
+import { REDIS_KEY_BOOK_PRINT_PREFIX, SITE_NAME } from '@/lib/consts'
 import { Badge } from '@/components/ui/badge'
 import { cookies } from 'next/headers'
 import { Verify } from '@/lib/firebase/firebase'
 import { BookSelectPanel } from '@/components/books/book-select-panel'
 import { SearchInput } from '@/components/common/SearchInput'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { QrCode } from 'lucide-react'
+import { cache } from '@/lib/redis-helpers'
+import { getBookImportTemplate } from '@/lib/book-utils'
+
+async function onPrintAction(
+  bookIDs: string[]
+): Promise<{ key: string } | { error: string }> {
+  'use server'
+
+  // hash the key
+  const hash = await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(bookIDs.toSorted().join(','))
+  )
+  const key = Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+    .slice(0, 16) // Shorten to 16 characters
+
+  const success = await cache.set(
+    `${REDIS_KEY_BOOK_PRINT_PREFIX}:${key}`,
+    bookIDs,
+    300
+  )
+  if (!success) {
+    return {
+      error: 'Failed to store print data in cache',
+    }
+  }
+  return { key }
+}
+
+async function downloadImportTemplateAction(
+  bookIDs: string[]
+): Promise<{ csv: string } | { error: string }> {
+  'use server'
+
+  if (!bookIDs) {
+    return { error: 'No book IDs provided' }
+  }
+
+  const cookieStore = await cookies()
+  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
+  const libID = cookieStore.get(cookieName)?.value
+
+  const res = await getListBooks(
+    bookIDs ? { ids: bookIDs, library_id: libID } : { library_id: libID }
+  )
+  if ('error' in res) {
+    return { error: res.error }
+  }
+
+  const csv = getBookImportTemplate(res.data)
+  if (!csv) {
+    return {
+      error: 'Failed to generate CSV',
+    }
+  }
+  return { csv }
+}
 
 export const metadata: Metadata = {
   title: `Books · ${SITE_NAME}`,
@@ -100,15 +156,13 @@ export default async function BooksSelectPage({
           placeholder="Search by title"
           name="title"
         />
-        <Button variant="outline" asChild>
-          <Link href="/admin/books/print-qr">
-            <QrCode className="mr-2 h-4 w-4" />
-            Print QR Codes
-          </Link>
-        </Button>
       </div>
 
-      <BookSelectPanel books={res.data} />
+      <BookSelectPanel
+        books={res.data}
+        onPrintAction={onPrintAction}
+        downloadImportTemplateAction={downloadImportTemplateAction}
+      />
 
       <Pagination>
         <PaginationContent>

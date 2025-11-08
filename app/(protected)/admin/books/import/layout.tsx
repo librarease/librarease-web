@@ -1,3 +1,4 @@
+import { BtnDownloadTemplate } from '@/components/books/BtnDownloadTemplate'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   Breadcrumb,
@@ -7,8 +8,6 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { FileText } from 'lucide-react'
-import { DownloadTemplateButton } from '@/components/books/DownloadTemplateButton'
-import { cookies } from 'next/headers'
 
 export default async function BorrowDetailsLayout({
   children,
@@ -16,10 +15,6 @@ export default async function BorrowDetailsLayout({
   children: React.ReactNode
   params: Promise<{}>
 }>) {
-  const cookieStore = await cookies()
-  const cookieName = process.env.LIBRARY_COOKIE_NAME as string
-  const libraryId = cookieStore.get(cookieName)?.value
-
   return (
     <div className="space-y-4">
       <nav className="backdrop-blur-sm sticky top-0 z-10">
@@ -63,7 +58,7 @@ export default async function BorrowDetailsLayout({
                 <strong>year</strong> - Year of publication (optional)
               </li>
             </ul>
-            <DownloadTemplateButton libraryId={libraryId} />
+            <BtnDownloadTemplate />
           </div>
         </AlertDescription>
       </Alert>
