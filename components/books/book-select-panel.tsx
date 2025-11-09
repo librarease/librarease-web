@@ -8,17 +8,8 @@ import {
   ViewTransition,
   useMemo,
   useCallback,
-  memo,
 } from 'react'
-import Image from 'next/image'
-import clsx from 'clsx'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../ui/card'
+import { Card, CardContent } from '../ui/card'
 import { Checkbox } from '../ui/checkbox'
 import { Field, FieldGroup, FieldLabel } from '../ui/field'
 import { Alert, AlertDescription } from '../ui/alert'
@@ -27,6 +18,7 @@ import { Download, QrCode } from 'lucide-react'
 import { toast } from 'sonner'
 import { downloadCSV } from '@/lib/book-utils'
 import { useRouter } from 'next/navigation'
+import { SelectedBook, UnselectedBook } from './book-select-card'
 
 export const BookSelectPanel: React.FC<{
   books: Book[]
@@ -38,22 +30,25 @@ export const BookSelectPanel: React.FC<{
   ) => Promise<{ csv: string } | { error: string }>
 }> = ({ books, onPrintAction, downloadImportTemplateAction }) => {
   const [, startTransition] = useTransition()
+  const router = useRouter()
 
-  // Create a stable Map reference for book lookups
-  const booksMap = useMemo(() => new Map(books.map((b) => [b.id, b])), [books])
-
-  // Only store IDs, not full book objects
-  const [selectedBookIDs, setSelectedBookIDs] = useState<Set<string>>(new Set())
+  // Store full book objects instead of just IDs
+  const [selectedBooks, setSelectedBooks] = useState<Book[]>([])
   const [selectedAll, setSelectedAll] = useState<boolean>(false)
+
+  const selectedBookIDs = useMemo(
+    () => new Set(selectedBooks.map((b) => b.id)),
+    [selectedBooks]
+  )
 
   const toggleSelectAll = useCallback(() => {
     startTransition(() => {
       setSelectedAll((prev) => {
         if (prev) {
-          setSelectedBookIDs(new Set())
+          setSelectedBooks([])
           return false
         }
-        setSelectedBookIDs(new Set(books.map((b) => b.id)))
+        setSelectedBooks([...books])
         return true
       })
     })
@@ -61,22 +56,22 @@ export const BookSelectPanel: React.FC<{
 
   useEffect(() => {
     if (selectedAll) {
-      setSelectedBookIDs(new Set(books.map((b) => b.id)))
+      setSelectedBooks([...books])
     }
   }, [books, selectedAll])
 
-  const toggleBookSelection = useCallback((bookId: string) => {
-    // startTransition(() => {
-    setSelectedBookIDs((prev) => {
-      const next = new Set(prev)
-      if (next.has(bookId)) {
-        next.delete(bookId)
-      } else {
-        next.add(bookId)
-      }
-      return next
-      // })
-    })
+  // Update toggle to accept book object
+  const toggleBookSelectionWithBook = useCallback((book: Book) => {
+    startTransition(() =>
+      setSelectedBooks((prev) => {
+        const exists = prev.find((b) => b.id === book.id)
+        if (exists) {
+          return prev.filter((b) => b.id !== book.id)
+        } else {
+          return [...prev, book]
+        }
+      })
+    )
   }, [])
 
   // Memoize the page selection state
@@ -89,17 +84,19 @@ export const BookSelectPanel: React.FC<{
 
   const toggleSelectPage = useCallback(() => {
     startTransition(() => {
-      setSelectedBookIDs((prev) => {
-        const next = new Set(prev)
-        if (isPageSelected) {
-          // Remove all current page book IDs
-          books.forEach((b) => next.delete(b.id))
-        } else {
-          // Add all current page book IDs
-          books.forEach((b) => next.add(b.id))
-        }
-        return next
-      })
+      if (isPageSelected) {
+        // Remove all current page books
+        setSelectedBooks((prev) =>
+          prev.filter((b) => !books.find((book) => book.id === b.id))
+        )
+      } else {
+        // Add all current page books
+        setSelectedBooks((prev) => {
+          const prevIds = new Set(prev.map((b) => b.id))
+          const newBooks = books.filter((b) => !prevIds.has(b.id))
+          return [...prev, ...newBooks]
+        })
+      }
     })
   }, [isPageSelected, books])
 
@@ -109,16 +106,7 @@ export const BookSelectPanel: React.FC<{
     [books, selectedBookIDs]
   )
 
-  // Memoize selected books for display
-  const selectedBooks = useMemo(
-    () =>
-      Array.from(selectedBookIDs)
-        .map((id) => booksMap.get(id))
-        .filter(Boolean) as Book[],
-    [selectedBookIDs, booksMap]
-  )
-
-  const atLeastOneSelected = selectedBookIDs.size > 0 || selectedAll
+  const atLeastOneSelected = selectedBooks.length > 0 || selectedAll
 
   async function onPrint() {
     const res = await onPrintAction(
@@ -143,8 +131,6 @@ export const BookSelectPanel: React.FC<{
       })
     }
   }
-
-  const router = useRouter()
 
   async function onDownloadTemplate() {
     const res = await downloadImportTemplateAction(
@@ -172,7 +158,7 @@ export const BookSelectPanel: React.FC<{
           onClick={onDownloadTemplate}
         >
           <Download className="mr-2 h-4 w-4" />
-          Download Template ({selectedAll ? 'All' : selectedBookIDs.size})
+          Download Template ({selectedAll ? 'All' : selectedBooks.length})
         </Button>
         <Button
           variant="outline"
@@ -180,9 +166,10 @@ export const BookSelectPanel: React.FC<{
           onClick={onPrint}
         >
           <QrCode className="mr-2 h-4 w-4" />
-          Print QR Codes ({selectedAll ? 'All' : selectedBookIDs.size})
+          Print QR Codes ({selectedAll ? 'All' : selectedBooks.length})
         </Button>
       </div>
+
       <Card className="has-[&>[data-state=checked]]:border-primary/50 has-[&>[id=select-all-checkbox][data-state=checked]]:bg-primary/10">
         <CardContent>
           <FieldGroup className="grid grid-cols-2">
@@ -212,6 +199,7 @@ export const BookSelectPanel: React.FC<{
           </FieldGroup>
         </CardContent>
       </Card>
+
       {selectedAll ? (
         <Alert>
           <AlertDescription>
@@ -219,40 +207,27 @@ export const BookSelectPanel: React.FC<{
           </AlertDescription>
         </Alert>
       ) : null}
+
       {selectedBooks.length > 0 && (
         <div className="flex items-end overflow-x-scroll p-6 isolate">
           {selectedBooks.map((b) => (
-            <div
+            <SelectedBook
               key={b.id}
-              onClick={() => (selectedAll ? null : toggleBookSelection(b.id))}
-              className={clsx(
-                'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12',
-                'hover:transition-all hover:-translate-y-4 hover:transform-none',
-                'peer peer-hover:left-12 peer-hover:transition-all',
-                '[transform:perspective(800px)_rotateY(20deg)]',
-                'hover:cursor-pointer'
-              )}
-            >
-              <ViewTransition name={b.id}>
-                <Image
-                  src={b?.cover ?? '/book-placeholder.svg'}
-                  alt={b.title + "'s cover"}
-                  width={128}
-                  height={192}
-                  className="shadow-md rounded-lg w-32 h-48 place-self-center object-cover"
-                />
-              </ViewTransition>
-            </div>
+              book={b}
+              onDeselect={() => toggleBookSelectionWithBook(b)}
+              disabled={selectedAll}
+            />
           ))}
         </div>
       )}
+
       <ViewTransition name="book-select-panel">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {unselectedBooks.map((book) => (
-            <BookSelectCard
+            <UnselectedBook
               key={book.id}
               book={book}
-              onToggle={() => toggleBookSelection(book.id)}
+              onSelect={() => toggleBookSelectionWithBook(book)}
               disabled={selectedAll}
             />
           ))}
@@ -261,57 +236,3 @@ export const BookSelectPanel: React.FC<{
     </>
   )
 }
-
-interface BookSelectCardProps {
-  book: Book
-  onToggle: () => void
-  disabled?: boolean
-}
-
-// Memoize the card component to prevent unnecessary re-renders
-const BookSelectCard = memo<BookSelectCardProps>(
-  ({ book, onToggle, disabled = false }) => {
-    return (
-      <ViewTransition name={`card-${book.id}`}>
-        <Card
-          className={clsx(
-            'cursor-pointer transition-all duration-200 hover:shadow-md',
-            disabled && 'opacity-50 cursor-not-allowed'
-          )}
-          onClick={disabled ? undefined : onToggle}
-        >
-          <CardHeader className="pb-3">
-            <div className="relative mx-auto mb-4 flex justify-center">
-              <ViewTransition name={book.id}>
-                <Image
-                  src={book.cover ?? '/book-placeholder.svg'}
-                  alt={`${book.title} cover`}
-                  width={100}
-                  height={150}
-                  className="z-10"
-                />
-              </ViewTransition>
-            </div>
-            <CardTitle className="text-base line-clamp-2">
-              {book.title}
-            </CardTitle>
-            <CardDescription className="line-clamp-1">
-              {book.author}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>{book.year}</span>
-                <span>•</span>
-                <span>{book.code}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </ViewTransition>
-    )
-  }
-)
-
-BookSelectCard.displayName = 'BookSelectCard'
