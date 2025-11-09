@@ -13,44 +13,35 @@ export const FormManageCollectionBooks: React.FC<{
   onSubmitAction: (v: string[]) => Promise<string>
   books: Book[]
 }> = ({ initialBooks, initialBookIDs, onSubmitAction, books }) => {
-  const [selectedBookIDs, setSelectedBookIDs] = useState<Set<string>>(
-    new Set(initialBookIDs)
+  const [selectedBooks, setSelectedBooks] = useState<Map<string, Book>>(
+    new Map(initialBooks.map((book) => [book.id, book]))
   )
 
-  // Combine initial books with fetched books, avoiding duplicates
-  const allBooks = useMemo(() => {
-    const initialBookIds = new Set(initialBooks.map((b) => b.id))
-    const uniqueFetchedBooks = books.filter(
-      (book) => !initialBookIds.has(book.id)
-    )
-    return initialBooks.concat(uniqueFetchedBooks)
-  }, [initialBooks, books])
-
-  const selectedBooks = useMemo(
-    () => allBooks.filter((book) => selectedBookIDs.has(book.id)),
-    [allBooks, selectedBookIDs]
+  const selectedBooksArray = useMemo(
+    () => Array.from(selectedBooks.values()),
+    [selectedBooks]
   )
 
   const unselectedBooks = useMemo(
-    () => allBooks.filter((book) => !selectedBookIDs.has(book.id)),
-    [allBooks, selectedBookIDs]
+    () => books.filter((book) => !selectedBooks.has(book.id)),
+    [books, selectedBooks]
   )
 
-  const toggleBookSelection = (bookId: string) => {
+  const toggleBookSelection = (book: Book) => {
     startTransition(() =>
-      setSelectedBookIDs((prev) => {
-        const next = new Set(prev)
-        if (next.has(bookId)) {
-          next.delete(bookId)
+      setSelectedBooks((prev) => {
+        const next = new Map(prev)
+        if (next.has(book.id)) {
+          next.delete(book.id)
         } else {
-          next.add(bookId)
+          next.set(book.id, book)
         }
         return next
       })
     )
   }
 
-  const selectedBookIDsArray = Array.from(selectedBookIDs)
+  const selectedBookIDsArray = selectedBooksArray.map((book) => book.id)
   const hasSameNumber = initialBookIDs.length === selectedBookIDsArray.length
   const hasEveryBook = initialBookIDs.every((id) =>
     selectedBookIDsArray.includes(id)
@@ -63,7 +54,7 @@ export const FormManageCollectionBooks: React.FC<{
   }
 
   const deselectAll = () => {
-    setSelectedBookIDs(new Set())
+    setSelectedBooks(new Map())
   }
 
   return (
@@ -72,21 +63,21 @@ export const FormManageCollectionBooks: React.FC<{
         <Button
           variant="outline"
           onClick={deselectAll}
-          disabled={selectedBookIDs.size === 0}
+          disabled={selectedBooks.size === 0}
           className="h-full"
         >
           <X className="mr-2 h-4 w-4" />
-          Deselect All ({selectedBookIDs.size})
+          Deselect All ({selectedBooks.size})
         </Button>
         <Button onClick={onSubmit} className="h-full" disabled={isNoChange}>
           <Plus className="mr-2 h-4 w-4" />
-          Save Selection ({selectedBookIDs.size})
+          Save Selection ({selectedBooks.size})
         </Button>
       </div>
 
-      {selectedBooks.length > 0 && (
+      {selectedBooksArray.length > 0 && (
         <div className="flex items-end overflow-x-scroll p-6 isolate">
-          {selectedBooks.map((b) => (
+          {selectedBooksArray.map((b) => (
             <SelectedBook
               key={b.id}
               book={b}

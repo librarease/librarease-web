@@ -14,12 +14,12 @@ import clsx from 'clsx'
 
 export const SelectedBook = memo<{
   book: Book
-  onDeselect?: (bookID: string) => void
+  onDeselect?: (book: Book) => void
   disabled?: boolean
 }>(({ book, onDeselect, disabled }) => {
   return (
     <div
-      onClick={() => (disabled ? null : onDeselect?.(book.id))}
+      onClick={() => (disabled ? null : onDeselect?.(book))}
       className={clsx(
         'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12',
         'hover:transition-all hover:-translate-y-4 hover:transform-none',
@@ -55,7 +55,7 @@ SelectedBook.displayName = 'SelectedBook'
 // Memoize the card component to prevent unnecessary re-renders
 export const UnselectedBook = memo<{
   book: Book
-  onSelect?: (bookID: string) => void
+  onSelect?: (book: Book) => void
   disabled?: boolean
 }>(({ book, onSelect, disabled }) => {
   return (
@@ -65,9 +65,9 @@ export const UnselectedBook = memo<{
           'cursor-pointer transition-all duration-200 hover:shadow-md',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
-        onClick={disabled ? undefined : () => onSelect?.(book.id)}
+        onClick={disabled ? undefined : () => onSelect?.(book)}
       >
-        <CardHeader className="pb-3 text-center">
+        <CardHeader className="text-center">
           <ViewTransition name={book.id}>
             <Image
               src={book.cover ?? '/book-placeholder.svg'}
