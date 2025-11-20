@@ -8,13 +8,16 @@ import { ViewTransition } from 'react'
 import { getBookStatus } from '@/lib/utils'
 
 export const DetailBook: React.FC<
-  React.PropsWithChildren<{ book: BookDetail }>
-> = ({ book, children }) => {
+  React.PropsWithChildren<
+    { book: BookDetail } & React.HTMLAttributes<HTMLDivElement>
+  >
+> = ({ book, children, ...props }) => {
   const status = getBookStatus(book.stats)
   const isAvailable = status === 'available'
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div {...props} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {/* Book Cover */}
       {/* Book Cover */}
       <div className="lg:col-span-1 grid place-items-center gap-4">
         <ViewTransition name={book.id}>
@@ -26,7 +29,9 @@ export const DetailBook: React.FC<
       {/* Book Information */}
       <div className="lg:col-span-2 space-y-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
+          <h1 className="text-3xl font-bold mb-2 text-[var(--color-vibrant)]">
+            {book.title}
+          </h1>
           <p className="text-xl text-muted-foreground mb-4">{book.author}</p>
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge
@@ -39,7 +44,7 @@ export const DetailBook: React.FC<
           </div>
         </div>
 
-        <Card>
+        <Card className="border-[var(--color-vibrant)]/20">
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
@@ -64,7 +69,7 @@ export const DetailBook: React.FC<
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-[var(--color-vibrant)]/20">
           <CardHeader>
             <CardTitle>Description</CardTitle>
           </CardHeader>

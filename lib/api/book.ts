@@ -49,17 +49,48 @@ export const getBook = async (query: GetBookQuery): GetBookResponse => {
 
 type CreateBookQuery = Pick<
   Book,
-  'title' | 'author' | 'year' | 'code' | 'library_id'
+  'title' | 'author' | 'year' | 'code' | 'library_id' | 'cover' | 'colors'
 >
 type CreateBookResponse = Promise<ResSingle<Pick<Book, 'id'>>>
 export const createBook = async (
-  query: CreateBookQuery
+  query: CreateBookQuery,
+  init?: RequestInit
 ): CreateBookResponse => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
   const response = await fetch(BOOKS_URL, {
+    ...init,
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
+    body: JSON.stringify(query),
+  })
+  if (!response.ok) {
+    const e = await response.json()
+    throw e
+  }
+  return response.json()
+}
+
+type UpdateBookQuery = Pick<
+  Book,
+  'title' | 'author' | 'year' | 'code' | 'colors'
+> & {
+  update_cover?: string
+}
+export const updateBook = async (
+  bookId: string,
+  query: UpdateBookQuery,
+  init?: RequestInit
+): Promise<ResSingle<Pick<Book, 'id'>>> => {
+  const url = new URL(`${BOOKS_URL}/${bookId}`)
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+
+  const response = await fetch(url.toString(), {
+    ...init,
+    method: 'PUT',
+    headers,
     body: JSON.stringify(query),
   })
   if (!response.ok) {

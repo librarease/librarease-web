@@ -16,13 +16,13 @@ import {
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { BellRing, Heart, Search } from 'lucide-react'
-import { DebouncedInput } from '@/components/common/DebouncedInput'
+import { BellRing, Heart } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Verify } from '@/lib/firebase/firebase'
 import { Button } from '@/components/ui/button'
 import { getListCollections } from '@/lib/api/collection'
 import { ListCollection } from '@/components/collections/ListCollection'
+import { SearchInput } from '@/components/common/SearchInput'
 
 export const metadata: Metadata = {
   title: `Collections · ${SITE_NAME}`,
@@ -100,13 +100,11 @@ export default async function UserCollections({
         </div>
       </nav>
 
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
-
-        <DebouncedInput
-          name="title"
+      <div className="flex justify-between gap-4">
+        <SearchInput
+          className="max-w-md"
           placeholder="Search by title"
-          className="pl-8 max-w-md"
+          name="title"
         />
       </div>
 

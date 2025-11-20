@@ -16,12 +16,11 @@ import {
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { Search } from 'lucide-react'
-import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
 import { Verify } from '@/lib/firebase/firebase'
 import { getListWatchlist } from '@/lib/api/watchlist'
+import { SearchInput } from '@/components/common/SearchInput'
 
 export const metadata: Metadata = {
   title: `Watchlist Books · ${SITE_NAME}`,
@@ -91,13 +90,11 @@ export default async function UserBooks({
         </div>
       </nav>
 
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
-
-        <DebouncedInput
-          name="title"
+      <div className="flex justify-between gap-4">
+        <SearchInput
+          className="max-w-md"
           placeholder="Search by title"
-          className="pl-8 max-w-md"
+          name="title"
         />
       </div>
 

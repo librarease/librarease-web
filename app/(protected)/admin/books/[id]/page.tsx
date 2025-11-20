@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Pen } from 'lucide-react'
 import Link from 'next/link'
 import { DetailBook } from '@/components/books/DetailBook'
+import { colorsToCssVars } from '@/lib/utils/color-utils'
 
 export default async function BookDetailsPage({
   params,
@@ -25,6 +26,8 @@ export default async function BookDetailsPage({
     console.log({ libRes: bookRes })
     return <div>{JSON.stringify(bookRes.message)}</div>
   }
+
+  const cssVars = colorsToCssVars(bookRes.data.colors)
 
   return (
     <div className="space-y-4">
@@ -45,7 +48,7 @@ export default async function BookDetailsPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <DetailBook book={bookRes.data}>
+      <DetailBook book={bookRes.data} style={cssVars}>
         <Button className="w-full" asChild>
           <Link href={`/admin/books/${bookRes.data.id}/edit`}>
             <Pen />

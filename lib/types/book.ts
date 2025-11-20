@@ -17,6 +17,7 @@ export type Book = WithCommon<{
   year: number
   code: string
   cover?: string
+  colors?: Colors
   library_id: string
   library?: Pick<Library, 'id' | 'name'>
   stats?: BookStats
@@ -40,4 +41,34 @@ export type ImportBookPreview = Pick<GetUploadURLResponse, 'path'> & {
       error?: string
     }
   >
+}
+
+type ColorOklch = {
+  l: number
+  c: number
+  h: number
+  space: 'oklch'
+}
+
+type ColorHex = {
+  hex: string
+  space: 'hex'
+}
+
+type ColorHsl = {
+  h: number
+  s: number
+  l: number
+  space: 'hsl'
+}
+
+type Color = ColorOklch | ColorHex | ColorHsl
+
+export type Colors = {
+  vibrant?: Color
+  dark_vibrant?: Color
+  light_vibrant?: Color
+  muted?: Color
+  dark_muted?: Color
+  light_muted?: Color
 }

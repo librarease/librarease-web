@@ -3,12 +3,13 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBook } from '@/lib/api/book'
-import { BookEditForm } from '@/components/books/book-edit-form'
+import { BookForm } from '@/components/books/BookForm'
+import { updateBookAction } from '@/lib/actions/update-book'
+import { Route } from 'next'
 
 export default async function EditBookPage({
   params,
@@ -40,11 +41,13 @@ export default async function EditBookPage({
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Edit Book</BreadcrumbPage>
+            <BreadcrumbLink href={`/admin/books/${id}` as Route}>
+              {bookRes.data.title}
+            </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <BookEditForm book={bookRes.data} />
+      <BookForm initialData={bookRes.data} onSubmitAction={updateBookAction} />
     </div>
   )
 }

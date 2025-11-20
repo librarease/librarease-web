@@ -6,7 +6,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { BookCreateForm } from '@/components/books/book-create-form'
+import { BookForm } from '@/components/books/BookForm'
+import { createBookAction } from '@/lib/actions/create-book'
 
 export default function NewBook() {
   return (
@@ -27,7 +28,16 @@ export default function NewBook() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <BookCreateForm />
+      <BookForm
+        initialData={{
+          title: '',
+          author: '',
+          year: 0,
+          code: '',
+          library_id: '',
+        }}
+        onSubmitAction={createBookAction}
+      />
     </div>
   )
 }

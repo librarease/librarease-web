@@ -30,6 +30,7 @@ import { Route } from 'next'
 import { ViewTransition } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { CardPrevBorrows } from './CardPrevBorrows'
+import { colorsToCssVars } from '@/lib/utils/color-utils'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
@@ -38,10 +39,13 @@ export const DetailBorrow: React.FC<
 > = ({ borrow, children }) => {
   const status = getBorrowStatus(borrow)
   const isDue = status === 'overdue'
+
+  const cssVars = colorsToCssVars(borrow.book.colors)
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="md:row-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={cssVars}>
+        <Card className="md:row-span-2 bg-[var(--color-light-vibrant)] dark:bg-[var(--color-dark-muted)]">
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>

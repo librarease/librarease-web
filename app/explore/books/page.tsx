@@ -17,10 +17,10 @@ import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { Search } from 'lucide-react'
-import { DebouncedInput } from '@/components/common/DebouncedInput'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
+import { colorsToCssVars } from '@/lib/utils/color-utils'
+import { SearchInput } from '@/components/common/SearchInput'
 
 export const metadata: Metadata = {
   title: `ExploreBooks · ${SITE_NAME}`,
@@ -85,20 +85,18 @@ export default async function ExploreBooks({
         </div>
       </nav>
 
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
-
-        <DebouncedInput
-          name="title"
+      <div className="flex justify-between gap-4">
+        <SearchInput
+          className="max-w-md"
           placeholder="Search by title"
-          className="pl-8 max-w-md"
+          name="title"
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {res.data.map((book) => (
           <Link key={book.id} href={`/explore/books/${book.id}`} passHref>
-            <ListBook book={book} />
+            <ListBook book={book} style={colorsToCssVars(book.colors)} />
           </Link>
         ))}
       </div>

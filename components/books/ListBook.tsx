@@ -12,13 +12,17 @@ import clsx from 'clsx'
 import { ViewTransition } from 'react'
 import { getBookStatus } from '@/lib/utils'
 
-export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
+export const ListBook: React.FC<
+  { book: Book } & React.HTMLAttributes<HTMLDivElement>
+> = ({ book, ...props }) => {
   const status = getBookStatus(book.stats)
 
   return (
     <Card
+      {...props}
       className={clsx(
         'group cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1'
+        // 'hover:bg-gradient-to-b from-[var(--color-light-vibrant)]/10 to-[var(--color-dark-vibrant)]/10'
       )}
     >
       <CardHeader className="pb-3">
@@ -45,7 +49,9 @@ export const ListBook: React.FC<{ book: Book }> = ({ book }) => {
             </ViewTransition>
           </div>
         </div>
-        <CardTitle className="text-lg line-clamp-1">{book.title}</CardTitle>
+        <CardTitle className="transition-colors duration-200 text-lg line-clamp-1 group-hover:text-[var(--color-light-vibrant)]">
+          {book.title}
+        </CardTitle>
         <CardDescription className="line-clamp-1">
           {book.author}
         </CardDescription>

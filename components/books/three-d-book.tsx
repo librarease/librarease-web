@@ -1,9 +1,10 @@
 import { Book } from '@/lib/types/book'
 import clsx from 'clsx'
 import Image from 'next/image'
+import React from 'react'
 
 export const ThreeDBook: React.FC<{
-  book: Pick<Book, 'title' | 'author' | 'cover' | 'year'>
+  book: Pick<Book, 'title' | 'author' | 'cover' | 'year' | 'colors'>
 }> = ({ book }) => {
   return (
     // container
@@ -36,7 +37,10 @@ export const ThreeDBook: React.FC<{
         </div>
         {/* left-side */}
         <div className="bg-accent absolute w-10 -left-5 h-80 [transform:rotate3D(0,1,0,-90deg)]">
-          <h2 className="text-sm w-80 h-56 pr-2.5 pt-2 text-right [transform-origin:0%_0%] [transform:rotate(90deg)_translateY(-40px)]">
+          <h2
+            style={{ color: 'var(--color-vibrant)' }}
+            className="text-sm w-80 h-56 pr-2.5 pt-2 text-right [transform-origin:0%_0%] [transform:rotate(90deg)_translateY(-40px)]"
+          >
             <span className="pr-3">{book.author}</span>
             <span>{book.year}</span>
           </h2>

@@ -23,6 +23,6 @@ export const getUploadURL = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
   return response.json()
 }

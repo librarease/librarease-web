@@ -11,6 +11,7 @@ import { getBook } from '@/lib/api/book'
 import BtnWatchlist from '@/components/books/BtnWatchlist'
 import { DetailBook } from '@/components/books/DetailBook'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
+import { colorsToCssVars } from '@/lib/utils/color-utils'
 
 export default async function BookDetailsPage({
   params,
@@ -28,6 +29,13 @@ export default async function BookDetailsPage({
   if ('error' in bookRes) {
     console.log({ libRes: bookRes })
     return <div>{JSON.stringify(bookRes.message)}</div>
+  }
+
+  const cssVars = colorsToCssVars(bookRes.data.colors)
+
+  // Map vibrant color to --color-primary for theme integration
+  if (cssVars['--color-light-vibrant']) {
+    cssVars['--color-primary'] = cssVars['--color-light-vibrant']
   }
 
   return (
@@ -49,7 +57,7 @@ export default async function BookDetailsPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <DetailBook book={bookRes.data}>
+      <DetailBook book={bookRes.data} style={cssVars}>
         <BtnWatchlist
           bookId={bookRes.data.id}
           isWatched={!!bookRes.data.watchlists?.[0]}
