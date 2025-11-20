@@ -218,7 +218,7 @@ export const FormEditBorrow: React.FC<{
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={new Date(field.value)}
+                        selected={new Date(field.value ?? '')}
                         onSelect={(v) => field.onChange(v?.toISOString())}
                         disabled={(date) =>
                           date < new Date(form.getValues('borrowed_at'))
@@ -227,7 +227,7 @@ export const FormEditBorrow: React.FC<{
                         autoFocus
                       />
                       <TimeInput
-                        value={field.value}
+                        value={field.value ?? ''}
                         onChange={field.onChange}
                       />
                     </PopoverContent>
@@ -290,7 +290,7 @@ export const FormEditBorrow: React.FC<{
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={new Date(field.value)}
+                        selected={new Date(field.value ?? '')}
                         onSelect={(v) => field.onChange(v?.toISOString())}
                         disabled={(date) =>
                           date < new Date(form.getValues('borrowed_at'))
@@ -299,7 +299,7 @@ export const FormEditBorrow: React.FC<{
                         autoFocus
                       />
                       <TimeInput
-                        value={field.value}
+                        value={field.value ?? ''}
                         onChange={field.onChange}
                       />
                     </PopoverContent>

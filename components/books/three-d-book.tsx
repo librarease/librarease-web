@@ -27,7 +27,7 @@ export const ThreeDBook: React.FC<{
           <Image
             src={book.cover ?? '/book-placeholder.svg'}
             width={224}
-            height={360}
+            height={320}
             alt={`${book.author} - ${book.year} cover`}
             className={clsx(
               'w-56 h-80 rounded-r-lg shadow-xl'
