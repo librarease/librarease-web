@@ -31,6 +31,7 @@ import { ViewTransition } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { CardPrevBorrows } from './CardPrevBorrows'
 import { colorsToCssVars } from '@/lib/utils/color-utils'
+import { BtnBorrowSeq } from './BtnBorrowSeq'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
@@ -45,7 +46,10 @@ export const DetailBorrow: React.FC<
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={cssVars}>
-        <Card className="md:row-span-2 bg-[var(--color-light-vibrant)] dark:bg-[var(--color-dark-muted)]">
+        <div className="place-self-center md:col-span-2 md:place-self-end">
+          <BtnBorrowSeq prevID={borrow.prev_id} nextID={borrow.next_id} />
+        </div>
+        <Card className="md:row-span-2 bg-(--color-light-vibrant) dark:bg-(--color-dark-muted)">
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>

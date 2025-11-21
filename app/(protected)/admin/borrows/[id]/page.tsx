@@ -11,16 +11,27 @@ import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 
 export default async function BorrowDetailsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{
+    status?: 'lost' | 'active' | 'overdue' | 'returned'
+    user_id?: string
+    book_id?: string
+    borrowed_at?: string
+    due_at?: string
+    returned_at?: string
+    lost_at?: string
+  }>
 }) {
   const { id } = await params
+  const sp = await searchParams
 
   const from = `/admin/borrows/${id}`
 
   const headers = await Verify({ from })
 
-  const [borrowRes] = await Promise.all([getBorrow({ id }, { headers })])
+  const [borrowRes] = await Promise.all([getBorrow({ id, ...sp }, { headers })])
 
   if ('error' in borrowRes) {
     return <div>{JSON.stringify(borrowRes.message)}</div>

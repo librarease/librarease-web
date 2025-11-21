@@ -24,7 +24,7 @@ export const SelectedBook = memo<{
         'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12',
         'hover:transition-all hover:-translate-y-4 hover:transform-none',
         'peer peer-hover:left-12 peer-hover:transition-all',
-        '[transform:perspective(800px)_rotateY(20deg)]',
+        'transform-[perspective(800px)_rotateY(20deg)]',
         !disabled && 'hover:cursor-pointer',
         'group'
       )}

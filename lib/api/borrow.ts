@@ -11,15 +11,14 @@ type GetListBorrowsQuery = QueryParams<
     library_id?: string
     status?: 'active' | 'overdue' | 'returned' | 'lost'
     user_id?: string
+    returned_at?: string
+    lost_at?: string
   }
 >
 type GetListBorrowsResponse = Promise<ResList<Borrow>>
 
 export const getListBorrows = async (
-  {
-    status,
-    ...query
-  }: GetListBorrowsQuery & { returned_at?: string; lost_at?: string },
+  { status, ...query }: GetListBorrowsQuery,
   init?: RequestInit
 ): GetListBorrowsResponse => {
   const url = new URL(BORROW_URL)
@@ -50,18 +49,51 @@ export const getListBorrows = async (
   return response.json()
 }
 
-type GetBorrowQuery = Pick<Borrow, 'id'>
+export type GetBorrowQuery = Pick<Borrow, 'id'> &
+  Pick<
+    GetListBorrowsQuery,
+    | 'book_id'
+    | 'subscription_id'
+    | 'user_id'
+    | 'library_id'
+    | 'borrowed_at'
+    | 'due_at'
+    | 'returned_at'
+    | 'lost_at'
+    | 'is_active'
+    | 'is_expired'
+    | 'sort_by'
+    | 'sort_in'
+    | 'status'
+  >
 type GetBorrowResponse = Promise<ResSingle<BorrowDetail>>
 export const getBorrow = async (
-  query: GetBorrowQuery,
+  { id, status, ...query }: GetBorrowQuery,
   init?: RequestInit
 ): GetBorrowResponse => {
-  const url = new URL(`${BORROW_URL}/${query.id}`)
+  const url = new URL(`${BORROW_URL}/${id}`)
   const headers = new Headers(init?.headers)
   headers.set('Content-Type', 'application/json')
   init = {
     ...init,
     headers,
+  }
+  Object.entries(query).forEach(([key, value]) => {
+    if (value) {
+      url.searchParams.append(key, String(value))
+    }
+  })
+
+  if (status) {
+    if (status === 'active') {
+      url.searchParams.append('is_active', 'true')
+    } else if (status === 'overdue') {
+      url.searchParams.append('is_overdue', 'true')
+    } else if (status === 'returned') {
+      url.searchParams.append('is_returned', 'true')
+    } else if (status === 'lost') {
+      url.searchParams.append('is_lost', 'true')
+    }
   }
   const response = await fetch(url.toString(), init)
   if (!response.ok) {

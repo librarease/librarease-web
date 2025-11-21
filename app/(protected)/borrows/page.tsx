@@ -157,6 +157,14 @@ export default async function Borrows({
             key={borrow.id}
             borrow={borrow}
             idx={skip + idx + 1}
+            searchParams={{
+              book_id,
+              borrowed_at,
+              due_at,
+              lost_at,
+              returned_at,
+              status,
+            }}
           />
         ))}
       </div>

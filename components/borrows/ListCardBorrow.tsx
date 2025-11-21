@@ -20,20 +20,38 @@ import {
 import Link from 'next/link'
 import { Route } from 'next'
 import { ViewTransition } from 'react'
+import { GetBorrowQuery } from '@/lib/api/borrow'
 
 export const ListCardBorrow: React.FC<
-  React.PropsWithChildren<{ borrow: Borrow; idx: number }>
-> = ({ borrow, idx, children }) => {
+  React.PropsWithChildren<{
+    borrow: Borrow
+    idx: number
+    searchParams: Pick<
+      GetBorrowQuery,
+      | 'status'
+      | 'user_id'
+      | 'book_id'
+      | 'borrowed_at'
+      | 'due_at'
+      | 'returned_at'
+      | 'lost_at'
+    >
+  }>
+> = ({ borrow, idx, children, searchParams }) => {
   const status = getBorrowStatus(borrow)
   const isDue = isBorrowDue(borrow)
+
+  const href = (`./borrows/${borrow.id}?` +
+    new URLSearchParams(
+      Object.entries(searchParams).filter(([_, v]) => Boolean(v))
+    ).toString()) as Route<string>
 
   return (
     <ViewTransition name={borrow.id} key={borrow.id}>
       <Card className={cn('relative', status === 'lost' && 'bg-destructive/5')}>
         <CardHeader>
           <Link
-            // FIXME
-            href={`./borrows/${borrow.id}` as Route}
+            href={href}
             className="flex justify-between items-start min-h-20"
           >
             <div>

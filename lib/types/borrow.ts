@@ -23,6 +23,8 @@ export type BorrowDetail = Omit<Borrow, 'book' | 'subscription' | 'staff'> & {
   book: Book
   subscription: SubscriptionDetail
   staff: Staff
+  prev_id?: string
+  next_id?: string
 }
 
 export type Return = WithCommon<{
