@@ -30,6 +30,7 @@ export async function updateBookAction(
     year: Number(formData.get('year')),
     code: formData.get('code') as string,
     imageFile: formData.get('imageFile') as File | null,
+    description: formData.get('description') as string,
   }
 
   // Handle cover file upload and color extraction

@@ -34,7 +34,7 @@ export default async function BorrowDetailsLayout({
     return <div>{JSON.stringify(borrowRes.message)}</div>
   }
   return (
-    <div className="space-y-4">
+    <>
       <nav className="backdrop-blur-sm sticky top-0 z-10">
         <h1 className="text-2xl font-semibold">{borrowRes.data.book.title}</h1>
         <div className="flex justify-between items-center">
@@ -70,6 +70,6 @@ export default async function BorrowDetailsLayout({
       {children}
       {lost}
       {returnNode}
-    </div>
+    </>
   )
 }

@@ -9,6 +9,8 @@ export type BookStats = {
     returning?: { returned_at?: string }
     lost?: { reported_at?: string }
   }
+  rating: number
+  review_count: number
 }
 
 export type Book = WithCommon<{
@@ -18,6 +20,7 @@ export type Book = WithCommon<{
   code: string
   cover?: string
   colors?: Colors
+  description?: string
   library_id: string
   library?: Pick<Library, 'id' | 'name'>
   stats?: BookStats

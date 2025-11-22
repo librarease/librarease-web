@@ -34,10 +34,11 @@ import Image from 'next/image'
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Book } from '@/lib/types/book'
 import { Spinner } from '../ui/spinner'
+import { Textarea } from '../ui/textarea'
 
 export type BookFormValues = Pick<
   Book,
-  'title' | 'author' | 'year' | 'code' | 'library_id' | 'cover'
+  'title' | 'author' | 'year' | 'code' | 'library_id' | 'cover' | 'description'
 > & {
   id?: string
   imageFile?: FileList
@@ -88,6 +89,7 @@ export const BookForm: React.FC<BookFormProps> = ({
       .custom<FileList>()
       .optional()
       .refine((v) => !v || v.length > 0, 'File required'),
+    description: z.string().optional(),
   })
 
   type FormValues = z.infer<typeof FormSchema>
@@ -100,6 +102,7 @@ export const BookForm: React.FC<BookFormProps> = ({
       code: initialData.code,
       library_id: initialData.library_id,
       cover: initialData.cover,
+      description: initialData.description,
     },
   })
 
@@ -146,6 +149,7 @@ export const BookForm: React.FC<BookFormProps> = ({
       if (data.imageFile && data.imageFile.length > 0) {
         formData.append('imageFile', data.imageFile[0])
       }
+      formData.append('description', data.description ?? '')
       formAction(formData)
     })
   }
@@ -315,6 +319,26 @@ export const BookForm: React.FC<BookFormProps> = ({
                   height={50}
                 />
               )}
+              {fieldState.error && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="description"
+          render={({ field, fieldState }) => (
+            <Field
+              data-invalid={fieldState.invalid}
+              className="flex flex-col col-span-2"
+            >
+              <FieldLabel>Description</FieldLabel>
+              <Textarea
+                placeholder="Description"
+                {...field}
+                onChange={field.onChange}
+                rows={4}
+              />
               {fieldState.error && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

@@ -49,7 +49,14 @@ export const getBook = async (query: GetBookQuery): GetBookResponse => {
 
 type CreateBookQuery = Pick<
   Book,
-  'title' | 'author' | 'year' | 'code' | 'library_id' | 'cover' | 'colors'
+  | 'title'
+  | 'author'
+  | 'year'
+  | 'code'
+  | 'library_id'
+  | 'cover'
+  | 'colors'
+  | 'description'
 >
 type CreateBookResponse = Promise<ResSingle<Pick<Book, 'id'>>>
 export const createBook = async (
@@ -74,7 +81,7 @@ export const createBook = async (
 
 type UpdateBookQuery = Pick<
   Book,
-  'title' | 'author' | 'year' | 'code' | 'colors'
+  'title' | 'author' | 'year' | 'code' | 'colors' | 'description'
 > & {
   update_cover?: string
 }

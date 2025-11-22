@@ -31,6 +31,7 @@ export async function createBookAction(
     code: formData.get('code') as string,
     library_id: formData.get('library_id') as string,
     imageFile: formData.get('imageFile') as File | null,
+    description: formData.get('description') as string,
   }
 
   // Handle cover file upload and color extraction

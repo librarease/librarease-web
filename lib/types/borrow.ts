@@ -1,5 +1,6 @@
 import { Book } from './book'
 import { WithCommon } from './common'
+import { Review } from './review'
 import { Staff } from './staff'
 import { Subscription, SubscriptionDetail } from './subscription'
 
@@ -23,6 +24,7 @@ export type BorrowDetail = Omit<Borrow, 'book' | 'subscription' | 'staff'> & {
   book: Book
   subscription: SubscriptionDetail
   staff: Staff
+  review?: Review
   prev_id?: string
   next_id?: string
 }

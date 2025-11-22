@@ -21,7 +21,10 @@ export const DetailBook: React.FC<
       {/* Book Cover */}
       <div className="lg:col-span-1 grid place-items-center gap-4">
         <ViewTransition name={book.id}>
-          <ThreeDBook book={book} />
+          <div className="relative">
+            <div className="absolute inset-0 blur-3xl opacity-80 bg-(--color-light-vibrant) dark:bg-(--color-dark-vibrant) rounded-lg" />
+            <ThreeDBook book={book} />
+          </div>
         </ViewTransition>
         {children}
       </div>
@@ -29,9 +32,7 @@ export const DetailBook: React.FC<
       {/* Book Information */}
       <div className="lg:col-span-2 space-y-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2 text-[var(--color-vibrant)]">
-            {book.title}
-          </h1>
+          <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
           <p className="text-xl text-muted-foreground mb-4">{book.author}</p>
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge
@@ -44,7 +45,7 @@ export const DetailBook: React.FC<
           </div>
         </div>
 
-        <Card className="border-[var(--color-vibrant)]/20">
+        <Card>
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
@@ -69,7 +70,7 @@ export const DetailBook: React.FC<
           </CardContent>
         </Card>
 
-        <Card className="border-[var(--color-vibrant)]/20">
+        <Card>
           <CardHeader>
             <CardTitle>Description</CardTitle>
           </CardHeader>

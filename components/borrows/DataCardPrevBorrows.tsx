@@ -11,7 +11,7 @@ import clsx from 'clsx'
 import { Skeleton } from '../ui/skeleton'
 import React, { ComponentProps, Suspense } from 'react'
 
-export const CardPrevBorrows: React.FC<
+export const DataCardPrevBorrows: React.FC<
   ComponentProps<typeof PrevBorrows>
 > = async ({ borrow }) => {
   return (
@@ -68,7 +68,7 @@ const PrevBorrows: React.FC<{ borrow: Borrow }> = async ({ borrow }) => {
             'shrink-0 relative left-0 transition-all not-first-of-type:-ml-12 brightness-75',
             'hover:transition-all hover:-translate-y-4 hover:transform-none hover:brightness-100',
             'peer peer-hover:left-12 peer-hover:transition-all',
-            '[transform:perspective(800px)_rotateY(20deg)]',
+            'transform-[perspective(800px)_rotateY(20deg)]',
             {
               'z-10 -translate-y-4 brightness-100 transform-none':
                 b.id === borrow.id,

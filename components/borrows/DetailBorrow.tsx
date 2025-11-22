@@ -29,9 +29,10 @@ import { ThreeDBook } from '@/components/books/three-d-book'
 import { Route } from 'next'
 import { ViewTransition } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
-import { CardPrevBorrows } from './CardPrevBorrows'
+import { DataCardPrevBorrows } from './DataCardPrevBorrows'
 import { colorsToCssVars } from '@/lib/utils/color-utils'
 import { BtnBorrowSeq } from './BtnBorrowSeq'
+import { Review } from '../reviews/Review'
 
 export const DetailBorrow: React.FC<
   React.PropsWithChildren<{
@@ -44,12 +45,12 @@ export const DetailBorrow: React.FC<
   const cssVars = colorsToCssVars(borrow.book.colors)
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={cssVars}>
+    <div className="mt-4 space-y-4" style={cssVars}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="place-self-center md:col-span-2 md:place-self-end">
           <BtnBorrowSeq prevID={borrow.prev_id} nextID={borrow.next_id} />
         </div>
-        <Card className="md:row-span-2 bg-(--color-light-vibrant) dark:bg-(--color-dark-muted)">
+        <Card className="md:row-span-2 bg-(--color-light-vibrant) dark:bg-(--color-dark-vibrant)">
           <CardHeader>
             <CardTitle>Book Information</CardTitle>
           </CardHeader>
@@ -212,6 +213,8 @@ export const DetailBorrow: React.FC<
         </Alert>
       ) : null}
 
+      {borrow.review ? <Review review={borrow.review} /> : null}
+
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
@@ -272,9 +275,9 @@ export const DetailBorrow: React.FC<
         </CardContent>
       </Card>
 
-      <CardPrevBorrows borrow={borrow} />
+      <DataCardPrevBorrows borrow={borrow} />
 
       {children}
-    </>
+    </div>
   )
 }
