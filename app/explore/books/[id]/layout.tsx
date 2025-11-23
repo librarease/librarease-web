@@ -6,13 +6,12 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { getBook } from '@/lib/api/book'
-import { Button } from '@/components/ui/button'
-import { Pen } from 'lucide-react'
-import Link from 'next/link'
 import { colorsToCssVars } from '@/lib/utils/color-utils'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { ViewTransition } from 'react'
 import { Route } from 'next'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default async function BookDetailsLayout({
   params,
@@ -38,15 +37,15 @@ export default async function BookDetailsLayout({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/admin/books">Books</BreadcrumbLink>
+            <BreadcrumbLink href="/explore/books">Books</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href={`/admin/books/${id}` as Route}>
+            <BreadcrumbLink href={`/explore/books/${id}` as Route}>
               {bookRes.data.title}
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -63,10 +62,7 @@ export default async function BookDetailsLayout({
               </div>
             </ViewTransition>
             <Button className="w-full" asChild>
-              <Link href={`/admin/books/${bookRes.data.id}/edit`}>
-                <Pen />
-                Edit
-              </Link>
+              <Link href={`/login?from=/books/${bookRes.data.id}`}>Login</Link>
             </Button>
           </div>
         </div>

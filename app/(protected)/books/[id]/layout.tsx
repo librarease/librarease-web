@@ -3,7 +3,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { getBook } from '@/lib/api/book'
@@ -11,6 +10,7 @@ import { colorsToCssVars } from '@/lib/utils/color-utils'
 import { ThreeDBook } from '@/components/books/three-d-book'
 import { ViewTransition } from 'react'
 import BtnWatchlist from '@/components/books/BtnWatchlist'
+import { Route } from 'next'
 
 export default async function BookDetailsLayout({
   params,
@@ -36,15 +36,17 @@ export default async function BookDetailsLayout({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/admin/books">Books</BreadcrumbLink>
+            <BreadcrumbLink href="/books">Books</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{bookRes.data.title}</BreadcrumbPage>
+            <BreadcrumbLink href={`/books/${id}` as Route}>
+              {bookRes.data.title}
+            </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

@@ -1,15 +1,7 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
 import { Verify } from '@/lib/firebase/firebase'
 import { getBook } from '@/lib/api/book'
 import { BookForm } from '@/components/books/BookForm'
 import { updateBookAction } from '@/lib/actions/update-book'
-import { Route } from 'next'
 
 export default async function EditBookPage({
   params,
@@ -28,26 +20,6 @@ export default async function EditBookPage({
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">{bookRes.data.title}</h1>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/admin/books">Books</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href={`/admin/books/${id}` as Route}>
-              {bookRes.data.title}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <BookForm initialData={bookRes.data} onSubmitAction={updateBookAction} />
-    </div>
+    <BookForm initialData={bookRes.data} onSubmitAction={updateBookAction} />
   )
 }

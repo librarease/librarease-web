@@ -45,7 +45,7 @@ export default function BtnWatchlist({
   return (
     <Button
       variant="outline"
-      className="w-full hover:bg-[var(--color-vibrant)] hover:text-background"
+      className="w-full hover:bg-(--color-light-vibrant) hover:text-white dark:hover:bg-(--color-dark-vibrant) dark:hover:text-white"
       onClick={handleAdd}
       disabled={pending}
     >
