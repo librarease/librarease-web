@@ -9,6 +9,7 @@ import { getListBorrows } from '@/lib/api/borrow'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Verify } from '@/lib/firebase/firebase'
+import { DataRecentBorrows } from '@/components/books/DataRecentBorrows'
 
 export default async function BookDetailsPage({
   params,
@@ -97,6 +98,8 @@ export default async function BookDetailsPage({
           <p className="text-sm leading-relaxed">{bookRes.data.description}</p>
         </CardContent>
       </Card>
+
+      <DataRecentBorrows book_id={id} />
 
       <Card>
         <CardHeader>

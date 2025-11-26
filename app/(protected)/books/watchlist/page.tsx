@@ -51,7 +51,7 @@ export default async function UserBooks({
     ...(library_id ? { library_id } : {}),
   } as const
 
-  const headers = await Verify({ from: '/books' })
+  const headers = await Verify({ from: '/books/watchlist' })
 
   const res = await getListWatchlist(query, { headers })
 
@@ -62,8 +62,9 @@ export default async function UserBooks({
 
   const prevSkip = skip - limit > 0 ? skip - limit : 0
 
-  const nextURL = `/books?skip=${skip + limit}&limit=${limit}` as const
-  const prevURL = `/books?skip=${prevSkip}&limit=${limit}` as const
+  const nextURL =
+    `/books/watchlist?skip=${skip + limit}&limit=${limit}` as const
+  const prevURL = `/books/watchlist?skip=${prevSkip}&limit=${limit}` as const
 
   return (
     <div className="space-y-4">

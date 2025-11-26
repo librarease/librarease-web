@@ -11,6 +11,7 @@ import { ThreeDBook } from '@/components/books/three-d-book'
 import { ViewTransition } from 'react'
 import BtnWatchlist from '@/components/books/BtnWatchlist'
 import { Route } from 'next'
+import { IsLoggedIn } from '@/lib/firebase/firebase'
 
 export default async function BookDetailsLayout({
   params,
@@ -21,7 +22,11 @@ export default async function BookDetailsLayout({
 }) {
   const { id } = await params
 
-  const [bookRes] = await Promise.all([getBook({ id, include_stats: 'true' })])
+  const claim = await IsLoggedIn()
+
+  const [bookRes] = await Promise.all([
+    getBook({ id, include_stats: 'true', user_id: claim?.librarease.id }),
+  ])
 
   if ('error' in bookRes) {
     console.log({ libRes: bookRes })

@@ -13,6 +13,7 @@ type GetListBorrowsQuery = QueryParams<
     user_id?: string
     returned_at?: string
     lost_at?: string
+    include_review?: 'true'
   }
 >
 type GetListBorrowsResponse = Promise<ResList<Borrow>>

@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import { Review } from '@/components/reviews/Review'
+import { DataRecentBorrows } from '@/components/books/DataRecentBorrows'
 
 export default async function BookDetailsPage({
   params,
@@ -102,6 +103,8 @@ export default async function BookDetailsPage({
           <p className="text-sm leading-relaxed">{bookRes.data.description}</p>
         </CardContent>
       </Card>
+
+      <DataRecentBorrows book_id={id} user_id={claim?.librarease.id} />
 
       {myReviewsRes.data.map((review) => (
         <Review key={review.id} review={review} />

@@ -18,6 +18,7 @@ export type Borrow = WithCommon<{
     'id' | 'user_id' | 'membership_id' | 'user' | 'membership'
   >
   staff: Pick<Staff, 'id' | 'name'>
+  review?: Pick<Review, 'id' | 'rating' | 'comment' | 'user' | 'created_at'> // available with include_review=true
 }>
 
 export type BorrowDetail = Omit<Borrow, 'book' | 'subscription' | 'staff'> & {
