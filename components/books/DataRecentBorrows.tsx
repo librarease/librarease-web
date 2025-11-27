@@ -6,8 +6,6 @@ import {
   Book,
   ChevronRight,
   Clock,
-  MessageSquare,
-  Star,
   Calendar,
   CalendarCheck,
 } from 'lucide-react'
@@ -20,6 +18,7 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 import { formatDate, getBorrowStatus } from '@/lib/utils'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import clsx from 'clsx'
 
 export const DataRecentBorrows: React.FC<
   React.ComponentProps<typeof RecentBorrows>
@@ -57,7 +56,7 @@ const RecentBorrows: React.FC<{
         sort_by: 'created_at',
         limit: 5,
         user_id,
-        include_review: 'true',
+        // include_review: 'true',
       },
       {
         headers,
@@ -97,7 +96,11 @@ const RecentBorrows: React.FC<{
         <Link
           href={((isAdmin ? '/admin' : '') + `/borrows/${borrow.id}`) as Route}
           key={borrow.id}
-          className="flex items-center justify-between p-4 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors"
+          className={clsx(
+            'flex flex-row justify-between items-center p-4 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors',
+            getBorrowStatus(borrow) === 'active' &&
+              'border-(--color-vibrant,var(--color-primary))'
+          )}
         >
           <div className="flex items-center gap-4">
             {isAdmin && (
@@ -123,25 +126,26 @@ const RecentBorrows: React.FC<{
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            {borrow.review ? (
-              <div className="flex items-center gap-1 text-sm">
-                <Star className="h-4 w-4 fill-(--color-vibrant,var(--color-yellow-400)) text-(--color-vibrant,var(--color-yellow-400))" />
-                <span>{borrow.review.rating}</span>
-              </div>
-            ) : borrow.returning ? (
-              <Badge variant="outline" className="text-xs">
-                <MessageSquare className="h-3 w-3 mr-1" />
-                No review
-              </Badge>
-            ) : null}
-            {getBorrowStatus(borrow)}
+          <div className="flex justify-between md:items-center gap-3">
+            <Badge
+              variant={
+                getBorrowStatus(borrow) === 'overdue'
+                  ? 'destructive'
+                  : getBorrowStatus(borrow) === 'active'
+                    ? 'default'
+                    : 'secondary'
+              }
+              className="capitalize hidden md:block"
+            >
+              {getBorrowStatus(borrow)}
+            </Badge>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </Link>
       ))}
+
       <div className="">
         <Link
           href={

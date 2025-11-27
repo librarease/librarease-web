@@ -67,5 +67,11 @@ export function colorsToCssVars(
     }
   }
 
+  // --color-muted is conflicting with tailwind's muted class, so we use --color-muted- instead
+  if (vars['--color-muted']) {
+    vars['--color-muted-'] = vars['--color-muted']
+    delete vars['--color-muted']
+  }
+
   return vars
 }

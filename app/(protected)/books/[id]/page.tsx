@@ -172,7 +172,7 @@ export default async function BookDetailsPage({
           <div className="mt-6 pt-6 border-t">
             {/* <Link href="/reviews"> */}
             <Button variant="outline" className="w-full bg-transparent">
-              View All Reviews
+              View All Reviews ({reviewsRes.meta.total})
             </Button>
             {/* </Link> */}
           </div>
