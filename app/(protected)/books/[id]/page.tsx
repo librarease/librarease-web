@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import { Review } from '@/components/reviews/Review'
 import { DataRecentBorrows } from '@/components/books/DataRecentBorrows'
+import { DateTime } from '@/components/common/DateTime'
 
 export default async function BookDetailsPage({
   params,
@@ -139,15 +140,17 @@ export default async function BookDetailsPage({
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback className="text-xs bg-primary/10">
-                        {review.user?.name?.slice(0, 2)}
+                        {review.user.name.slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
-                    <div>
-                      {review.user?.name}
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
+                    <div className="flex flex-col">
+                      <h4 className="font-medium">{review.user.name}</h4>
+                      <DateTime
+                        dateTime={review.created_at}
+                        className="text-xs text-muted-foreground"
+                      >
                         {formatDate(review.created_at)}
-                      </div>
+                      </DateTime>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -170,11 +173,18 @@ export default async function BookDetailsPage({
             ))}
           </div>
           <div className="mt-6 pt-6 border-t">
-            {/* <Link href="/reviews"> */}
-            <Button variant="outline" className="w-full bg-transparent">
-              View All Reviews ({reviewsRes.meta.total})
-            </Button>
-            {/* </Link> */}
+            <Link
+              href={`/books/${id}/reviews`}
+              aria-disabled={reviewsRes.meta.total === 0}
+            >
+              <Button
+                variant="outline"
+                className="w-full bg-transparent"
+                disabled={reviewsRes.meta.total === 0}
+              >
+                View All Reviews ({reviewsRes.meta.total})
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

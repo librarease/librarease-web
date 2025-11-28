@@ -29,8 +29,8 @@ export const ListBook: React.FC<
         <div className="grid place-items-center">
           {/* 3D Book Effect */}
           <div className="flex my-12">
-            <div className="bg-accent [transform:perspective(400px)_rotateY(314deg)] -mr-1 w-4">
-              <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 [transform:rotate(90deg)_translateY(-16px)] origin-top-left"></span>
+            <div className="bg-accent transform-[perspective(400px)_rotateY(314deg)] -mr-1 w-4">
+              <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 transform-[rotate(90deg)_translateY(-16px)] origin-top-left"></span>
             </div>
             <ViewTransition name={book.id}>
               <Image
@@ -40,7 +40,7 @@ export const ListBook: React.FC<
                 height={192}
                 className={clsx(
                   'shadow-xl rounded-r-md w-32 h-48 object-cover',
-                  '[transform:perspective(800px)_rotateY(14deg)]',
+                  'transform-[perspective(800px)_rotateY(14deg)]',
                   status === 'borrowed' && 'grayscale-75',
                   status === 'lost' && 'grayscale opacity-50'
                 )}
@@ -49,7 +49,7 @@ export const ListBook: React.FC<
             </ViewTransition>
           </div>
         </div>
-        <CardTitle className="transition-colors duration-200 text-lg line-clamp-1 group-hover:text-[var(--color-light-vibrant)]">
+        <CardTitle className="transition-colors duration-200 text-lg line-clamp-1 group-hover:text-(--color-light-vibrant)">
           {book.title}
         </CardTitle>
         <CardDescription className="line-clamp-1">

@@ -9,7 +9,7 @@ export type Review = WithCommon<{
   borrowing_id: string
   borrowing: Pick<Borrow, 'subscription_id' | 'borrowed_at' | 'due_at'>
   user: Pick<User, 'id' | 'name' | 'email'>
-  book: Pick<Book, 'title' | 'author' | 'code' | 'cover' | 'colors'>
+  book: Pick<Book, 'id' | 'title' | 'author' | 'code' | 'cover' | 'colors'>
 }>
 
 export type ReviewDetail = Review & {
