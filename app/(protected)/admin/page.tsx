@@ -11,6 +11,7 @@ import {
   Ticket,
   BookCopy,
   Workflow,
+  MessageSquare,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
@@ -37,6 +38,7 @@ const menuItems = [
   },
   { title: 'Borrows', icon: BookUser, href: '/admin/borrows' },
   { title: 'Collections', icon: BookCopy, href: '/admin/collections' },
+  { title: 'Reviews', icon: MessageSquare, href: '/admin/reviews' },
   { title: 'Jobs', icon: Workflow, href: '/admin/jobs' },
 ] as const
 

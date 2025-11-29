@@ -41,7 +41,13 @@ export const getListBorrows = async (
     }
   }
 
-  const response = await fetch(url.toString(), init)
+  const response = await fetch(url.toString(), {
+    ...init,
+    cache: 'force-cache',
+    next: {
+      revalidate: 60,
+    },
+  })
   if (!response.ok) {
     const e = await response.json()
     throw e
@@ -96,7 +102,13 @@ export const getBorrow = async (
       url.searchParams.append('is_lost', 'true')
     }
   }
-  const response = await fetch(url.toString(), init)
+  const response = await fetch(url.toString(), {
+    ...init,
+    cache: 'force-cache',
+    next: {
+      revalidate: 60,
+    },
+  })
   if (!response.ok) {
     const e = await response.json()
     throw e

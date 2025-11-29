@@ -27,7 +27,12 @@ export const getListBooks = async ({
     url.searchParams.append('ids', ids.join(','))
   }
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cache: 'force-cache',
+    next: {
+      revalidate: 60,
+    },
+  })
   return response.json()
 }
 

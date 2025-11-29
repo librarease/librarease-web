@@ -24,15 +24,17 @@ export default async function BorrowDetailsPage({
 
   const headers = await Verify({ from })
 
-  const [borrowRes] = await Promise.all([getBorrow({ id, ...sp }, { headers })])
-
-  if ('error' in borrowRes) {
-    return <div>{JSON.stringify(borrowRes.message)}</div>
-  }
-
   const claim = await IsLoggedIn()
   if (!claim || !claim.librarease) {
     redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
+  }
+
+  const [borrowRes] = await Promise.all([
+    getBorrow({ id, user_id: claim.librarease.id, ...sp }, { headers }),
+  ])
+
+  if ('error' in borrowRes) {
+    return <div>{JSON.stringify(borrowRes.message)}</div>
   }
 
   return <DetailBorrow borrow={borrowRes.data} />

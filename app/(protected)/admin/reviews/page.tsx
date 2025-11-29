@@ -26,9 +26,11 @@ export default async function ReviewsPage({
     limit?: number
     rating?: number
     comment?: string
+    book_id?: string
+    user_id?: string
   }>
 }) {
-  const { rating, comment, ...sp } = await searchParams
+  const { rating, comment, book_id, user_id, ...sp } = await searchParams
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
 
@@ -43,6 +45,8 @@ export default async function ReviewsPage({
   const res = await getListReviews(
     {
       library_id: activeLibraryID,
+      book_id,
+      user_id,
       skip,
       rating,
       comment,
@@ -65,27 +69,31 @@ export default async function ReviewsPage({
       {res.data.map((review) => (
         <Card key={review.id} className="hover:shadow-md transition-shadow">
           <CardContent>
-            <Link href={`/admin/books/${review.book.id}`} className="shrink-0">
-              <div className="flex gap-4">
-                {/* 3D Book Effect */}
-                <div className="shrink-0">
-                  <div className="flex">
-                    <div className="bg-accent transform-[perspective(400px)_rotateY(314deg)] -mr-1 w-4">
-                      <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 transform-[rotate(90deg)_translateY(-16px)] origin-top-left"></span>
-                    </div>
-                    <Image
-                      src={review.book.cover ?? '/book-placeholder.svg'}
-                      alt={review.book.title + "'s cover"}
-                      width={96}
-                      height={144}
-                      className={clsx(
-                        'shadow-xl rounded-r-md md:w-24 md:h-36 object-cover',
-                        'transform-[perspective(800px)_rotateY(14deg)]'
-                      )}
-                      priority
-                    />
+            <div className="flex gap-4">
+              {/* 3D Book Effect */}
+
+              <Link
+                href={`/admin/books/${review.book.id}`}
+                className="shrink-0"
+              >
+                <div className="flex">
+                  <div className="bg-accent transform-[perspective(400px)_rotateY(314deg)] -mr-1 w-4">
+                    <span className="inline-block text-nowrap text-[0.5rem] font-bold text-accent-foreground/50 transform-[rotate(90deg)_translateY(-16px)] origin-top-left"></span>
                   </div>
+                  <Image
+                    src={review.book.cover ?? '/book-placeholder.svg'}
+                    alt={review.book.title + "'s cover"}
+                    width={96}
+                    height={144}
+                    className={clsx(
+                      'shadow-xl rounded-r-md md:w-24 md:h-36 object-cover',
+                      'transform-[perspective(800px)_rotateY(14deg)]'
+                    )}
+                    priority
+                  />
                 </div>
+              </Link>
+              <Link href={`/admin/borrows/${review.borrowing_id}`}>
                 <div className="space-y-4">
                   <div className="flex flex-col md:flex-row md:justify-between">
                     <div>
@@ -109,7 +117,7 @@ export default async function ReviewsPage({
 
                   {/* Review text */}
                   <div>
-                    <p className="text-sm leading-relaxed mb-4 text-foreground">
+                    <p className="text-sm leading-relaxed mb-4 text-foreground line-clamp-4">
                       {review.comment}
                     </p>
 
@@ -132,8 +140,8 @@ export default async function ReviewsPage({
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       ))}

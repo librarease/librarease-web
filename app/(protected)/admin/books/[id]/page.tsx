@@ -161,8 +161,15 @@ export default async function BookDetailsPage({
             ))}
           </div>
           <div className="mt-6 pt-6 border-t">
-            <Link href="/admin/reviews">
-              <Button variant="outline" className="w-full bg-transparent">
+            <Link
+              href={`/admin/reviews?book_id=${id}`}
+              aria-disabled={reviewsRes.meta.total === 0}
+            >
+              <Button
+                variant="outline"
+                className="w-full bg-transparent"
+                disabled={reviewsRes.meta.total === 0}
+              >
                 View All Reviews ({reviewsRes.meta.total})
               </Button>
             </Link>

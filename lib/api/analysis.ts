@@ -23,7 +23,12 @@ export const getAnalysis = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cache: 'force-cache',
+    next: {
+      revalidate: 3000,
+    },
+  })
   return response.json()
 }
 
@@ -59,7 +64,12 @@ export const getOverdueAnalysis = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cache: 'force-cache',
+    next: {
+      revalidate: 3000,
+    },
+  })
   return response.json()
 }
 
@@ -82,7 +92,12 @@ export const getBorrowingHeatmapAnalysis = async (query: {
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cache: 'force-cache',
+    next: {
+      revalidate: 3000,
+    },
+  })
   return response.json()
 }
 
@@ -105,7 +120,12 @@ export const getReturningHeatmapAnalysis = async (query: {
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cache: 'force-cache',
+    next: {
+      revalidate: 3000,
+    },
+  })
   return response.json()
 }
 
@@ -125,6 +145,11 @@ export const getPowerUsersAnalysis = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), {
+    cache: 'force-cache',
+    next: {
+      revalidate: 3000,
+    },
+  })
   return response.json()
 }
