@@ -29,5 +29,10 @@ export async function undoLostAction(id: string) {
     return { error: 'failed to undo lost' }
   } finally {
     revalidatePath(`/admin/borrows/${id}`)
+    revalidatePath(`/admin/borrows`)
+    revalidatePath(`/borrows/${id}`)
+    revalidatePath('/borrows')
+    revalidatePath('/admin/books')
+    revalidatePath('/books')
   }
 }

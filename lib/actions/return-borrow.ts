@@ -37,5 +37,10 @@ export async function returnBorrowAction({
     return { error: 'failed to return borrow' }
   } finally {
     revalidatePath(`/admin/borrows/${id}`)
+    revalidatePath(`/admin/borrows`)
+    revalidatePath(`/borrows/${id}`)
+    revalidatePath('/borrows')
+    revalidatePath('/admin/books')
+    revalidatePath('/books')
   }
 }

@@ -27,6 +27,11 @@ export async function lostBorrowAction(
     }
     return { error: 'failed to mark as lost' }
   } finally {
-    revalidatePath('/admin/borrows')
+    revalidatePath(`/admin/borrows/${data.id}`)
+    revalidatePath(`/admin/borrows`)
+    revalidatePath(`/borrows/${data.id}`)
+    revalidatePath('/borrows')
+    revalidatePath('/admin/books')
+    revalidatePath('/books')
   }
 }
