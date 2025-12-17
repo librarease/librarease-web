@@ -1,5 +1,5 @@
 'use server'
-import { revalidatePath } from 'next/cache'
+
 import { lostBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 
@@ -27,11 +27,11 @@ export async function lostBorrowAction(
     }
     return { error: 'failed to mark as lost' }
   } finally {
-    revalidatePath(`/admin/borrows/${data.id}`)
-    revalidatePath(`/admin/borrows`)
-    revalidatePath(`/borrows/${data.id}`)
-    revalidatePath('/borrows')
-    revalidatePath('/admin/books')
-    revalidatePath('/books')
+    // revalidatePath(`/admin/borrows/${data.id}`)
+    // revalidatePath(`/admin/borrows`)
+    // revalidatePath(`/borrows/${data.id}`)
+    // revalidatePath('/borrows')
+    // revalidatePath('/admin/books')
+    // revalidatePath('/books')
   }
 }

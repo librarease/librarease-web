@@ -1,6 +1,5 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
 import { Verify } from '../firebase/firebase'
 import { updateBook } from '../api/book'
 import { processImageFile } from '../utils/image-processing'
@@ -57,8 +56,8 @@ export async function updateBookAction(
         error: res.error,
       }
     }
-    revalidatePath('/admin/books')
-    revalidatePath('/books')
+    // revalidatePath('/admin/books')
+    // revalidatePath('/books')
     return { message: 'Book updated successfully' }
   } catch (e) {
     console.error(e)

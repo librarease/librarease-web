@@ -27,12 +27,7 @@ export const getListBooks = async ({
     url.searchParams.append('ids', ids.join(','))
   }
 
-  const response = await fetch(url.toString(), {
-    cache: 'force-cache',
-    next: {
-      revalidate: 60,
-    },
-  })
+  const response = await fetch(url.toString())
   return response.json()
 }
 
@@ -48,12 +43,7 @@ export const getBook = async (query: GetBookQuery): GetBookResponse => {
       url.searchParams.append(key, String(value))
     }
   })
-  const response = await fetch(url.toString(), {
-    cache: 'force-cache',
-    next: {
-      revalidate: 30,
-    },
-  })
+  const response = await fetch(url.toString())
   return response.json()
 }
 
