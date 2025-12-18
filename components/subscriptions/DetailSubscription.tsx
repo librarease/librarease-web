@@ -1,8 +1,15 @@
 import { SubscriptionDetail } from '@/lib/types/subscription'
 
 import { formatDate } from '@/lib/utils'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  ArrowRight,
   Book,
   Calendar,
   CalendarClock,
@@ -19,10 +26,28 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { Route } from 'next'
+import { Button } from '../ui/button'
 
 export const DetailSubscription: React.FC<
-  React.PropsWithChildren<{ subscription: SubscriptionDetail }>
-> = ({ children, subscription }) => {
+  React.PropsWithChildren<{
+    subscription: SubscriptionDetail
+    isAdmin?: boolean
+  }>
+> = ({ children, subscription, isAdmin }) => {
+  const activeLoanLimit = subscription.active_loan_limit ?? 0
+  const activeLoanCount = subscription.active_loan_count ?? 0
+  const activeLoanFree = Math.max(activeLoanLimit - activeLoanCount, 0)
+  const activeLoanFreePct = activeLoanLimit
+    ? (activeLoanFree / activeLoanLimit) * 100
+    : 0
+
+  const usageLimit = subscription.usage_limit ?? 0
+  const usageCount = subscription.usage_count ?? 0
+  const usageRemaining = Math.max(usageLimit - usageCount, 0)
+  const usageRemainingPct = usageLimit ? (usageRemaining / usageLimit) * 100 : 0
+
+  const isExpired = new Date(subscription.expires_at) < new Date()
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -73,7 +98,7 @@ export const DetailSubscription: React.FC<
           </CardContent>
         </Card>
 
-        <Card className="order-first md:order-none">
+        <Card className="order-first md:order-0">
           <CardHeader>
             <CardTitle>User Information</CardTitle>
           </CardHeader>
@@ -125,43 +150,60 @@ export const DetailSubscription: React.FC<
           <CardHeader>
             <CardTitle>Usage</CardTitle>
           </CardHeader>
-          <CardContent className="grid md:grid-cols-2 gap-4">
+          <CardContent
+            style={
+              isExpired
+                ? ({
+                    '--color-primary': 'var(--primary-foreground)',
+                  } as Record<string, string>)
+                : undefined
+            }
+            className="grid md:grid-cols-2 gap-4"
+          >
             {subscription.active_loan_limit && (
               <div>
                 <div className="flex justify-between">
                   <span>Active Borrows</span>
-                  <span>
-                    {subscription.active_loan_count ?? 0} /{' '}
-                    {subscription.active_loan_limit}
+                  <span className="text-sm text-muted-foreground">
+                    Free {activeLoanFree} / {subscription.active_loan_limit}
                   </span>
                 </div>
-                <Progress
-                  value={
-                    ((subscription.active_loan_count ?? 0) /
-                      subscription.active_loan_limit) *
-                    100
-                  }
-                />
-              </div>
-            )}
-            {subscription.usage_limit && (
-              <div>
-                <div className="flex justify-between">
-                  <span>Borrowed Books</span>
-                  <span>
-                    {subscription.usage_count ?? 0} / {subscription.usage_limit}
-                  </span>
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>In use: {activeLoanCount}</span>
+                  <span>Capacity: {subscription.active_loan_limit}</span>
                 </div>
-                <Progress
-                  value={
-                    ((subscription.usage_count ?? 0) /
-                      subscription.usage_limit) *
-                    100
-                  }
-                />
+                <Progress value={activeLoanFreePct} className="mt-1" />
               </div>
             )}
+
+            <div>
+              <div className="flex justify-between">
+                <span>Total Borrows</span>
+                <span className="text-sm text-muted-foreground">
+                  Remaining {usageRemaining} / {usageLimit}
+                </span>
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>Used: {usageCount}</span>
+                <span>Quota: {usageLimit}</span>
+              </div>
+              <Progress value={usageRemainingPct} className="mt-1" />
+            </div>
           </CardContent>
+          <CardAction className="mx-auto">
+            <Link
+              href={
+                ((isAdmin ? '/admin' : '') +
+                  `/borrows?subscription_id=${subscription.id}`) as Route
+              }
+              className="self-center"
+            >
+              <Button variant="link" className="w-full bg-transparent">
+                View Borrows
+                <ArrowRight />
+              </Button>
+            </Link>
+          </CardAction>
         </Card>
       </div>
 

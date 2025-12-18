@@ -12,7 +12,14 @@ import type { Metadata, Route } from 'next'
 import { DateRangeSelector } from '@/components/dashboard/DateRangeSelector'
 import { IsLoggedIn } from '@/lib/firebase/firebase'
 import { redirect, RedirectType } from 'next/navigation'
-import { format, subMonths, parse, startOfDay, endOfDay } from 'date-fns'
+import {
+  format,
+  subMonths,
+  parse,
+  startOfDay,
+  endOfDay,
+  addDays,
+} from 'date-fns'
 import { getListLibraries } from '@/lib/api/library'
 import { DateRange } from 'react-day-picker'
 import { cookies } from 'next/headers'
@@ -62,7 +69,7 @@ export default async function DashboardPage({
 
   if (!to || !from) {
     const now = new Date()
-    const to = format(now, 'dd-MM-yyyy')
+    const to = format(addDays(now, 1), 'dd-MM-yyyy')
     const from = format(subMonths(now, 1), 'dd-MM-yyyy')
     const sp = new URLSearchParams()
     sp.set('from', from)

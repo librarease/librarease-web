@@ -66,7 +66,7 @@ export default async function SubscriptionDetailsPage({
           </Badge>
         </div>
       </nav>
-      <DetailSubscription subscription={subsRes.data}>
+      <DetailSubscription subscription={subsRes.data} isAdmin>
         <Button asChild>
           <Link
             href={`/admin/subscriptions/${subsRes.data.id}/edit`}

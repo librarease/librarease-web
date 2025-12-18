@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { returnBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 
@@ -36,8 +37,8 @@ export async function returnBorrowAction({
     }
     return { error: 'failed to return borrow' }
   } finally {
-    // revalidatePath(`/admin/borrows/${id}`)
-    // revalidatePath(`/admin/borrows`)
+    revalidatePath(`/admin/borrows/${id}`)
+    revalidatePath(`/admin/borrows`)
     // revalidatePath(`/borrows/${id}`)
     // revalidatePath('/borrows')
     // revalidatePath('/admin/books')

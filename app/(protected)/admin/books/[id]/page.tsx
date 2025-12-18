@@ -1,4 +1,11 @@
-import { Calendar, Hash, Library, Star } from 'lucide-react'
+import {
+  ArrowRight,
+  Calendar,
+  Hash,
+  Library,
+  MessageSquare,
+  Star,
+} from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatDate, getBookStatus } from '@/lib/utils'
@@ -120,60 +127,70 @@ export default async function BookDetailsPage({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            {reviewsRes.data.map((review) => (
-              <div
-                key={review.id}
-                className="border-b last:border-b-0 pb-6 last:pb-0"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="text-xs bg-primary/10">
-                        {review.user?.name?.slice(0, 2)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      {review.user?.name}
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        {formatDate(review.created_at)}
+          {reviewsRes.meta.total === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <MessageSquare className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              <p>No reviews yet</p>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-6">
+                {reviewsRes.data.map((review) => (
+                  <div
+                    key={review.id}
+                    className="border-b last:border-b-0 pb-6 last:pb-0"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="text-xs bg-primary/10">
+                            {review.user?.name?.slice(0, 2)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          {review.user?.name}
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            {formatDate(review.created_at)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`h-4 w-4 ${
+                              star <= review.rating
+                                ? 'fill-(--color-vibrant,var(--color-yellow-400)) text-(--color-vibrant,var(--color-yellow-400))'
+                                : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
                       </div>
                     </div>
+                    <p className="text-sm leading-relaxed text-foreground">
+                      {review.comment}
+                    </p>
                   </div>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-4 w-4 ${
-                          star <= review.rating
-                            ? 'fill-(--color-vibrant,var(--color-yellow-400)) text-(--color-vibrant,var(--color-yellow-400))'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <p className="text-sm leading-relaxed text-foreground">
-                  {review.comment}
-                </p>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="mt-6 pt-6 border-t">
-            <Link
-              href={`/admin/reviews?book_id=${id}`}
-              aria-disabled={reviewsRes.meta.total === 0}
-            >
-              <Button
-                variant="outline"
-                className="w-full bg-transparent"
-                disabled={reviewsRes.meta.total === 0}
-              >
-                View All Reviews ({reviewsRes.meta.total})
-              </Button>
-            </Link>
-          </div>
+              <div className="mt-6 pt-6 border-t">
+                <Link
+                  href={`/admin/reviews?book_id=${id}`}
+                  aria-disabled={reviewsRes.meta.total === 0}
+                >
+                  <Button
+                    variant="ghost"
+                    className="w-full bg-transparent"
+                    disabled={reviewsRes.meta.total === 0}
+                  >
+                    View All Reviews ({reviewsRes.meta.total})
+                    <ArrowRight />
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

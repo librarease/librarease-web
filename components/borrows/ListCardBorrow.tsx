@@ -35,6 +35,7 @@ export const ListCardBorrow: React.FC<
       | 'due_at'
       | 'returned_at'
       | 'lost_at'
+      | 'subscription_id'
     >
   }>
 > = ({ borrow, idx, children, searchParams }) => {

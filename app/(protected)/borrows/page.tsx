@@ -23,6 +23,7 @@ import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
 import { ModelFilter } from '@/components/common/ModelFilter'
 import { BookFilter, DateFilter } from '@/components/common/filters'
+// import { SubscriptionFilter } from '@/components/common/filters/SubscriptionFilter'
 
 export const metadata: Metadata = {
   title: `Borrows · ${SITE_NAME}`,
@@ -41,6 +42,7 @@ export default async function Borrows({
     due_at?: string
     returned_at?: string
     lost_at?: string
+    subscription_id?: string
   }>
 }) {
   const sp = await searchParams
@@ -53,6 +55,7 @@ export default async function Borrows({
   const due_at = sp?.due_at
   const returned_at = sp?.returned_at
   const lost_at = sp?.lost_at
+  const subscription_id = sp?.subscription_id
 
   const headers = await Verify({
     from: '/borrows',
@@ -74,6 +77,7 @@ export default async function Borrows({
       due_at,
       returned_at,
       lost_at,
+      subscription_id,
     },
     {
       headers,
@@ -141,9 +145,11 @@ export default async function Borrows({
             'due_at',
             'returned_at',
             'lost_at',
+            'subscription_id',
           ]}
         >
           <BookFilter />
+          {/* <SubscriptionFilter /> */}
           <DateFilter filterKey="borrowed_at" placeholder="Borrow Date" />
           <DateFilter filterKey="due_at" placeholder="Due Date" />
           <DateFilter filterKey="returned_at" placeholder="Returned Date" />
@@ -164,6 +170,7 @@ export default async function Borrows({
               lost_at,
               returned_at,
               status,
+              subscription_id,
             }}
           />
         ))}

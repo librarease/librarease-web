@@ -5,9 +5,9 @@ import {
   AlertCircle,
   Book,
   ChevronRight,
-  Clock,
   Calendar,
   CalendarCheck,
+  ArrowRight,
 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import Link from 'next/link'
@@ -27,9 +27,8 @@ export const DataRecentBorrows: React.FC<
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
-            {user_id ? 'Your Borrowing History' : 'Recent Borrows'}
+          <CardTitle>
+            {user_id ? 'Borrowing History' : 'Recent Borrows'}
           </CardTitle>
         </div>
       </CardHeader>
@@ -146,17 +145,16 @@ const RecentBorrows: React.FC<{
         </Link>
       ))}
 
-      <div className="">
-        <Link
-          href={
-            ((isAdmin ? '/admin' : '') + `/borrows?book_id=${book_id}`) as Route
-          }
-        >
-          <Button variant="outline" className="w-full bg-transparent">
-            View All Borrows ({res.meta.total})
-          </Button>
-        </Link>
-      </div>
+      <Link
+        href={
+          ((isAdmin ? '/admin' : '') + `/borrows?book_id=${book_id}`) as Route
+        }
+      >
+        <Button variant="ghost" className="w-full bg-transparent">
+          View All Borrows ({res.meta.total})
+          <ArrowRight />
+        </Button>
+      </Link>
     </div>
   )
 }

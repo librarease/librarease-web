@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { updateBorrow } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 
@@ -21,8 +22,8 @@ export async function updateBorrowAction(
     }
     return { error: 'failed to update borrow' }
   } finally {
-    // revalidatePath(`/admin/borrows/${data.id}`)
-    // revalidatePath(`/admin/borrows`)
+    revalidatePath(`/admin/borrows/${data.id}`)
+    revalidatePath(`/admin/borrows`)
     // revalidatePath(`/borrows/${data.id}`)
     // revalidatePath('/borrows')
   }

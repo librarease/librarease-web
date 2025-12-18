@@ -33,7 +33,7 @@ export default async function ReviewsLayout({
       <div className="flex justify-between">
         <SearchInput
           className="max-w-md"
-          placeholder="Search by review comment..."
+          placeholder="Search by comment"
           name="comment"
         />
         <div className="self-end inline-flex gap-2">

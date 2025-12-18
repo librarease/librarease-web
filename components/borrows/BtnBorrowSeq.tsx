@@ -6,6 +6,17 @@ import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Route } from 'next'
 
+const ConditionalLink: React.FC<{
+  href?: string
+  children: React.ReactNode
+}> = ({ href, children }) => {
+  return href ? (
+    <Link href={href as Route<string>}>{children}</Link>
+  ) : (
+    <>{children}</>
+  )
+}
+
 export const BtnBorrowSeq: React.FC<{ prevID?: string; nextID?: string }> = ({
   prevID,
   nextID,
@@ -17,24 +28,33 @@ export const BtnBorrowSeq: React.FC<{ prevID?: string; nextID?: string }> = ({
     params.append(key, value)
   })
 
+  const getHref = (id?: string) =>
+    id ? `./${id}?${params.toString()}` : undefined
+
   return (
     <div className="space-x-2">
-      {prevID && (
-        <Link href={`./${prevID}?${params.toString()}` as Route<string>}>
-          <Button variant="outline" size="sm">
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Previous
-          </Button>
-        </Link>
-      )}
-      {nextID && (
-        <Link href={`./${nextID}?${params.toString()}` as Route<string>}>
-          <Button variant="outline" size="sm">
-            <ChevronRight className="h-4 w-4 mr-1" />
-            Next
-          </Button>
-        </Link>
-      )}
+      <ConditionalLink href={getHref(prevID)}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!prevID}
+          aria-disabled={!prevID}
+        >
+          <ChevronLeft className="h-4 w-4 mr-1" />
+          Previous
+        </Button>
+      </ConditionalLink>
+      <ConditionalLink href={getHref(nextID)}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!nextID}
+          aria-disabled={!nextID}
+        >
+          <ChevronRight className="h-4 w-4 mr-1" />
+          Next
+        </Button>
+      </ConditionalLink>
     </div>
   )
 }

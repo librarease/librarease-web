@@ -18,9 +18,18 @@ import { IsLoggedIn } from '@/lib/firebase/firebase'
 import { logoutAction } from '@/lib/actions/logout'
 import { ModeToggle } from '@/components/button-toggle-theme'
 import { redirect, RedirectType } from 'next/navigation'
+import { addDays, format, subMonths } from 'date-fns'
+
+const now = new Date()
+const to = format(addDays(now, 1), 'dd-MM-yyyy')
+const from = format(subMonths(now, 1), 'dd-MM-yyyy')
 
 const menuItems = [
-  { title: 'Dashboard', icon: ChartSpline, href: '/admin/dashboard' },
+  {
+    title: 'Dashboard',
+    icon: ChartSpline,
+    href: `/admin/dashboard?from=${from}&to=${to}`,
+  },
   { title: 'Libraries', icon: Library, href: '/admin/libraries' },
   { title: 'Notifications', icon: BellIcon, href: '/notifications' },
   { title: 'Books', icon: Book, href: '/admin/books' },
