@@ -51,9 +51,6 @@ export const DetailBorrow: React.FC<
           <BtnBorrowSeq prevID={borrow.prev_id} nextID={borrow.next_id} />
         </div>
         <Card className="md:row-span-2 bg-(--color-light-vibrant) dark:bg-(--color-dark-vibrant)">
-          <CardHeader>
-            <CardTitle>Book Information</CardTitle>
-          </CardHeader>
           <CardContent className="grid place-self-center md:place-self-auto md:grid-cols-2 gap-4">
             {/* FIXME */}
             <Link href={`../books/${borrow.book.id}` as Route}>

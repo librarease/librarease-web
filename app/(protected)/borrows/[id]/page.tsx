@@ -2,6 +2,10 @@ import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import { getBorrow } from '@/lib/api/borrow'
 import { redirect, RedirectType } from 'next/navigation'
 import { DetailBorrow } from '@/components/borrows/DetailBorrow'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { Star } from 'lucide-react'
+import clsx from 'clsx'
 
 export default async function BorrowDetailsPage({
   params,
@@ -37,5 +41,21 @@ export default async function BorrowDetailsPage({
     return <div>{JSON.stringify(borrowRes.message)}</div>
   }
 
-  return <DetailBorrow borrow={borrowRes.data} />
+  return (
+    <DetailBorrow borrow={borrowRes.data}>
+      <Button variant="secondary" asChild>
+        <Link href={`/borrows/${borrowRes.data.id}/review`} className="w-full">
+          <Star
+            className={clsx(
+              'size-4 mr-2',
+              borrowRes.data.review
+                ? 'fill-yellow-400 text-yellow-400'
+                : 'text-gray-300'
+            )}
+          />
+          {borrowRes.data.review ? 'Edit Review' : 'Write a Review'}
+        </Link>
+      </Button>
+    </DetailBorrow>
+  )
 }

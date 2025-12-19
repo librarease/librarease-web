@@ -41,7 +41,7 @@ export const BtnBorrowSeq: React.FC<{ prevID?: string; nextID?: string }> = ({
           aria-disabled={!prevID}
         >
           <ChevronLeft className="h-4 w-4 mr-1" />
-          Previous
+          <span>Previous</span>
         </Button>
       </ConditionalLink>
       <ConditionalLink href={getHref(nextID)}>
@@ -52,7 +52,7 @@ export const BtnBorrowSeq: React.FC<{ prevID?: string; nextID?: string }> = ({
           aria-disabled={!nextID}
         >
           <ChevronRight className="h-4 w-4 mr-1" />
-          Next
+          <span>Next</span>
         </Button>
       </ConditionalLink>
     </div>

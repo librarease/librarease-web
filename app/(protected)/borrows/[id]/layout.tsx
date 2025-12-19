@@ -13,8 +13,10 @@ import { getBorrowStatus } from '@/lib/utils'
 export default async function BorrowDetailsLayout({
   children,
   params,
+  review,
 }: Readonly<{
   children: React.ReactNode
+  review: React.ReactNode
   params: Promise<{ id: string }>
 }>) {
   const { id } = await params
@@ -61,6 +63,7 @@ export default async function BorrowDetailsLayout({
         </div>
       </nav>
       {children}
+      {review}
     </>
   )
 }
