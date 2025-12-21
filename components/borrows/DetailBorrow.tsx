@@ -215,7 +215,7 @@ export const DetailBorrow: React.FC<
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
-            <CardTitle>Membership</CardTitle>
+            <CardTitle>Subscription</CardTitle>
             <Badge
               variant={
                 isSubscriptionActive(borrow.subscription)
@@ -231,7 +231,7 @@ export const DetailBorrow: React.FC<
         <CardContent className="grid gap-2 grid-cols-[max-content_1fr] md:grid-cols-[max-content_1fr_max-content_1fr] items-center">
           <CreditCard className="size-4" />
           <p>
-            <span className="font-medium">Membership:&nbsp;</span>
+            <span className="font-medium">Subscription:&nbsp;</span>
             <Link
               href={`../subscriptions/${borrow.subscription.id}` as Route}
               className="link"

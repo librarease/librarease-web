@@ -13,11 +13,17 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field'
 import { Textarea } from '../ui/textarea'
 import { reviewBorrowAction } from '@/lib/actions/review-borrow'
 import { Star } from 'lucide-react'
+import { BtnDeleteReview } from './BtnDeleteReview'
 
 const REVIEW_MAX_LENGTH = 512
 
 const BaseReviewSchema = z.object({
-  rating: z.coerce.number<number>().min(0).max(5),
+  rating: z
+    .number()
+    .min(1, {
+      error: 'Please provide a rating of at least 1 star',
+    })
+    .max(5),
   comment: z.string().max(REVIEW_MAX_LENGTH).optional(),
 })
 const UpdateReviewSchema = BaseReviewSchema.extend({
@@ -42,6 +48,7 @@ export const FormReview: React.FC<{
         }
       : {
           borrow_id: borrow.id,
+          rating: 0,
         },
   })
 
@@ -107,6 +114,7 @@ export const FormReview: React.FC<{
                   </span>
                 )}
               </div>
+              {fieldState.error && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -133,11 +141,24 @@ export const FormReview: React.FC<{
             </Field>
           )}
         />
-
-        <Button type="reset" variant="ghost" onClick={onReset}>
+        {borrow.review && (
+          <BtnDeleteReview
+            type="button"
+            className="col-span-2"
+            id={borrow.review.id}
+            borrowID={borrow.id}
+            variant="secondary"
+          />
+        )}
+        <Button
+          type="reset"
+          variant="ghost"
+          onClick={onReset}
+          disabled={!form.formState.isDirty}
+        >
           Reset
         </Button>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending || !form.formState.isDirty}>
           {isPending && <Spinner />}
           Submit Review
         </Button>

@@ -102,7 +102,9 @@ export default async function Memberships({
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((m) => (
-          <ListCardMembership key={m.id} membership={m} />
+          <Link href={`/admin/memberships/${m.id}`} key={m.id}>
+            <ListCardMembership membership={m} />
+          </Link>
         ))}
       </div>
 

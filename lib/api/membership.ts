@@ -23,9 +23,11 @@ export const getListMemberships = async (
   return response.json()
 }
 
-type GetBookQuery = Pick<Membership, 'id'>
-type GetBookResponse = Promise<ResSingle<Membership>>
-export const getBook = async (query: GetBookQuery): GetBookResponse => {
+type GetMembershipQuery = Pick<Membership, 'id'>
+type GetMembershipResponse = Promise<ResSingle<Membership>>
+export const getMembership = async (
+  query: GetMembershipQuery
+): GetMembershipResponse => {
   const url = new URL(`${MEMBERSHIPS_URL}/${query.id}`)
   const response = await fetch(url.toString())
   return response.json()

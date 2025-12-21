@@ -18,9 +18,5 @@ export default async function SubscriptionEditPage({
     return <div>{JSON.stringify(subRes.message)}</div>
   }
 
-  return (
-    <div className="grid place-items-center">
-      <FormEditSubscription sub={subRes.data} />
-    </div>
-  )
+  return <FormEditSubscription sub={subRes.data} />
 }

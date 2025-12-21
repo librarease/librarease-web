@@ -4,19 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button } from '../ui/button'
-import { cn, formatDate } from '@/lib/utils'
-import { CalendarIcon } from 'lucide-react'
-import { Calendar } from '../ui/calendar'
-import { useCallback, useTransition } from 'react'
-import { TimeInput } from '../ui/time-input'
-import { Separator } from '../ui/separator'
-import { BtnDeleteSubscription } from './BtnDeleteSubscription'
-import { SubscriptionDetail } from '@/lib/types/subscription'
-import { updateSubscriptionAction } from '@/lib/actions/update-subscription'
-import { Alert, AlertTitle } from '../ui/alert'
+import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
+import { useCallback, useTransition } from 'react'
+import { Input } from '@/components/ui/input'
+import { Membership } from '@/lib/types/membership'
+import { Spinner } from '../ui/spinner'
 import {
   InputGroup,
   InputGroupAddon,
@@ -25,113 +18,103 @@ import {
   InputGroupTextarea,
 } from '../ui/input-group'
 
-const NOTE_MAX_LENGTH = 512
+const DESCRIPTION_MAX_LENGTH = 512
 
-const FormSchema = z
-  .object({
-    id: z.string(),
-    expires_at: z.string(),
-    amount: z.coerce.number<number>().nonnegative(),
-    loan_period: z.coerce.number<number>().positive(),
-    active_loan_limit: z.coerce.number<number>().nonnegative(),
-    usage_limit: z.coerce.number<number>().nonnegative(),
-    fine_per_day: z.coerce.number<number>().nonnegative(),
-    note: z.string().max(NOTE_MAX_LENGTH).optional(),
-  })
-  .superRefine((data, ctx) => {
-    // active loan limit must be equal or less than usage limit
-    if (data.usage_limit > 0 && data.active_loan_limit > data.usage_limit) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Active loan limit must be equal or less than usage limit',
-        path: ['active_loan_limit'],
-      })
-    }
-  })
+const BaseSchema = z.object({
+  library_id: z.uuid(),
+  name: z.string().min(1).max(100),
+  loan_period: z.coerce.number<number>().positive(),
+  duration: z.coerce.number<number>().positive().optional(),
+  active_loan_limit: z.coerce.number<number>().positive(),
+  fine_per_day: z.coerce.number<number>().positive(),
+  price: z.coerce.number<number>().nonnegative(),
+  usage_limit: z.coerce.number<number>().nonnegative(),
+  description: z.string().max(DESCRIPTION_MAX_LENGTH).optional(),
+})
 
-export const FormEditSubscription: React.FC<{
-  sub: SubscriptionDetail
-}> = ({ sub }) => {
+const UpdateSchema = BaseSchema.extend({
+  id: z.uuid(),
+})
+
+const FormSchema = z.union([BaseSchema, UpdateSchema])
+
+export const FormMembership: React.FC<{
+  libraryID: string
+  membership?: Membership
+  onSubmitAction: (
+    data: z.infer<typeof FormSchema>
+  ) => Promise<{ error: string } | { message: string }>
+}> = ({ libraryID, membership, onSubmitAction }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: sub,
+    defaultValues: membership ?? {
+      library_id: libraryID,
+      name: '',
+      active_loan_limit: 0,
+      duration: 0,
+      fine_per_day: 0,
+      loan_period: 0,
+      price: 0,
+      usage_limit: 0,
+    },
   })
-
-  const [isPending, startTransition] = useTransition()
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    startTransition(async () => {
-      const res = await updateSubscriptionAction(data)
-      if ('error' in res) {
-        toast.error(res.error)
-        return
-      }
-      toast(res.message)
-    })
-  }
 
   const onReset = useCallback(() => {
     form.reset()
   }, [form])
 
+  const [isPending, startTransition] = useTransition()
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log('Submitting membership data:', data)
+    startTransition(async () => {
+      const res = await onSubmitAction(data)
+      if ('error' in res) {
+        toast.error(res.error, { richColors: true })
+      } else {
+        toast.success(res.message)
+      }
+    })
+  }
+
   return (
-    <form id="edit-subscription-form" onSubmit={form.handleSubmit(onSubmit)}>
+    <form id="membership-form" onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup className="grid gap-4 md:grid-cols-2 max-w-md mx-auto">
         <Controller
+          name="name"
           control={form.control}
-          name="expires_at"
           render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="expires_at">Expiration Date</FieldLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={'outline'}
-                    className={cn(!field.value && 'text-muted-foreground')}
-                  >
-                    {field.value ? (
-                      formatDate(field.value, {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={new Date(field.value)}
-                    onSelect={(v) => field.onChange(v?.toISOString())}
-                    captionLayout="dropdown"
-                    autoFocus
-                  />
-                  <TimeInput value={field.value} onChange={field.onChange} />
-                </PopoverContent>
-              </Popover>
+            <Field data-invalid={fieldState.invalid} className="col-span-2">
+              <FieldLabel htmlFor="name">Name</FieldLabel>
+              <Input
+                {...field}
+                id="name"
+                aria-invalid={fieldState.invalid}
+                placeholder="Membership Name"
+                autoComplete="off"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
 
         <Controller
-          name="amount"
+          name="duration"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="amount">Amount</FieldLabel>
+              <FieldLabel htmlFor="duration">Duration</FieldLabel>
               <InputGroup>
                 <InputGroupInput
                   {...field}
                   type="number"
-                  id="amount"
+                  id="duration"
                   aria-invalid={fieldState.invalid}
-                  placeholder="Amount"
+                  placeholder="Duration"
                   autoComplete="off"
                 />
                 <InputGroupAddon align="inline-end">
-                  <InputGroupText>pts</InputGroupText>
+                  <InputGroupText>day</InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -181,7 +164,7 @@ export const FormEditSubscription: React.FC<{
                   autoComplete="off"
                 />
                 <InputGroupAddon align="inline-end">
-                  <InputGroupText>book</InputGroupText>
+                  <InputGroupText>day</InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -205,7 +188,7 @@ export const FormEditSubscription: React.FC<{
                   autoComplete="off"
                 />
                 <InputGroupAddon align="inline-end">
-                  <InputGroupText>pts</InputGroupText>
+                  <InputGroupText>day</InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -228,7 +211,31 @@ export const FormEditSubscription: React.FC<{
                   autoComplete="off"
                 />
                 <InputGroupAddon align="inline-end">
-                  <InputGroupText>book</InputGroupText>
+                  <InputGroupText>day</InputGroupText>
+                </InputGroupAddon>
+              </InputGroup>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="price"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="price">Price</FieldLabel>
+              <InputGroup>
+                <InputGroupInput
+                  {...field}
+                  type="number"
+                  id="price"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Price"
+                  autoComplete="off"
+                />
+                <InputGroupAddon align="inline-end">
+                  <InputGroupText>pts</InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -238,14 +245,14 @@ export const FormEditSubscription: React.FC<{
 
         <Controller
           control={form.control}
-          name="note"
+          name="description"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="col-span-2">
-              <FieldLabel htmlFor="note">Note</FieldLabel>
+              <FieldLabel htmlFor="description">Description</FieldLabel>
               <InputGroup>
                 <InputGroupTextarea
-                  id="note"
-                  placeholder="Add a note"
+                  id="description"
+                  placeholder="Write a brief description about this membership."
                   {...field}
                   onChange={field.onChange}
                   rows={4}
@@ -253,25 +260,13 @@ export const FormEditSubscription: React.FC<{
 
                 <InputGroupAddon align="block-end">
                   <InputGroupText className="text-muted-foreground text-xs">
-                    {field.value?.length ?? 0}/{NOTE_MAX_LENGTH}
+                    {field.value?.length ?? 0}/{DESCRIPTION_MAX_LENGTH}
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
               {fieldState.error && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
-        />
-        <Alert className="flex-none col-span-2">
-          <AlertTitle>
-            Changes will be applied for future borrows only.
-          </AlertTitle>
-        </Alert>
-        <Separator className="my-2 col-span-2" />
-        <BtnDeleteSubscription
-          type="button"
-          className="col-span-2"
-          sub={sub}
-          variant="secondary"
         />
         <Button
           type="reset"
@@ -281,7 +276,8 @@ export const FormEditSubscription: React.FC<{
         >
           Reset
         </Button>
-        <Button type="submit" disabled={!form.formState.isDirty || isPending}>
+        <Button type="submit">
+          {isPending && <Spinner />}
           Submit
         </Button>
       </FieldGroup>
