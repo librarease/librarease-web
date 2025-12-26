@@ -19,19 +19,33 @@ export const TabLink = <T extends string>({
         className
       )}
     >
-      {tabs.map(({ name, href }) => (
-        <Link
-          replace
-          key={href}
-          href={href}
-          className={cn(
-            'px-2 py-1 text-center text-sm font-medium text-foreground flex items-center justify-center min-w-[80px]', // min-w ensures same width
-            activeHref === href && 'bg-background rounded-md shadow-sm'
-          )}
-        >
-          {name}
-        </Link>
-      ))}
+      {tabs.map(({ name, href }) => {
+        const isActive = activeHref === href
+        const shouldReplace = activeHref.includes('?') && href.includes('?')
+        const tabClassName = cn(
+          'px-2 py-1 text-center text-sm font-medium text-foreground flex items-center justify-center min-w-[80px]',
+          isActive && 'bg-background rounded-md shadow-sm'
+        )
+
+        if (isActive) {
+          return (
+            <a key={href} href="" aria-current="page" className={tabClassName}>
+              {name}
+            </a>
+          )
+        }
+
+        return (
+          <Link
+            replace={shouldReplace}
+            key={href}
+            href={href}
+            className={tabClassName}
+          >
+            {name}
+          </Link>
+        )
+      })}
     </div>
   )
 }

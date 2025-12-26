@@ -19,14 +19,6 @@ const nextConfig: NextConfig = {
 
   reactCompiler: true,
 
-  /* config options here */
-  env: {
-    API_URL: process.env.API_URL,
-    SESSION_COOKIE_NAME: process.env.SESSION_COOKIE_NAME,
-    APP_URL: process.env.APP_URL,
-    LIBRARY_COOKIE_NAME: process.env.LIBRARY_COOKIE_NAME,
-  },
-
   rewrites: async () => {
     return [
       {
