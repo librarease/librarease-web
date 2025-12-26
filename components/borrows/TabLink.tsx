@@ -29,7 +29,7 @@ export const TabLink = <T extends string>({
 
         if (isActive) {
           return (
-            <a key={href} href="" aria-current="page" className={tabClassName}>
+            <a key={href} className={tabClassName}>
               {name}
             </a>
           )
