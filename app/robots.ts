@@ -14,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
         '/users/*',
       ],
     },
-    sitemap: `${process.env.APP_URL}/sitemap.xml`,
+    sitemap: `${process.env.NEXT_PUBLIC_APP_URL}/sitemap.xml`,
   }
 }

@@ -19,6 +19,10 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 COPY . .
 
+# Accept build arguments for NEXT_PUBLIC environment variables
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+
 RUN yarn
 
 RUN yarn build

@@ -50,9 +50,8 @@ export async function loginAction(
   cookieStore.set(sessionName, token, {
     maxAge,
     httpOnly: true,
-    domain: `.${process.env.APP_URL?.slice(process.env.APP_URL.indexOf('://') + 3)}`,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'strict',
   })
 
   // set active library

@@ -1,3 +1,4 @@
-// utilized next.config.js rewrites
-// cookies are available in client requests
-export const BASE_URL = `${process.env.APP_URL}/api/v1`
+export const BASE_URL =
+  typeof window === 'undefined'
+    ? `${process.env.API_URL}/api/v1`
+    : `${process.env.NEXT_PUBLIC_APP_URL}/api/v1`
