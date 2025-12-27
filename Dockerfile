@@ -19,6 +19,9 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 COPY . .
 
+# Set NODE_ENV to production for build
+ENV NODE_ENV=production
+
 # Accept build arguments for NEXT_PUBLIC environment variables
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
