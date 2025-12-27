@@ -1,6 +1,8 @@
-import { BASE_URL } from './common'
+// import { BASE_URL } from './common'
 
-const TERMS_URL = `${BASE_URL}/terms`
+// NOTE: static generation only, so we can use NEXT_PUBLIC_APP_URL
+
+const TERMS_URL = `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/terms`
 
 export const getTermsDoc = async (): Promise<string> => {
   const url = new URL(TERMS_URL)
@@ -9,7 +11,7 @@ export const getTermsDoc = async (): Promise<string> => {
   return response.text()
 }
 
-const PRIVACY_URL = `${BASE_URL}/privacy`
+const PRIVACY_URL = `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/privacy`
 
 export const getPrivacyDoc = async (): Promise<string> => {
   const url = new URL(PRIVACY_URL)
