@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## LibrarEase Web
 
-## Getting Started
+A Next.js app for LibrarEase. This repo uses Yarn.
 
-First, run the development server:
+**Prereqs**
+
+- Node.js 18+ (or 20+ recommended)
+- Yarn (classic) — packageManager is set in `package.json`
+- Redis (local or hosted)
+- Firebase project (client SDK + Admin credentials)
+
+## Quick Setup
+
+1. Install deps
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Configure environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy the example and fill required values:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env
+# or create .env.local in development
+```
 
-## Learn More
+Required variables (see `.env.example` for the full list):
 
-To learn more about Next.js, take a look at the following resources:
+- Firebase client: `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_PROJECT_ID`
+- Firebase Admin: `GOOGLE_APPLICATION_CREDENTIALS` (absolute path to the service account JSON)
+- Redis: `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD` (optional), `REDIS_DB`
+- App URLs: `API_URL`, `NEXT_PUBLIC_APP_URL`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Start Redis
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+On macOS (Homebrew):
 
-## Deploy on Vercel
+```bash
+brew install redis
+brew services start redis
+# default host: localhost, port: 6379
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Or via Docker:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+docker run -p 6379:6379 --name redis -d redis:7
+```
+
+4. Run the app
+
+```bash
+yarn dev
+# build & run production
+yarn build && yarn start
+```
+
+Open http://localhost:3000 to view.
+
+## Scripts
+
+- `yarn dev`: Next.js dev server (Turbopack)
+- `yarn build`: Production build
+- `yarn start`: Start production server
+- `yarn lint`: ESLint
+- `yarn format`: Prettier format
+- `yarn typecheck`: TypeScript type checking
+
+## Firebase Notes
+
+- Create a Firebase project and enable Authentication as needed
+- Place the Admin service account JSON and point `GOOGLE_APPLICATION_CREDENTIALS` to it
+- Client keys go in `FIREBASE_*` variables; do not commit secrets
+
+## Observability (optional)
+
+If using OpenTelemetry, configure `OTEL_*` variables per `.env.example`.
+
+## License
+
+This software is licensed under the PolyForm Noncommercial License 1.0.0. See the `LICENSE` file for terms. For commercial licensing inquiries, contact: solidifyarmor@gmail.com.
