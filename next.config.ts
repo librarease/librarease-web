@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
 
   experimental: {
-    // for event source stream
-    proxyTimeout: 0,
     viewTransition: true,
   },
 
