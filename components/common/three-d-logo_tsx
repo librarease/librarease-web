@@ -1,0 +1,91 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+import * as THREE from 'three'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
+
+export default function LibraryIcon() {
+  const mountRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    // 1. Scene Setup
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000)
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // Improve sharpness
+    renderer.setSize(200, 200) // Match container size
+
+    // Keep the canvas inside its container so centering works
+    renderer.domElement.style.width = '100%'
+    renderer.domElement.style.height = '100%'
+    renderer.domElement.style.display = 'block'
+    const mountEl = mountRef.current
+    if (!mountEl) return
+    mountEl.appendChild(renderer.domElement)
+
+    // 2. Create the "Stacked Books" Group
+    const group = new THREE.Group()
+    const primaryColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--color-primary')
+        .trim() || '#4f46e5'
+    const material = new THREE.MeshStandardMaterial({ color: primaryColor })
+
+    const heights = [2.5, 1.8, 2.2, 2.2] // first/last tallest, second shortest, third medium
+    const baseY = -1 // anchor so all books rest on a shared baseline
+
+    for (let i = 0; i < 4; i++) {
+      const height = heights[i]
+      const bookGeom = new RoundedBoxGeometry(0.4, height, 1.7, 3, 0.07)
+      const book = new THREE.Mesh(bookGeom, material)
+      book.position.x = (i - 1.5) * 0.6
+      book.position.y = baseY + height / 2
+
+      if (i === 3) {
+        // Tilt the last book
+        book.rotation.z = Math.PI / 10
+        book.position.x += 0.1
+      }
+
+      group.add(book)
+    }
+    scene.add(group)
+
+    // 3. Lighting
+    const light = new THREE.DirectionalLight(0xffffff, 1)
+    light.position.set(2, 2, 5)
+    scene.add(light, new THREE.AmbientLight(0xffffff, 0.5))
+
+    camera.position.z = 5
+
+    // 4. Mouse Tracking Logic
+    const onMouseMove = (event: MouseEvent) => {
+      // Normalize mouse coordinates to -1 to +1
+      const x = (event.clientX / window.innerWidth) * 2 - 1
+      const y = -(event.clientY / window.innerHeight) * 2 + 1
+
+      // Rotate the group slightly based on mouse
+      group.rotation.y = x * 0.5
+      group.rotation.x = -y * 0.5
+    }
+
+    window.addEventListener('mousemove', onMouseMove)
+
+    // 5. Animation Loop
+    const animate = () => {
+      requestAnimationFrame(animate)
+      renderer.render(scene, camera)
+    }
+    animate()
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      mountEl.removeChild(renderer.domElement)
+      renderer.dispose()
+    }
+  }, [])
+
+  return <div ref={mountRef} style={{ width: '200px', height: '200px' }} />
+}

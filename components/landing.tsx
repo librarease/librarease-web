@@ -59,11 +59,11 @@ export default function LandingPage() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
                 Digital Library
               </span>
               <br />
-              <span className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-blue-600 dark:from-emerald-400 dark:via-emerald-300 dark:to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-emerald-600 via-emerald-500 to-blue-600 dark:from-emerald-400 dark:via-emerald-300 dark:to-blue-400 bg-clip-text text-transparent">
                 Reimagined
               </span>
             </h1>
@@ -77,7 +77,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
+                className="bg-linear-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
                 asChild
               >
                 <Link href="/login">
@@ -143,7 +143,7 @@ export default function LandingPage() {
         <section className="container mx-auto px-4 py-24">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
                 Built for Speed & Simplicity
               </span>
             </h2>
@@ -190,7 +190,7 @@ export default function LandingPage() {
               return (
                 <div
                   key={index}
-                  className={`relative p-8 rounded-2xl border border-foreground/10 backdrop-blur-sm bg-gradient-to-br ${feature.gradient} group hover:border-foreground/20 transition-all duration-300 shadow-sm hover:shadow-md`}
+                  className={`relative p-8 rounded-2xl border border-foreground/10 backdrop-blur-sm bg-linear-to-br ${feature.gradient} group hover:border-foreground/20 transition-all duration-300 shadow-sm hover:shadow-md`}
                 >
                   <div className="relative">
                     <div className="inline-flex items-center justify-center w-12 h-12 mb-6 relative">
@@ -217,15 +217,15 @@ export default function LandingPage() {
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="relative p-12 rounded-3xl border border-foreground/10 backdrop-blur-sm bg-gradient-to-br from-emerald-500/5 to-blue-500/5">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-blue-500/10 rounded-3xl blur-xl" />
+            <div className="relative p-12 rounded-3xl border border-foreground/10 backdrop-blur-sm bg-linear-to-br from-emerald-500/5 to-blue-500/5">
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-500/10 via-transparent to-blue-500/10 rounded-3xl blur-xl" />
               <div className="relative">
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
                     Ready to Transform
                   </span>
                   <br />
-                  <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
                     Your Library?
                   </span>
                 </h2>
@@ -235,7 +235,7 @@ export default function LandingPage() {
                 </p>
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
+                  className="bg-linear-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-0 shadow-xl shadow-emerald-500/25 px-8 py-6 text-lg transition-colors duration-300"
                   asChild
                 >
                   <Link href="/signup">

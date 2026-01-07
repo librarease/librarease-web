@@ -37,7 +37,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          mask-password: "true"
+          mask-password: 'true'
 
       # This is a separate action that sets up buildx runner
       - name: Setup Docker Buildx

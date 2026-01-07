@@ -8,19 +8,19 @@ export const ThreeDBook: React.FC<{
 }> = ({ book }) => {
   return (
     // container
-    <div className="[perspective:3000px] group">
+    <div className="perspective-[3000px] group">
       {/* book */}
       <div
         className={clsx(
           'w-56 h-80 mx-auto my-[5%] transform-3d transition-transform duration-500',
-          '[transform:rotate3d(0,1,0,35deg)] lg:[transform:none] lg:group-hover:[transform:rotate3d(0,1,0,35deg)]'
+          'transform-[rotate3d(0,1,0,35deg)] lg:transform-none lg:group-hover:transform-[rotate3d(0,1,0,35deg)]'
         )}
       >
         {/* front */}
         <div
           className={clsx(
-            'absolute transform-3d [transform-origin:0%_50%] [transform:translate3d(0,0,20px)]',
-            "after:content-[''] after:bg-accent after:absolute after:top-0 after:bottom-0 after:-left-[1px] after:w-1"
+            'absolute transform-3d origin-[0%_50%] transform-[translate3d(0,0,20px)]',
+            "after:content-[''] after:bg-accent after:absolute after:top-0 after:bottom-0 after:-left-px after:w-1"
           )}
         >
           {/* cover */}
@@ -36,10 +36,10 @@ export const ThreeDBook: React.FC<{
           />
         </div>
         {/* left-side */}
-        <div className="bg-accent absolute w-10 -left-5 h-80 [transform:rotate3D(0,1,0,-90deg)]">
+        <div className="bg-accent absolute w-10 -left-5 h-80 transform-[rotate3D(0,1,0,-90deg)]">
           <h2
             style={{ color: 'var(--color-vibrant)' }}
-            className="text-sm w-80 h-56 pr-2.5 pt-2 text-right [transform-origin:0%_0%] [transform:rotate(90deg)_translateY(-40px)]"
+            className="text-sm w-80 h-56 pr-2.5 pt-2 text-right origin-[0%_0%] transform-[rotate(90deg)_translateY(-40px)]"
           >
             <span className="pr-3">{book.author}</span>
             <span>{book.year}</span>

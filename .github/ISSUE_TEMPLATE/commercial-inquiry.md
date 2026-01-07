@@ -17,20 +17,21 @@ However, we're tracking interest for potential future commercial licensing optio
 **Company Name:**  
 **Website:**  
 **Contact Person:**  
-**Email:**  
+**Email:**
 
 ## Intended Use
 
 **How would you like to use LibrarEase commercially?**
 
-
 **Estimated deployment scale:**
+
 - [ ] Small (1-10 users)
 - [ ] Medium (10-100 users)
 - [ ] Large (100+ users)
 - [ ] Enterprise (1000+ users)
 
 **Use case category:**
+
 - [ ] SaaS/Hosting service
 - [ ] Internal business tool
 - [ ] Integration into existing product
@@ -40,7 +41,6 @@ However, we're tracking interest for potential future commercial licensing optio
 ## Timeline
 
 **When would you need commercial licensing?**
-
 
 ---
 
