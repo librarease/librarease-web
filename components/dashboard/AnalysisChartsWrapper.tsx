@@ -3,6 +3,7 @@ import { MostBorrowedBookChart } from './MostBorrowedBookChart'
 import { MontlyBorrowChart } from './MontlyBorrowChart'
 import { TopMembershipChart } from './TopMembershipChart'
 import { getAnalysis } from '@/lib/api/analysis'
+import { format } from 'date-fns'
 
 type AnalysisChartsWrapperProps = {
   libraryId: string
@@ -37,12 +38,18 @@ export async function AnalysisChartsWrapper({
     )
   }
 
+  const formattedFrom = format(from, 'LLL dd, yyyy')
+  const formattedTo = format(to, 'LLL dd, yyyy')
   return (
     <>
       <MostBorrowedBookChart data={res.data.book} />
       <TopMembershipChart data={res.data.membership} />
       <MontlyBorrowChart data={res.data.borrowing} />
-      <MonthlyRevenueChart data={res.data.revenue} />
+      <MonthlyRevenueChart
+        data={res.data.revenue}
+        from={formattedFrom}
+        to={formattedTo}
+      />
     </>
   )
 }

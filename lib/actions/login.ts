@@ -42,13 +42,25 @@ export async function loginAction(
 
   const user = userCredentials.user
   const sessionName = process.env.SESSION_COOKIE_NAME as string
+  const refreshTokenName = process.env.REFRESH_TOKEN_COOKIE_NAME as string
   const result = await user.getIdTokenResult()
   const token = result.token
+  const refreshToken = userCredentials.user.refreshToken
   const maxAge =
     new Date(result.expirationTime).getTime() - new Date().getTime()
   const cookieStore = await cookies()
+
+  // Store ID token
   cookieStore.set(sessionName, token, {
-    maxAge,
+    maxAge: Math.floor(maxAge / 1000), // Convert milliseconds to seconds
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  })
+
+  // Store refresh token (longer expiration)
+  cookieStore.set(refreshTokenName, refreshToken, {
+    maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
     httpOnly: true,
     secure: true,
     sameSite: 'strict',

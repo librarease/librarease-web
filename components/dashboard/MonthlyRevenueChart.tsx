@@ -1,6 +1,5 @@
 'use client'
 
-// import { TrendingUp } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 import {
@@ -19,9 +18,6 @@ import {
 } from '@/components/ui/chart'
 import { Analysis } from '@/lib/types/analysis'
 import { formatDate } from '@/lib/utils'
-import { useSearchParams } from 'next/navigation'
-import { format, parse } from 'date-fns'
-import { useMemo } from 'react'
 
 const chartConfig = {
   subscription: {
@@ -34,20 +30,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function MonthlyRevenueChart({ data }: { data: Analysis['revenue'] }) {
-  const params = useSearchParams()
-  const paramFrom = params.get('from') as string
-  const paramTo = params.get('to') as string
-
-  const [from, to] = useMemo(() => {
-    const from = format(
-      parse(paramFrom, 'dd-MM-yyyy', new Date()),
-      'LLL dd, yyyy'
-    )
-    const to = format(parse(paramTo, 'dd-MM-yyyy', new Date()), 'LLL dd, yyyy')
-    return [from, to]
-  }, [paramFrom, paramTo])
-
+export function MonthlyRevenueChart({
+  data,
+  from,
+  to,
+}: {
+  data: Analysis['revenue']
+  from: string
+  to: string
+}) {
   return (
     <Card>
       <CardHeader>
@@ -111,7 +102,6 @@ export function MonthlyRevenueChart({ data }: { data: Analysis['revenue'] }) {
               fill="url(#fillFine)"
               fillOpacity={0.4}
               stroke="var(--color-fine)"
-              stackId="a"
             />
             <Area
               dataKey="subscription"
@@ -119,7 +109,6 @@ export function MonthlyRevenueChart({ data }: { data: Analysis['revenue'] }) {
               fill="url(#fillSubscription)"
               fillOpacity={0.4}
               stroke="var(--color-subscription)"
-              stackId="a"
             />
           </AreaChart>
         </ChartContainer>

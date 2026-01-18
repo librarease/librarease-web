@@ -99,7 +99,7 @@ export const HeatmapChart: React.FC<HeatmapChartProps> = ({
       return {
         x: decimalHour,
         y: localDayOfWeek,
-        z: count * 20, // Scale up for bubble size
+        z: count, // Scale up for bubble size
         count,
         day: dayNames[localDayOfWeek],
         time: formatTime(localHour, localMinute),
