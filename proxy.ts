@@ -42,13 +42,10 @@ export async function proxy(request: NextRequest) {
       const newIdToken = data.id_token
       const newRefreshToken = data.refresh_token
 
-      const decodedToken = await auth.verifyIdToken(newIdToken)
-      const expiresIn = decodedToken.exp * 1000 - Date.now()
-
       const response = NextResponse.next()
 
       response.cookies.set(sessionName, newIdToken, {
-        maxAge: Math.floor(expiresIn / 1000),
+        maxAge: 30 * 24 * 60 * 60, // 30 days
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
@@ -101,13 +98,10 @@ export async function proxy(request: NextRequest) {
         const newIdToken = data.id_token
         const newRefreshToken = data.refresh_token
 
-        const decodedToken = await auth.verifyIdToken(newIdToken)
-        const expiresIn = decodedToken.exp * 1000 - Date.now()
-
         const response = NextResponse.next()
 
         response.cookies.set(sessionName, newIdToken, {
-          maxAge: Math.floor(expiresIn / 1000),
+          maxAge: 30 * 24 * 60 * 60, // 30 days
           httpOnly: true,
           secure: true,
           sameSite: 'strict',
