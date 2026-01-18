@@ -42,7 +42,8 @@ export async function proxy(request: NextRequest) {
       const newIdToken = data.id_token
       const newRefreshToken = data.refresh_token
 
-      const response = NextResponse.next()
+      // Redirect to the same URL to apply fresh cookies
+      const response = NextResponse.redirect(request.url)
 
       response.cookies.set(sessionName, newIdToken, {
         maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -98,7 +99,8 @@ export async function proxy(request: NextRequest) {
         const newIdToken = data.id_token
         const newRefreshToken = data.refresh_token
 
-        const response = NextResponse.next()
+        // Redirect to the same URL to apply fresh cookies
+        const response = NextResponse.redirect(request.url)
 
         response.cookies.set(sessionName, newIdToken, {
           maxAge: 30 * 24 * 60 * 60, // 30 days
