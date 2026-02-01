@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/card'
 import Link from 'next/link'
 import { Route } from 'next'
-import { ViewTransition } from 'react'
 import { GetBorrowQuery } from '@/lib/api/borrow'
 
 export const ListCardBorrow: React.FC<
@@ -48,65 +47,63 @@ export const ListCardBorrow: React.FC<
     ).toString()) as Route<string>
 
   return (
-    <ViewTransition name={borrow.id} key={borrow.id}>
-      <Card className={cn('relative', status === 'lost' && 'bg-destructive/5')}>
-        <CardHeader>
-          <Link
-            href={href}
-            className="flex justify-between items-start min-h-20"
+    <Card
+      key={borrow.id}
+      className={cn('relative', status === 'lost' && 'bg-destructive/5')}
+    >
+      <CardHeader>
+        <Link href={href} className="flex justify-between items-start min-h-20">
+          <div>
+            <CardTitle className="text-lg line-clamp-2">
+              <abbr title={borrow.book.title} className="no-underline">
+                {borrow.book.title}
+              </abbr>
+            </CardTitle>
+            <CardDescription>
+              <span className="text-muted-foreground/80 font-bold tracking-wider">
+                #&nbsp;{idx.toString().padStart(4, '0')}
+              </span>
+            </CardDescription>
+          </div>
+          <Badge
+            variant={
+              getBorrowStatus(borrow) === 'overdue'
+                ? 'destructive'
+                : getBorrowStatus(borrow) === 'active'
+                  ? 'default'
+                  : 'secondary'
+            }
+            className="capitalize"
           >
-            <div>
-              <CardTitle className="text-lg line-clamp-2">
-                <abbr title={borrow.book.title} className="no-underline">
-                  {borrow.book.title}
-                </abbr>
-              </CardTitle>
-              <CardDescription>
-                <span className="text-muted-foreground/80 font-bold tracking-wider">
-                  #&nbsp;{idx.toString().padStart(4, '0')}
-                </span>
-              </CardDescription>
-            </div>
-            <Badge
-              variant={
-                getBorrowStatus(borrow) === 'overdue'
-                  ? 'destructive'
-                  : getBorrowStatus(borrow) === 'active'
-                    ? 'default'
-                    : 'secondary'
-              }
-              className="capitalize"
-            >
-              {getBorrowStatus(borrow)}
-            </Badge>
-          </Link>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center gap-2 text-sm">
-            <User className="size-4 text-muted-foreground" />
-            <span>{borrow.subscription.user.name}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <LibraryIcon className="size-4 text-muted-foreground" />
-            <span>{borrow.subscription.membership.library.name}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="size-4 text-muted-foreground" />
-            <span>Borrowed: {formatDate(borrow.borrowed_at)}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            {isDue ? (
-              <CalendarX className="size-4 text-destructive" />
-            ) : (
-              <CalendarClock className="size-4 text-muted-foreground" />
-            )}
-            <span className={cn(isDue && 'text-destructive')}>
-              Due: {formatDate(borrow.due_at)}
-            </span>
-          </div>
-        </CardContent>
-        <CardFooter>{children}</CardFooter>
-      </Card>
-    </ViewTransition>
+            {getBorrowStatus(borrow)}
+          </Badge>
+        </Link>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex items-center gap-2 text-sm">
+          <User className="size-4 text-muted-foreground" />
+          <span>{borrow.subscription.user.name}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <LibraryIcon className="size-4 text-muted-foreground" />
+          <span>{borrow.subscription.membership.library.name}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <Calendar className="size-4 text-muted-foreground" />
+          <span>Borrowed: {formatDate(borrow.borrowed_at)}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          {isDue ? (
+            <CalendarX className="size-4 text-destructive" />
+          ) : (
+            <CalendarClock className="size-4 text-muted-foreground" />
+          )}
+          <span className={cn(isDue && 'text-destructive')}>
+            Due: {formatDate(borrow.due_at)}
+          </span>
+        </div>
+      </CardContent>
+      <CardFooter>{children}</CardFooter>
+    </Card>
   )
 }
