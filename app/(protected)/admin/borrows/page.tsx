@@ -30,7 +30,6 @@ import { BtnReturnBook } from '@/components/borrows/BtnReturnBorrow'
 import { cookies } from 'next/headers'
 import { ModelFilter } from '@/components/common/ModelFilter'
 import { UserFilter, BookFilter, DateFilter } from '@/components/common/filters'
-import { BorrowCardErrorBoundary } from '@/components/borrows/BorrowCardErrorBoundary'
 import { ModalExportBorrow } from '@/components/borrows/ModalExportBorrow'
 import { SubscriptionFilter } from '@/components/common/filters/SubscriptionFilter'
 
