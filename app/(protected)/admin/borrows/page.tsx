@@ -191,30 +191,25 @@ export default async function Borrows({
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((borrow, idx) => (
-          <BorrowCardErrorBoundary key={borrow.id} idx={skip + idx + 1}>
-            <ListCardBorrow
-              borrow={borrow}
-              idx={skip + idx + 1}
-              searchParams={{
-                book_id,
-                borrowed_at,
-                due_at,
-                lost_at,
-                returned_at,
-                status,
-                user_id,
-                subscription_id,
-              }}
-            >
-              <BtnReturnBook
-                variant="outline"
-                className="w-full"
-                borrow={borrow}
-              >
-                Return Book
-              </BtnReturnBook>
-            </ListCardBorrow>
-          </BorrowCardErrorBoundary>
+          <ListCardBorrow
+            key={borrow.id}
+            borrow={borrow}
+            idx={skip + idx + 1}
+            searchParams={{
+              book_id,
+              borrowed_at,
+              due_at,
+              lost_at,
+              returned_at,
+              status,
+              user_id,
+              subscription_id,
+            }}
+          >
+            <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
+              Return Book
+            </BtnReturnBook>
+          </ListCardBorrow>
         ))}
       </div>
       <Pagination>
