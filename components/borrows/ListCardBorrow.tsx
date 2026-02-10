@@ -20,6 +20,7 @@ import {
 import Link from 'next/link'
 import { Route } from 'next'
 import { GetBorrowQuery } from '@/lib/api/borrow'
+import { ViewTransition } from 'react'
 
 export const ListCardBorrow: React.FC<
   React.PropsWithChildren<{
