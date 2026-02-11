@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { deleteReturn } from '../api/borrow'
 import { Verify } from '../firebase/firebase'
 
@@ -28,6 +28,7 @@ export async function undoReturnAction(id: string) {
   } finally {
     revalidatePath(`/admin/borrows/${id}`)
     revalidatePath(`/admin/borrows`)
+    revalidateTag('borrows', 'max')
     // revalidatePath(`/borrows/${id}`)
     // revalidatePath('/borrows')
     // revalidatePath('/admin/books')

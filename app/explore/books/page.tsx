@@ -41,14 +41,23 @@ export default async function ExploreBooks({
   const limit = Number(sp?.limit ?? 20)
   const library_id = sp?.library_id
 
-  const res = await getListBooks({
-    sort_by: 'created_at',
-    sort_in: 'desc',
-    limit: limit,
-    skip: skip,
-    title: sp?.title,
-    ...(library_id ? { library_id } : {}),
-  })
+  const res = await getListBooks(
+    {
+      sort_by: 'created_at',
+      sort_in: 'desc',
+      limit: limit,
+      skip: skip,
+      title: sp?.title,
+      ...(library_id ? { library_id } : {}),
+    },
+    {
+      cache: 'force-cache',
+      next: {
+        tags: ['books'],
+        revalidate: 300,
+      },
+    }
+  )
 
   if ('error' in res) {
     console.log(res)

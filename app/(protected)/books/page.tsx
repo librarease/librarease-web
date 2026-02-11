@@ -56,7 +56,13 @@ export default async function UserBooks({
 
   await Verify({ from: '/books' })
 
-  const res = await getListBooks(query)
+  const res = await getListBooks(query, {
+    cache: 'force-cache',
+    next: {
+      tags: ['books'],
+      revalidate: 300,
+    },
+  })
 
   if ('error' in res) {
     console.log(res)

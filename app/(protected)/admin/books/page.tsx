@@ -49,15 +49,24 @@ export default async function Books({
   const cookieName = process.env.LIBRARY_COOKIE_NAME as string
   const libID = cookieStore.get(cookieName)?.value
 
-  const res = await getListBooks({
-    sort_by: 'created_at',
-    sort_in: 'desc',
-    limit: limit,
-    skip: skip,
-    title: sp?.title,
-    library_id: libID,
-    include_stats: 'true',
-  })
+  const res = await getListBooks(
+    {
+      sort_by: 'created_at',
+      sort_in: 'desc',
+      limit: limit,
+      skip: skip,
+      title: sp?.title,
+      library_id: libID,
+      include_stats: 'true',
+    },
+    {
+      cache: 'force-cache',
+      next: {
+        tags: ['books'],
+        revalidate: 300,
+      },
+    }
+  )
 
   if ('error' in res) {
     console.log(res)

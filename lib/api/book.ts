@@ -13,10 +13,10 @@ type GetListBooksQuery = QueryParams<
 }
 type GetListBooksResponse = Promise<ResList<Book>>
 
-export const getListBooks = async ({
-  ids,
-  ...query
-}: GetListBooksQuery): GetListBooksResponse => {
+export const getListBooks = async (
+  { ids, ...query }: GetListBooksQuery,
+  init?: RequestInit
+): GetListBooksResponse => {
   const url = new URL(BOOKS_URL)
   Object.entries(query).forEach(([key, value]) => {
     if (value) {
@@ -27,7 +27,7 @@ export const getListBooks = async ({
     url.searchParams.append('ids', ids.join(','))
   }
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
   return response.json()
 }
 

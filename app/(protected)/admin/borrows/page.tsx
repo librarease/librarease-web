@@ -91,6 +91,11 @@ export default async function Borrows({
     },
     {
       headers,
+      cache: 'force-cache',
+      next: {
+        tags: ['borrows'],
+        revalidate: 60,
+      },
     }
   )
 
