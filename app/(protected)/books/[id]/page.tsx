@@ -18,6 +18,7 @@ import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import { Review } from '@/components/reviews/Review'
 import { DataRecentBorrows } from '@/components/books/DataRecentBorrows'
 import { DateTime } from '@/components/common/DateTime'
+import { CACHE_KEY_REVIEWS, CACHE_TTL_SECONDS } from '@/lib/consts'
 
 export default async function BookDetailsPage({
   params,
@@ -34,10 +35,27 @@ export default async function BookDetailsPage({
 
   const [bookRes, reviewsRes, myReviewsRes] = await Promise.all([
     getBook({ id, include_stats: 'true' }),
-    getListReviews({ book_id: id, limit: 3 }, { headers }),
+    getListReviews(
+      { book_id: id, limit: 3 },
+      {
+        headers,
+        cache: 'force-cache',
+        next: {
+          tags: [CACHE_KEY_REVIEWS, id],
+          revalidate: CACHE_TTL_SECONDS,
+        },
+      }
+    ),
     getListReviews(
       { book_id: id, limit: 3, user_id: claim?.librarease.id },
-      { headers }
+      {
+        headers,
+        cache: 'force-cache',
+        next: {
+          tags: [CACHE_KEY_REVIEWS, id],
+          revalidate: CACHE_TTL_SECONDS,
+        },
+      }
     ),
   ])
 

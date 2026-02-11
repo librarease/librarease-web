@@ -13,13 +13,14 @@ export async function updateSubscriptionAction(
     if ('error' in res) {
       return { error: res.error }
     }
+
+    revalidatePath(`/admin/subscriptions/${data.id}`)
+
     return { message: 'subscription updated successfully' }
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
       return { error: e.error as string }
     }
     return { error: 'failed to update subscription' }
-  } finally {
-    revalidatePath(`/admin/subscriptions/${data.id}`)
   }
 }

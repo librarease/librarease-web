@@ -18,7 +18,7 @@ import {
 import { getListBorrows } from '@/lib/api/borrow'
 import { IsLoggedIn, Verify } from '@/lib/firebase/firebase'
 import type { Metadata } from 'next'
-import { SITE_NAME } from '@/lib/consts'
+import { CACHE_KEY_BORROWS, CACHE_TTL_SECONDS, SITE_NAME } from '@/lib/consts'
 import { TabLink } from '@/components/borrows/TabLink'
 import { Badge } from '@/components/ui/badge'
 import { ModelFilter } from '@/components/common/ModelFilter'
@@ -83,8 +83,8 @@ export default async function Borrows({
       headers,
       cache: 'force-cache',
       next: {
-        tags: ['borrows'],
-        revalidate: 60,
+        tags: [CACHE_KEY_BORROWS],
+        revalidate: CACHE_TTL_SECONDS,
       },
     }
   )

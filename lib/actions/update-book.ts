@@ -3,6 +3,8 @@
 import { Verify } from '../firebase/firebase'
 import { updateBook } from '../api/book'
 import { processImageFile } from '../utils/image-processing'
+import { revalidateTag } from 'next/cache'
+import { CACHE_KEY_BOOKS } from '../consts'
 
 type ActionState =
   | {
@@ -45,7 +47,6 @@ export async function updateBookAction(
       }
     }
   }
-  console.log(bookData)
 
   try {
     const res = await updateBook(formData.get('id') as string, bookData, {
@@ -58,6 +59,9 @@ export async function updateBookAction(
     }
     // revalidatePath('/admin/books')
     // revalidatePath('/books')
+    revalidateTag(CACHE_KEY_BOOKS, 'max')
+    revalidateTag(formData.get('id') as string, 'max')
+
     return { message: 'Book updated successfully' }
   } catch (e) {
     console.error(e)

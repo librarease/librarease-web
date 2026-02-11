@@ -13,6 +13,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Route } from 'next'
+import { CACHE_KEY_REVIEWS, CACHE_TTL_SECONDS } from '@/lib/consts'
 
 export default async function BookReviewsPage({
   params,
@@ -43,7 +44,14 @@ export default async function BookReviewsPage({
       comment,
       limit,
     },
-    { headers }
+    {
+      headers,
+      cache: 'force-cache',
+      next: {
+        tags: [CACHE_KEY_REVIEWS, id],
+        revalidate: CACHE_TTL_SECONDS,
+      },
+    }
   )
 
   if ('error' in res) {

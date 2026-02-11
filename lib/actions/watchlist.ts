@@ -1,8 +1,9 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { addToWatchlist, removeFromWatchlist } from '../api/watchlist'
 import { Verify } from '../firebase/firebase'
+import { CACHE_KEY_WATCHLIST } from '../consts'
 
 export async function addToWatchlistAction(bookId: string) {
   const headers = await Verify({ from: `/books/${bookId}` })
@@ -13,6 +14,7 @@ export async function addToWatchlistAction(bookId: string) {
       return { error: res.message }
     }
     revalidatePath(`/books/${bookId}`)
+    revalidateTag(CACHE_KEY_WATCHLIST, 'max')
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
       return { error: e.error as string }
@@ -27,6 +29,7 @@ export async function removeFromWatchlistAction(bookId: string) {
   try {
     const res = await removeFromWatchlist(bookId, { headers })
     revalidatePath(`/books/${bookId}`)
+    revalidateTag(CACHE_KEY_WATCHLIST, 'max')
     return res
   } catch (e) {
     if (e instanceof Object && 'error' in e) {

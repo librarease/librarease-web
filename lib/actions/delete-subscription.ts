@@ -11,13 +11,15 @@ export async function deleteSubscriptionAction(id: string) {
     if (res && 'error' in res) {
       return { error: res.error }
     }
+
+    revalidatePath(`/admin/subscriptions`)
+    revalidatePath(`/subscriptions`)
+
     return { message: 'subscription deleted successfully' }
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
       return { error: e.error as string }
     }
     return { error: 'failed to delete subscription' }
-  } finally {
-    revalidatePath(`/admin/subscriptions`)
   }
 }

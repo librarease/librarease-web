@@ -17,6 +17,11 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Verify } from '@/lib/firebase/firebase'
 import { DataRecentBorrows } from '@/components/books/DataRecentBorrows'
+import {
+  CACHE_KEY_BORROWS,
+  CACHE_KEY_REVIEWS,
+  CACHE_TTL_SECONDS,
+} from '@/lib/consts'
 
 export default async function BookDetailsPage({
   params,
@@ -31,8 +36,28 @@ export default async function BookDetailsPage({
 
   const [bookRes, reviewsRes, borrowsRes] = await Promise.all([
     getBook({ id, include_stats: 'true' }),
-    getListReviews({ book_id: id, limit: 3 }, { headers }),
-    getListBorrows({ book_id: id, limit: 3 }, { headers }),
+    getListReviews(
+      { book_id: id, limit: 3 },
+      {
+        headers,
+        cache: 'force-cache',
+        next: {
+          tags: [CACHE_KEY_REVIEWS, id],
+          revalidate: CACHE_TTL_SECONDS,
+        },
+      }
+    ),
+    getListBorrows(
+      { book_id: id, limit: 3 },
+      {
+        headers,
+        cache: 'force-cache',
+        next: {
+          tags: [CACHE_KEY_BORROWS, id],
+          revalidate: CACHE_TTL_SECONDS,
+        },
+      }
+    ),
   ])
 
   if ('error' in bookRes) {

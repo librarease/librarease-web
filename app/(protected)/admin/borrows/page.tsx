@@ -21,7 +21,7 @@ import { Verify } from '@/lib/firebase/firebase'
 import { BookUser, Scan } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { SITE_NAME } from '@/lib/consts'
+import { CACHE_KEY_BORROWS, CACHE_TTL_SECONDS, SITE_NAME } from '@/lib/consts'
 import { DropdownMenuBorrow } from '@/components/borrows/DropdownMenuBorrow'
 import { BtnScanReturnBorrow } from '@/components/borrows/ModalReturnBorrow'
 import { TabLink } from '@/components/borrows/TabLink'
@@ -93,8 +93,8 @@ export default async function Borrows({
       headers,
       cache: 'force-cache',
       next: {
-        tags: ['borrows'],
-        revalidate: 60,
+        tags: [CACHE_KEY_BORROWS],
+        revalidate: CACHE_TTL_SECONDS,
       },
     }
   )

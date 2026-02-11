@@ -54,9 +54,12 @@ const menuItems = [
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()
 
+  if (!claim) {
+    redirect('/refresh?from=/admin')
+  }
+
   // TODO: remove after the custom claim is set
   if (
-    !claim ||
     !claim.librarease ||
     (claim.librarease.role == 'USER' &&
       claim.librarease.admin_libs.length === 0 &&

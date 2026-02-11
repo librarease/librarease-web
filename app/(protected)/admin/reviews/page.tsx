@@ -17,6 +17,7 @@ import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
+import { CACHE_KEY_REVIEWS, CACHE_TTL_SECONDS } from '@/lib/consts'
 
 export default async function ReviewsPage({
   searchParams,
@@ -52,7 +53,11 @@ export default async function ReviewsPage({
       comment,
       limit,
     },
-    { headers }
+    {
+      headers,
+      cache: 'force-cache',
+      next: { tags: [CACHE_KEY_REVIEWS], revalidate: CACHE_TTL_SECONDS },
+    }
   )
 
   if ('error' in res) {

@@ -51,7 +51,7 @@ export default async function DashboardPage({
   }>
 }) {
   const claims = await IsLoggedIn()
-  if (!claims) redirect('/login?from=/admin/dashboard')
+  if (!claims) redirect('/refresh?from=/admin/dashboard')
 
   if (
     claims.librarease.role === 'USER' &&
@@ -119,9 +119,9 @@ export default async function DashboardPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="grid my-4 grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid my-4 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <DateRangeSelector
-          className="col-span-2"
+          className="col-span-2 lg:col-span-3"
           range={{ from: fromDate, to: toDate }}
           onChangeAction={onDateRangeChange}
         />

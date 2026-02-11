@@ -16,7 +16,7 @@ import {
 import { getListBooks } from '@/lib/api/book'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { SITE_NAME } from '@/lib/consts'
+import { CACHE_KEY_BOOKS, CACHE_TTL_SECONDS, SITE_NAME } from '@/lib/consts'
 import { BellRing } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
@@ -59,8 +59,8 @@ export default async function UserBooks({
   const res = await getListBooks(query, {
     cache: 'force-cache',
     next: {
-      tags: ['books'],
-      revalidate: 300,
+      tags: [CACHE_KEY_BOOKS],
+      revalidate: CACHE_TTL_SECONDS,
     },
   })
 

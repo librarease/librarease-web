@@ -1,8 +1,9 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { Verify } from '../firebase/firebase'
 import { createReview, updateReview } from '../api/review'
+import { CACHE_KEY_REVIEWS } from '../consts'
 
 type ReviewBorrowParams =
   | Parameters<typeof createReview>[0]
@@ -30,15 +31,17 @@ export async function reviewBorrowAction(
         error: res.error,
       }
     }
+
+    revalidatePath(`/admin/borrows/${id}`)
+    revalidatePath(`/admin/borrows/${id}/review`)
+    revalidatePath(`/admin/borrows`)
+    revalidateTag(CACHE_KEY_REVIEWS, 'max')
+
     return { message: 'Review submitted successfully' }
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
       return { error: e.error as string }
     }
     return { error: 'Failed to submit review' }
-  } finally {
-    revalidatePath(`/admin/borrows/${id}`)
-    revalidatePath(`/admin/borrows/${id}/review`)
-    revalidatePath(`/admin/borrows`)
   }
 }

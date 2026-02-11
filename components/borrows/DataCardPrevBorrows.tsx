@@ -11,6 +11,7 @@ import clsx from 'clsx'
 import { Skeleton } from '../ui/skeleton'
 import React, { ComponentProps, Suspense } from 'react'
 import { Button } from '../ui/button'
+import { CACHE_KEY_BORROWS, CACHE_TTL_SECONDS } from '@/lib/consts'
 
 export const DataCardPrevBorrows: React.FC<
   Omit<ComponentProps<typeof PrevBorrows>, 'count'>
@@ -46,6 +47,11 @@ const PrevBorrows: React.FC<{ borrow: Borrow; count: number }> = async ({
       },
       {
         headers,
+        cache: 'force-cache',
+        next: {
+          tags: [CACHE_KEY_BORROWS],
+          revalidate: CACHE_TTL_SECONDS,
+        },
       }
     ),
   ])

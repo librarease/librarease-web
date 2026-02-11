@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/pagination'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { SITE_NAME } from '@/lib/consts'
+import { CACHE_KEY_WATCHLIST, CACHE_TTL_SECONDS, SITE_NAME } from '@/lib/consts'
 import { Badge } from '@/components/ui/badge'
 import { ListBook } from '@/components/books/ListBook'
 import { Verify } from '@/lib/firebase/firebase'
@@ -53,7 +53,14 @@ export default async function UserBooks({
 
   const headers = await Verify({ from: '/books/watchlist' })
 
-  const res = await getListWatchlist(query, { headers })
+  const res = await getListWatchlist(query, {
+    headers,
+    cache: 'force-cache',
+    next: {
+      tags: [CACHE_KEY_WATCHLIST],
+      revalidate: CACHE_TTL_SECONDS,
+    },
+  })
 
   if ('error' in res) {
     console.log(res)

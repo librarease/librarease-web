@@ -1,9 +1,10 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { Verify } from '../firebase/firebase'
 import { createBook } from '../api/book'
 import { processImageFile } from '../utils/image-processing'
+import { CACHE_KEY_BOOKS } from '../consts'
 
 type ActionState =
   | {
@@ -57,6 +58,7 @@ export async function createBookAction(
     }
     revalidatePath('/admin/books')
     revalidatePath('/books')
+    revalidateTag(CACHE_KEY_BOOKS, 'max')
     return { message: 'Book created successfully' }
   } catch (e) {
     if (e instanceof Object && 'error' in e) {
