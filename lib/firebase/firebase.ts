@@ -47,7 +47,8 @@ export async function Verify({
   }
 
   if (forceRedirect && (!headers.has('X-Uid') || !headers.has('X-Client-Id'))) {
-    redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
+    // redirect(`/login?from=${encodeURIComponent(from)}`, RedirectType.replace)
+    redirect(`/refresh?from=${encodeURIComponent(from)}`, RedirectType.replace)
   }
 
   return headers
