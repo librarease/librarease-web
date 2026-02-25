@@ -37,7 +37,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          mask-password: 'true'
+          mask-password: "true"
 
       # This is a separate action that sets up buildx runner
       - name: Setup Docker Buildx
@@ -71,12 +71,12 @@ jobs:
     needs: Build
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Echo Branch
         run: echo running on branch ${GITHUB_REF##*/}
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 25
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
