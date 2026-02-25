@@ -19,16 +19,15 @@ FROM node:25-alpine AS builder
 WORKDIR /app
 COPY . .
 
-# Set NODE_ENV to production for build
-ENV NODE_ENV=production
-
 # Accept build arguments for NEXT_PUBLIC environment variables
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
+# Install all deps (including devDependencies needed for the build)
 RUN yarn
 
-RUN yarn build
+# Set NODE_ENV to production only for the build step
+RUN NODE_ENV=production yarn build
 
 # If using npm comment out above and use below instead
 # RUN npm run build
