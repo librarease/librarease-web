@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import { getListCollections } from '@/lib/api/collection'
 import { ListCollection } from '@/components/collections/ListCollection'
 import { SearchInput } from '@/components/common/SearchInput'
+import { colorsToCssVars } from '@/lib/utils/color-utils'
 
 export const metadata: Metadata = {
   title: `Collections · ${SITE_NAME}`,
@@ -50,12 +51,13 @@ export default async function UserCollections({
     skip: skip,
     title: sp?.title,
     include_library: 'true',
+    include_stats: 'true',
     ...(library_id ? { library_id } : {}),
   } as const
 
-  await Verify({ from: '/admin/collections' })
+  const headers = await Verify({ from: '/admin/collections' })
 
-  const res = await getListCollections(query)
+  const res = await getListCollections(query, { headers })
 
   if ('error' in res) {
     console.log(res)
@@ -112,7 +114,10 @@ export default async function UserCollections({
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((col) => (
           <Link key={col.id} href={`/admin/collections/${col.id}`} passHref>
-            <ListCollection collection={col} />
+            <ListCollection
+              collection={col}
+              style={colorsToCssVars(col.colors)}
+            />
           </Link>
         ))}
       </div>

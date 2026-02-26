@@ -22,7 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Upload, X, ChevronsUpDown, Check } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useActionState, startTransition } from 'react'
 import Image from 'next/image'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { cn } from '@/lib/utils'
@@ -39,36 +39,38 @@ import { toast } from 'sonner'
 import Link from 'next/link'
 
 const FormSchema = z.object({
-  title: z.string(),
+  title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
   cover: z.string().optional(),
-  library_id: z.uuid(),
+  imageFile: z.custom<FileList>().optional(),
+  library_id: z.uuid('Please select a library'),
 })
 
 type CollectionFormValues = z.infer<typeof FormSchema>
 
+type CollectionFormState = { message: string } | { error: string }
+
 type FormCollectionProps = {
-  initialData: CollectionFormValues
-  onSubmit(data: CollectionFormValues): void
+  initialData: CollectionFormValues & { id?: string }
+  onSubmitAction(
+    currentState: CollectionFormState,
+    data: FormData
+  ): Promise<CollectionFormState>
 }
 
 export const FormCollection: React.FC<FormCollectionProps> = ({
   initialData,
-  onSubmit,
+  onSubmitAction,
 }) => {
   const form = useForm<CollectionFormValues>({
     defaultValues: initialData,
     resolver: zodResolver(FormSchema),
   })
   const [dragActive, setDragActive] = useState(false)
-  const handleFileUpload = (file: File) => {
-    if (file && file.type.startsWith('image/')) {
-      //   setFormData((prev) => ({
-      //     ...prev,
-      //     banner_file: file,
-      //     banner_url: URL.createObjectURL(file),
-      //   }))
-      console.log(file)
+  const imageFile = form.watch('imageFile')
+  const handleFileUpload = (files: FileList) => {
+    if (files && files.length > 0 && files[0].type.startsWith('image/')) {
+      form.setValue('imageFile', files, { shouldValidate: true })
     }
   }
 
@@ -87,10 +89,43 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
     e.stopPropagation()
     setDragActive(false)
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFileUpload(e.dataTransfer.files[0])
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileUpload(e.dataTransfer.files)
     }
   }
+
+  const [state, formAction, isPending] = useActionState(onSubmitAction, {
+    message: '',
+    error: '',
+  })
+
+  function onSubmit(data: CollectionFormValues) {
+    startTransition(() => {
+      const formData = new FormData()
+      if (initialData.id) {
+        formData.append('id', initialData.id)
+      }
+
+      formData.append('title', data.title)
+      formData.append('library_id', data.library_id)
+      formData.append('description', data.description ?? '')
+      
+      if (data.imageFile && data.imageFile.length > 0) {
+        formData.append('imageFile', data.imageFile[0])
+      }
+      
+      formAction(formData)
+    })
+  }
+
+  useEffect(() => {
+    if ('error' in state && state.error) {
+      toast.error(state.error, { richColors: true })
+    }
+    if ('message' in state && state.message) {
+      toast.success(state.message, { richColors: true })
+    }
+  }, [state])
 
   const [libQ, setLibQ] = useState('')
   const [libs, setLibs] = useState<Library[]>([])
@@ -124,14 +159,35 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {initialData.cover ? (
+              {imageFile && imageFile.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="relative aspect-[2] rounded-lg overflow-hidden">
+                    <Image
+                      src={URL.createObjectURL(imageFile[0])}
+                      alt="New cover"
+                      width={800}
+                      height={400}
+                      className="shadow-md rounded-lg w-full place-self-center object-contain"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2"
+                      onClick={() => form.setValue('imageFile', undefined)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ) : initialData.cover ? (
                 <div className="space-y-4">
                   <div className="relative aspect-[2] rounded-lg overflow-hidden">
                     <Image
                       src={initialData.cover ?? '/book-placeholder.svg'}
                       alt={initialData.title + "'s cover"}
-                      width={160}
-                      height={240}
+                      width={800}
+                      height={400}
                       className="shadow-md rounded-lg w-full place-self-center object-contain"
                     />
                     <Button
@@ -168,7 +224,7 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
                     type="file"
                     accept="image/*"
                     onChange={(e) =>
-                      e.target.files?.[0] && handleFileUpload(e.target.files[0])
+                      e.target.files && handleFileUpload(e.target.files)
                     }
                     className="hidden"
                     id="banner-upload"
@@ -296,8 +352,8 @@ export const FormCollection: React.FC<FormCollectionProps> = ({
             <Button type="button" variant="outline" asChild>
               <Link href="/admin/collections">Cancel</Link>
             </Button>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting
+            <Button type="submit" disabled={isPending || form.formState.isSubmitting}>
+              {isPending || form.formState.isSubmitting
                 ? 'Submitting...'
                 : 'Save Collection'}
             </Button>

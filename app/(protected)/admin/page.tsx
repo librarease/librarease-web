@@ -71,14 +71,11 @@ export default async function LibraryDashboard() {
   return (
     <main className="min-h-[calc(100vh-4rem)] p-8">
       <div className="max-w-2xl mx-auto space-y-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Librarease</h1>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" onClick={logoutAction}>
-              Logout
-            </Button>
-            <ModeToggle />
-          </div>
+        <div className="place-self-end flex items-center gap-2">
+          <Button variant="ghost" onClick={logoutAction}>
+            Logout
+          </Button>
+          <ModeToggle />
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {menuItems.map((item) => {

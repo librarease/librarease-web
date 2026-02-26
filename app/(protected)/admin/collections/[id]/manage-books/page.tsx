@@ -20,6 +20,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Route } from 'next'
+import { Verify } from '@/lib/firebase/firebase'
 
 export default async function CollectionManageBooksPage({
   params,
@@ -33,8 +34,16 @@ export default async function CollectionManageBooksPage({
   const skip = Number(sp?.skip ?? 0)
   const limit = Number(sp?.limit ?? 20)
 
+  const headers = await Verify({
+    from: `/admin/collections/${id}/manage-books`,
+  })
+
   const [collectionRes, colBookRes] = await Promise.all([
-    getCollection(id, { include_book_ids: 'true' }),
+    getCollection(
+      id,
+      { include_book_ids: 'true', include_stats: 'true' },
+      { headers }
+    ),
     getListCollectionBooks(id, {
       include_book: 'true',
     }),

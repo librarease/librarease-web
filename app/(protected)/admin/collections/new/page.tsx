@@ -41,7 +41,7 @@ export default async function NewCollectionPage() {
           library_id: activeLibraryID ?? '',
           title: '',
         }}
-        onSubmit={createCollectionAction}
+        onSubmitAction={createCollectionAction}
       />
     </div>
   )

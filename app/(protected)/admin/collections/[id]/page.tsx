@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { deleteCollectionAction } from '@/lib/actions/collection'
 import { getCollection, getListCollectionBooks } from '@/lib/api/collection'
+import { Verify } from '@/lib/firebase/firebase'
 import {
   Book,
   Calendar,
@@ -30,9 +31,10 @@ export default async function CollectionDetailsPage({
   params: Promise<{ id: string; title?: string }>
 }) {
   const { id, title } = await params
+  const headers = await Verify({ from: `/admin/collections/${id}` })
 
   const [collectionRes, bookRes] = await Promise.all([
-    getCollection(id),
+    getCollection(id, { include_stats: 'true' }, { headers }),
     getListCollectionBooks(id, {
       include_book: 'true',
       book_title: title,
@@ -72,7 +74,7 @@ export default async function CollectionDetailsPage({
 
       <div className="relative aspect-[2] rounded-lg mb-6">
         <Image
-          src={collectionRes.data.cover?.path ?? '/book-placeholder.svg'}
+          src={collectionRes.data.cover ?? '/book-placeholder.svg'}
           alt={collectionRes.data.title}
           fill
           className="w-full h-full object-cover rounded-t"
@@ -168,18 +170,6 @@ export default async function CollectionDetailsPage({
 
         {/* Books in Collection */}
         <div className="lg:col-span-3">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold">Books in Collection</h2>
-            <Button asChild>
-              <Link
-                href={`/admin/collections/${collectionRes.data.id}/manage-books`}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Manage Books
-              </Link>
-            </Button>
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookRes.data.map((collectionBook) => (
               <Link

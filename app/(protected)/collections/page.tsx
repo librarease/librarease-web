@@ -16,13 +16,15 @@ import {
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SITE_NAME } from '@/lib/consts'
-import { BellRing, Heart } from 'lucide-react'
+import { BellRing } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Verify } from '@/lib/firebase/firebase'
 import { Button } from '@/components/ui/button'
 import { getListCollections } from '@/lib/api/collection'
 import { ListCollection } from '@/components/collections/ListCollection'
 import { SearchInput } from '@/components/common/SearchInput'
+import { FollowCollectionButton } from '@/components/collections/FollowCollectionButton'
+import { colorsToCssVars } from '@/lib/utils/color-utils'
 
 export const metadata: Metadata = {
   title: `Collections · ${SITE_NAME}`,
@@ -50,12 +52,13 @@ export default async function UserCollections({
     skip: skip,
     title: sp?.title,
     include_library: 'true',
+    include_stats: 'true',
     ...(library_id ? { library_id } : {}),
   } as const
 
-  await Verify({ from: '/collections' })
+  const headers = await Verify({ from: '/collections' })
 
-  const res = await getListCollections(query)
+  const res = await getListCollections(query, { headers })
 
   if ('error' in res) {
     console.log(res)
@@ -89,14 +92,6 @@ export default async function UserCollections({
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Button variant="secondary" asChild>
-            <Link href="/collections/watchlist">
-              <>
-                <BellRing className="mr-2 h-4 w-4" />
-                Followings
-              </>
-            </Link>
-          </Button>
         </div>
       </nav>
 
@@ -111,19 +106,15 @@ export default async function UserCollections({
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {res.data.map((col) => (
           <Link key={col.id} href={`/collections/${col.id}`} passHref>
-            <ListCollection collection={col}>
-              <Button
-                size="sm"
-                className="w-full"
-                style={{
-                  backgroundColor: 'var(--accent-bg)',
-                  color: 'var(--accent-text)',
-                }}
-                disabled
-              >
-                <Heart className="mr-2 size-4" />
-                Follow
-              </Button>
+            <ListCollection
+              collection={col}
+              style={colorsToCssVars(col.colors)}
+            >
+              <FollowCollectionButton
+                collectionId={col.id}
+                initialIsFollowed={!!col.stats?.followed_at}
+                className="bg-(--color-vibrant,var(--color-primary)) hover:bg-(--color-dark-muted,var(--color-muted-foreground)) dark:hover:bg-(--color-light-muted,var(--color-muted-foreground))"
+              />
             </ListCollection>
           </Link>
         ))}

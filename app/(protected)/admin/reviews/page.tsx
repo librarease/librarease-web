@@ -98,7 +98,10 @@ export default async function ReviewsPage({
                   />
                 </div>
               </Link>
-              <Link href={`/admin/borrows/${review.borrowing_id}`}>
+              <Link
+                className="grow"
+                href={`/admin/borrows/${review.borrowing_id}`}
+              >
                 <div className="space-y-4">
                   <div className="flex flex-col md:flex-row md:justify-between">
                     <div>

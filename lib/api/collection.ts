@@ -6,10 +6,11 @@ const COLLECTION_URL = `${BASE_URL}/collections`
 
 type GetListCollectionsQuery = QueryParams<
   Pick<Collection, 'id' | 'title' | 'library_id'>
->
+> & { include_stats?: 'true' }
 type GetListCollectionsResponse = Promise<ResList<Collection>>
 export const getListCollections = async (
-  query: GetListCollectionsQuery
+  query: GetListCollectionsQuery,
+  init?: RequestInit
 ): GetListCollectionsResponse => {
   const url = new URL(COLLECTION_URL)
   Object.entries(query).forEach(([key, value]) => {
@@ -18,15 +19,20 @@ export const getListCollections = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
   return response.json()
 }
 
-type GetCollectionQuery = { include_books?: 'true'; include_book_ids: 'true' }
+type GetCollectionQuery = {
+  include_books?: 'true'
+  include_book_ids?: 'true'
+  include_stats?: 'true'
+}
 type GetCollectionResponse = Promise<ResSingle<Collection>>
 export const getCollection = async (
   id: string,
-  query?: GetCollectionQuery
+  query?: GetCollectionQuery,
+  init?: RequestInit
 ): GetCollectionResponse => {
   const url = new URL(`${COLLECTION_URL}/${id}`)
   Object.entries(query ?? {}).forEach(([key, value]) => {
@@ -35,14 +41,14 @@ export const getCollection = async (
     }
   })
 
-  const response = await fetch(url.toString())
+  const response = await fetch(url.toString(), init)
   return response.json()
 }
 
 type CreateCollectionQuery = Pick<
   Collection,
-  'title' | 'library_id' | 'description'
-> & { cover?: string }
+  'title' | 'library_id' | 'description' | 'cover' | 'colors'
+>
 type CreateCollectionResponse = Promise<
   ResSingle<Omit<Collection, 'library' | 'cover'>>
 >
@@ -84,7 +90,9 @@ export const deleteCollection = async (
 }
 
 type UpdateCollectionQuery = Partial<
-  Pick<Collection, 'title' | 'description'> & { update_cover: string }
+  Pick<Collection, 'title' | 'description' | 'colors'> & {
+    update_cover: string
+  }
 >
 export const updateCollection = async (
   id: string,
@@ -146,6 +154,42 @@ export const updateCollectionBooks = async (
     method: 'PUT',
     headers,
     body: JSON.stringify(query),
+  })
+  if (!res.ok) {
+    const e = await res.json()
+    throw new Error(e.message)
+  }
+  return res.json()
+}
+
+export const followCollection = async (
+  id: string,
+  init?: RequestInit
+): Promise<ResSingle<undefined>> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+  const res = await fetch(`${COLLECTION_URL}/${id}/follow`, {
+    ...init,
+    method: 'POST',
+    headers,
+  })
+  if (!res.ok) {
+    const e = await res.json()
+    throw new Error(e.message)
+  }
+  return res.json()
+}
+
+export const unfollowCollection = async (
+  id: string,
+  init?: RequestInit
+): Promise<ResSingle<undefined>> => {
+  const headers = new Headers(init?.headers)
+  headers.set('Content-Type', 'application/json')
+  const res = await fetch(`${COLLECTION_URL}/${id}/follow`, {
+    ...init,
+    method: 'DELETE',
+    headers,
   })
   if (!res.ok) {
     const e = await res.json()

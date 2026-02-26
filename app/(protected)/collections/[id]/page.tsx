@@ -12,6 +12,8 @@ import { getCollection, getListCollectionBooks } from '@/lib/api/collection'
 import { Book, Calendar, Library, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { FollowCollectionButton } from '@/components/collections/FollowCollectionButton'
+import { Verify } from '@/lib/firebase/firebase'
 
 export default async function CollectionDetailsPage({
   params,
@@ -20,13 +22,17 @@ export default async function CollectionDetailsPage({
   params: Promise<{ id: string }>
   searchParams: { title?: string }
 }) {
-  //   const claims = await IsLoggedIn()
-
   const { id } = await params
   const { title } = searchParams
 
+  const headers = await Verify({ from: `/collections/${id}` })
+
   const [collectionRes, bookRes] = await Promise.all([
-    getCollection(id),
+    getCollection(
+      id,
+      { include_stats: 'true', include_book_ids: 'true' },
+      { headers }
+    ),
     getListCollectionBooks(id, {
       include_book: 'true',
       book_title: title,
@@ -64,7 +70,7 @@ export default async function CollectionDetailsPage({
 
       <div className="relative aspect-[2] rounded-lg overflow-hidden mb-6">
         <Image
-          src={collectionRes.data.cover?.path || '/book-placeholder.svg'}
+          src={collectionRes.data.cover || '/book-placeholder.svg'}
           alt={collectionRes.data.title}
           fill
           className="w-full h-full object-cover rounded-t"
@@ -87,6 +93,13 @@ export default async function CollectionDetailsPage({
               <Book className="h-4 w-4" />
               <span>{collectionRes.data.book_count} books</span>
             </div>
+          </div>
+          <div className="mt-4">
+            <FollowCollectionButton
+              collectionId={collectionRes.data.id}
+              initialIsFollowed={!!collectionRes.data.stats?.followed_at}
+              className="w-auto h-9 px-4 text-sm font-medium"
+            />
           </div>
         </div>
       </div>
@@ -134,10 +147,6 @@ export default async function CollectionDetailsPage({
 
         {/* Books in Collection */}
         <div className="lg:col-span-3">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold">Books in Collection</h2>
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookRes.data.map((collectionBook) => (
               <Link

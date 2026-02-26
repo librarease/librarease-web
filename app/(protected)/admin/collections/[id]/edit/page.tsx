@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { updateCollectionAction } from '@/lib/actions/collection'
 import { getCollection } from '@/lib/api/collection'
+import { Verify } from '@/lib/firebase/firebase'
 
 export default async function EditCollectionPage({
   params,
@@ -16,8 +17,15 @@ export default async function EditCollectionPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const headers = await Verify({ from: `/admin/collections/${id}/edit` })
 
-  const [collectionRes] = await Promise.all([getCollection(id)])
+  const [collectionRes] = await Promise.all([
+    getCollection(
+      id,
+      { include_books: 'true', include_stats: 'true' },
+      { headers }
+    ),
+  ])
 
   if ('error' in collectionRes) {
     console.log(collectionRes)
@@ -26,7 +34,7 @@ export default async function EditCollectionPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">New Collection</h1>
+      <h1 className="text-2xl font-semibold">Edit Collection</h1>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -47,12 +55,16 @@ export default async function EditCollectionPage({
 
       <FormCollection
         initialData={{
+          id: collectionRes.data.id,
           library_id: collectionRes.data.library_id,
           title: collectionRes.data.title,
-          cover: collectionRes.data.cover?.path,
+          cover: collectionRes.data.cover,
           description: collectionRes.data.description,
         }}
-        onSubmit={updateCollectionAction.bind(null, collectionRes.data.id)}
+        onSubmitAction={updateCollectionAction.bind(
+          null,
+          collectionRes.data.id
+        )}
       />
     </div>
   )
