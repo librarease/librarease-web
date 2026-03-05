@@ -11,8 +11,9 @@ import {
 import { Membership } from '@/lib/types/membership'
 import { Badge } from '../ui/badge'
 
-export const ListCardMembership: React.FC<{ membership: Membership }> = ({
+export const ListCardMembership: React.FC<{ membership: Membership, children?: React.ReactNode }> = ({
   membership,
+  children,
 }) => {
   return (
     <Card
@@ -64,11 +65,11 @@ export const ListCardMembership: React.FC<{ membership: Membership }> = ({
           <span>Price: {membership.price ?? '-'} Pts</span>
         </div>
       </CardContent>
-      <CardFooter>
-        {/* <BtnReturnBook variant="outline" className="w-full" borrow={borrow}>
-          Return Book
-        </BtnReturnBook> */}
-      </CardFooter>
+      {children && (
+        <CardFooter>
+          {children}
+        </CardFooter>
+      )}
     </Card>
   )
 }

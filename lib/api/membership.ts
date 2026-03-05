@@ -54,3 +54,29 @@ export const createMembership = async (
   }
   return response.json()
 }
+
+type UpdateMembershipQuery = {
+  id: string
+} & Partial<CreateMembershipQuery>
+type UpdateMembershipResponse = Promise<ResSingle<Membership>>
+export const updateMembership = async (
+  query: UpdateMembershipQuery,
+  options?: { headers?: HeadersInit }
+): UpdateMembershipResponse => {
+  const { id, ...data } = query
+  const response = await fetch(`${MEMBERSHIPS_URL}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+    body: JSON.stringify(data),
+  })
+
+  // Attempt to parse json error if response is not ok
+  if (!response.ok) {
+    const e = await response.json().catch(() => ({ error: 'Unknown error occurred' }))
+    throw e
+  }
+  return response.json()
+}

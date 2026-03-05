@@ -1,3 +1,5 @@
+'use client'
+
 import { Notification as TNotification } from '@/lib/types/notification'
 import { cn, formatDate } from '@/lib/utils'
 import {
@@ -11,6 +13,7 @@ import {
 import { NotificationAction } from './NotificationAction'
 import Link from 'next/link'
 import { Route } from 'next'
+import { readNotificationAction } from '@/lib/actions/notification'
 
 export const Notification: React.FC<{ noti: TNotification }> = ({ noti }) => {
   return (
@@ -26,6 +29,11 @@ export const Notification: React.FC<{ noti: TNotification }> = ({ noti }) => {
       <Link
         href={getLink(noti.reference_type, noti.reference_id ?? '')}
         className="flex-1 min-w-0"
+        onClick={() => {
+          if (!noti.read_at) {
+            readNotificationAction(noti.id)
+          }
+        }}
       >
         <div className="flex justify-between items-start">
           <h3 className={cn('font-medium', !noti.read_at && 'font-semibold')}>

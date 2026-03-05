@@ -43,7 +43,7 @@ export default async function BorrowDetailsPage({
 
   return (
     <DetailBorrow borrow={borrowRes.data}>
-      <Button variant="secondary" asChild>
+      <Button variant="secondary" className='bottom-2 sticky'  asChild>
         <Link href={`/borrows/${borrowRes.data.id}/review`} className="w-full">
           <Star
             className={clsx(

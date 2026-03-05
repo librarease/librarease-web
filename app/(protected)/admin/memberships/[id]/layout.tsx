@@ -15,9 +15,11 @@ export const metadata: Metadata = {
 
 export default async function MembershipDetailsLayout({
   children,
+  edit,
   params,
 }: Readonly<{
   children: React.ReactNode
+  edit: React.ReactNode
   params: Promise<{ id: string }>
 }>) {
   const { id } = await params
@@ -30,7 +32,7 @@ export default async function MembershipDetailsLayout({
   }
   return (
     <>
-      <nav className="backdrop-blur-sm sticky top-0 z-10">
+      <nav className="backdrop-blur-sm sticky top-0 z-10 mb-4">
         <h1 className="text-2xl font-semibold">{membershipRes.data.name}</h1>
         <div className="flex justify-between items-center">
           <Breadcrumb>
@@ -51,6 +53,7 @@ export default async function MembershipDetailsLayout({
         </div>
       </nav>
       {children}
+      {edit}
     </>
   )
 }
