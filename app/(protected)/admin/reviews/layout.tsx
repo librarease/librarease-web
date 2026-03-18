@@ -9,6 +9,9 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
+// https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+export const dynamic = 'force-dynamic'
+
 export default async function ReviewsLayout({
   children,
 }: Readonly<{
