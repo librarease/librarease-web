@@ -302,8 +302,10 @@ export const DetailSubscription: React.FC<
             </CardContent>
           </Card>
         </div>
-      </div>
+
       {children}
+
+      </div>
     </>
   )
 }
