@@ -18,17 +18,19 @@ import { IsLoggedIn } from '@/lib/firebase/firebase'
 import { logoutAction } from '@/lib/actions/logout'
 import { ModeToggle } from '@/components/button-toggle-theme'
 import { redirect, RedirectType } from 'next/navigation'
+import type { Route } from 'next'
 import { addDays, format, subMonths } from 'date-fns'
+type MenuItem = {
+  title: string
+  icon: typeof Library
+  href: Route
+}
 
-const now = new Date()
-const to = format(addDays(now, 1), 'dd-MM-yyyy')
-const from = format(subMonths(now, 1), 'dd-MM-yyyy')
-
-const menuItems = [
+const baseMenuItems: MenuItem[] = [
   {
     title: 'Dashboard',
     icon: ChartSpline,
-    href: `/admin/dashboard?from=${from}&to=${to}`,
+    href: '/admin/dashboard',
   },
   { title: 'Libraries', icon: Library, href: '/admin/libraries' },
   { title: 'Notifications', icon: BellIcon, href: '/notifications' },
@@ -49,7 +51,9 @@ const menuItems = [
   { title: 'Collections', icon: BookCopy, href: '/admin/collections' },
   { title: 'Reviews', icon: MessageSquare, href: '/admin/reviews' },
   { title: 'Jobs', icon: Workflow, href: '/admin/jobs' },
-] as const
+]
+
+export const dynamic = 'force-dynamic'
 
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()
@@ -67,6 +71,18 @@ export default async function LibraryDashboard() {
   ) {
     redirect(`/`, RedirectType.replace)
   }
+
+  const now = new Date()
+  const to = format(addDays(now, 1), 'dd-MM-yyyy')
+  const from = format(subMonths(now, 1), 'dd-MM-yyyy')
+  const menuItems = baseMenuItems.map((item) =>
+    item.title === 'Dashboard'
+      ? {
+          ...item,
+          href: `/admin/dashboard?from=${from}&to=${to}` as Route,
+        }
+      : item
+  )
 
   return (
     <main className="min-h-[calc(100vh-4rem)] p-8">

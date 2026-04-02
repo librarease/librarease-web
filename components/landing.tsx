@@ -103,6 +103,12 @@ export default function LandingPage() {
               Explore Books
             </Link>
             <Link
+              href="/about"
+              className="hover:text-foreground transition-colors"
+            >
+              About
+            </Link>
+            <Link
               href="/login"
               className="hover:text-foreground transition-colors"
             >
@@ -294,6 +300,12 @@ export default function LandingPage() {
               className="hover:text-foreground transition-colors"
             >
               Explore Books
+            </Link>
+            <Link
+              href="/about"
+              className="hover:text-foreground transition-colors"
+            >
+              About
             </Link>
             <Link
               href="/terms"
