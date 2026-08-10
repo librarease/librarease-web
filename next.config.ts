@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
 
   experimental: {
-    useTypeScriptCli: false,
     turbopackRustReactCompiler: true,
     useOffline: true,
   },
