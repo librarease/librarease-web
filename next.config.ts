@@ -4,12 +4,11 @@ const nextConfig: NextConfig = {
   output: 'standalone',
 
   typedRoutes: true,
+  cacheComponents: true,
+  partialPrefetching: true,
 
   experimental: {
-    viewTransition: true,
     useTypeScriptCli: false,
-    cacheComponents: true,
-    partialPrefetching: true,
     turbopackRustReactCompiler: true,
     useOffline: true,
   },

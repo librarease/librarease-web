@@ -53,8 +53,6 @@ const baseMenuItems: MenuItem[] = [
   { title: 'Jobs', icon: Workflow, href: '/admin/jobs' },
 ]
 
-export const dynamic = 'force-dynamic'
-
 export default async function LibraryDashboard() {
   const claim = await IsLoggedIn()
 
