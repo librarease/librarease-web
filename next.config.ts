@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
 
   experimental: {
     viewTransition: true,
+    useTypeScriptCli: false,
+    cacheComponents: true,
+    partialPrefetching: true,
+    turbopackRustReactCompiler: true,
+    useOffline: true,
   },
 
   logging: {
