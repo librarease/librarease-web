@@ -15,11 +15,21 @@ import { useActionState, useEffect } from 'react'
 import { loginAction } from '@/lib/actions/login'
 import Link from 'next/link'
 import { Route } from 'next'
+import { localizePath, type Locale } from '@/lib/i18n'
+
+type ForgotPasswordCopy = Awaited<
+  ReturnType<typeof import('@/lib/i18n').getDictionary>
+>['auth']['forgotPassword']
 
 export function ForgotPasswordForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<'div'> & { email?: string; from: Route }) {
+}: React.ComponentPropsWithoutRef<'div'> & {
+  email?: string
+  from: Route
+  locale: Locale
+  copy: ForgotPasswordCopy
+}) {
   const initialState = {
     error: '',
     email: props.email ?? '',
@@ -44,10 +54,8 @@ export function ForgotPasswordForm({
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Forgot Password</CardTitle>
-          <CardDescription>
-            Enter your email to reset your password
-          </CardDescription>
+          <CardTitle className="text-2xl">{props.copy.title}</CardTitle>
+          <CardDescription>{props.copy.description}</CardDescription>
           {state.error && (
             <div className="text-sm text-red-400">{state.error}</div>
           )}
@@ -56,32 +64,35 @@ export function ForgotPasswordForm({
           <form action={action}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{props.copy.emailLabel}</Label>
                 <Input
                   id="email"
                   type="email"
                   name="email"
-                  placeholder="e.g. mgmg@example.com"
+                  placeholder={props.copy.emailPlaceholder}
                   autoFocus
                   defaultValue={state.email}
                   required
                 />
               </div>
               <Link
-                href="/login"
+                href={localizePath(props.locale, '/login')}
                 className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
               >
-                Remember your password?
+                {props.copy.backToLogin}
               </Link>
             </div>
             <Button type="submit" className="w-full" disabled={isPending}>
-              Reset Password
+              {props.copy.submit}
             </Button>
 
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline underline-offset-4">
-                Sign up
+              {props.copy.signupPrompt}{' '}
+              <Link
+                href={localizePath(props.locale, '/signup')}
+                className="underline underline-offset-4"
+              >
+                {props.copy.signupLink}
               </Link>
             </div>
           </form>

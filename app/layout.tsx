@@ -7,11 +7,13 @@
 // https://github.com/librarease/librarease-web
 
 import type { Metadata, Viewport } from 'next'
+import { headers } from 'next/headers'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/consts'
 import { ThemeProvider } from '@/components/theme-provider'
+import { defaultLocale, isLocale, LOCALE_HEADER } from '@/lib/i18n'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -60,13 +62,18 @@ export const metadata: Metadata = {
   category: 'BusinessApplication',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const headerList = await headers()
+  const requestLocale = headerList.get(LOCALE_HEADER)
+  const locale =
+    requestLocale && isLocale(requestLocale) ? requestLocale : defaultLocale
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         //  container mx-auto px-4
         className={`${geistSans.variable} ${geistMono.variable} antialiased mx-auto`}

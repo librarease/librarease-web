@@ -1,20 +1,53 @@
-import { getTermsDoc } from '@/lib/api/docs'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
+import { notFound } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import {
+  getDictionary,
+  getMetadataForPage,
+  isLocale,
+  localizePath,
+  type Locale,
+} from '@/lib/i18n'
 
-export default async function TermsPage() {
-  const doc = await getTermsDoc()
+type Props = {
+  params: Promise<{
+    locale: string
+  }>
+}
+
+async function getPageLocale(params: Props['params']): Promise<Locale> {
+  const { locale } = await params
+
+  if (!isLocale(locale)) {
+    notFound()
+  }
+
+  return locale
+}
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const locale = await getPageLocale(params)
+  const dictionary = await getDictionary(locale)
+
+  return getMetadataForPage(locale, '/privacy', dictionary.meta.privacy)
+}
+
+export default async function PrivacyPage({ params }: Props) {
+  const locale = await getPageLocale(params)
+  const dictionary = await getDictionary(locale)
 
   return (
-    <div className="">
+    <div>
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        {/* Header */}
         <div className="mb-10">
           <Button variant="ghost" asChild className="mb-4 -ml-4">
-            <Link href="/">
+            <Link href={localizePath(locale, '/')}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              {dictionary.privacy.backToHome}
             </Link>
           </Button>
 
@@ -31,7 +64,7 @@ export default async function TermsPage() {
                 prose-li:mb-1 prose-li:leading-relaxed
                 prose-blockquote:border-l-emerald-500 prose-blockquote:bg-emerald-50 prose-blockquote:p-4 prose-blockquote:rounded-r-lg
                 prose-code:bg-slate-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-foreground"
-            dangerouslySetInnerHTML={{ __html: doc }}
+            dangerouslySetInnerHTML={{ __html: dictionary.privacy.html }}
           />
         </div>
       </div>

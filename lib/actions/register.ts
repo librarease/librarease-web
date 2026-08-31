@@ -8,6 +8,7 @@
 // } from 'firebase/auth'
 import { redirect, RedirectType } from 'next/navigation'
 import { registerUser } from '../api/auth'
+import { defaultLocale, isLocale } from '@/lib/i18n'
 
 // const auth = getAuth(app)
 
@@ -25,6 +26,11 @@ export async function registerAction(
   const name = formData.get('name') as string
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const localeValue = formData.get('locale')
+  const locale =
+    typeof localeValue === 'string' && isLocale(localeValue)
+      ? localeValue
+      : defaultLocale
 
   try {
     await registerUser({ name, email, password })
@@ -38,5 +44,5 @@ export async function registerAction(
     }
   }
 
-  redirect(`/login?email=${email}`, RedirectType.replace)
+  redirect(`/${locale}/login?email=${email}`, RedirectType.replace)
 }

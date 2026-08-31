@@ -11,96 +11,46 @@ import {
   Star,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { localizePath, type LandingCopy, type Locale } from '@/lib/i18n'
 import { ModeToggle } from './button-toggle-theme'
 
-const forLibraries = [
-  {
-    icon: BookOpen,
-    title: 'Organize your collection',
-    description:
-      'Add books with cover art and details. Import your existing catalog in bulk with a CSV file.',
-  },
-  {
-    icon: Users,
-    title: 'Manage memberships',
-    description:
-      'Create plans with custom loan limits, borrow periods, and fine rates. Members subscribe and start borrowing.',
-  },
-  {
-    icon: BarChart3,
-    title: "See what's happening",
-    description:
-      'A clear picture of borrowing activity, popular titles, and revenue — updated in real time.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Built for your whole team',
-    description:
-      'Give staff access to handle day-to-day borrowing and returns, while admins keep full oversight.',
-  },
-]
+type LandingPageProps = {
+  locale: Locale
+  copy: LandingCopy
+}
 
-const forReaders = [
-  {
-    icon: Search,
-    title: 'Browse available books',
-    description:
-      "Explore your library's collection and see what's available before you visit.",
-  },
-  {
-    icon: BookMarked,
-    title: 'Track your borrows',
-    description:
-      "Know exactly what you have out, when it's due, and your full borrowing history.",
-  },
-  {
-    icon: Bell,
-    title: 'Stay on top of due dates',
-    description:
-      "Get notified before a book is due so you never pay a fine you didn't expect.",
-  },
-  {
-    icon: Star,
-    title: 'Leave a review',
-    description:
-      "Share your thoughts on books you've read. Help other members find their next favourite.",
-  },
-]
+const libraryIcons = [BookOpen, Users, BarChart3, ShieldCheck]
+const readerIcons = [Search, BookMarked, Bell, Star]
 
-const stats = [
-  { value: '50+', label: 'Libraries' },
-  { value: '10,000+', label: 'Active Members' },
-  { value: '200,000+', label: 'Books' },
-  { value: '99.9%', label: 'Uptime' },
-]
+export default function LandingPage({ locale, copy }: LandingPageProps) {
+  const currentYear = new Date().getFullYear()
 
-export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans border container mx-auto">
       {/* Nav */}
       <header className="border-b border-border">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <span className="font-bold tracking-tight text-foreground text-base">
-            Librarease
+            {copy.brand}
           </span>
           <nav className="hidden md:flex items-center gap-8 text-sm text-foreground/60 transition-colors">
-            <Link
+            <a
               href="#for-libraries"
               className="hover:text-foreground transition-colors"
             >
-              For Libraries
-            </Link>
-            <Link
+              {copy.nav.forLibraries}
+            </a>
+            <a
               href="#for-readers"
               className="hover:text-foreground transition-colors"
             >
-              For Readers
-            </Link>
+              {copy.nav.forReaders}
+            </a>
             <Link
               href="/explore/books"
               className="hover:text-foreground transition-colors"
             >
-              Explore Books
+              {copy.nav.exploreBooks}
             </Link>
             <Link
               href="/about"
@@ -109,16 +59,18 @@ export default function LandingPage() {
               About
             </Link>
             <Link
-              href="/login"
+              href={localizePath(locale, '/login')}
               className="hover:text-foreground transition-colors"
             >
-              Sign in
+              {copy.nav.signIn}
             </Link>
           </nav>
           <div className="flex items-center gap-4">
             <ModeToggle />
             <Button asChild className="hidden sm:inline-flex">
-              <Link href="/signup">Get started</Link>
+              <Link href={localizePath(locale, '/signup')}>
+                {copy.nav.getStarted}
+              </Link>
             </Button>
           </div>
         </div>
@@ -128,27 +80,28 @@ export default function LandingPage() {
       <section className="border-b border-border">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-36">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight text-balance mb-6">
-              Your library,
+            <h1 className="text-5xl md:text-7xl font-bold leading-[1.2] tracking-tight text-balance mb-6">
+              {copy.hero.title}
               <br />
-              <span className="text-muted-foreground">connected.</span>
+              <span className="text-muted-foreground">{copy.hero.accent}</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-lg text-pretty">
-              Experience a modern library ecosystem built for smooth operations
-              and a better borrowing experience. Smart management for librarians
-              and effortless access for readers.
+              {copy.hero.description}
             </p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <Button asChild size="lg">
-                <Link href="/signup" className="flex items-center gap-2">
-                  Get started free
+                <Link
+                  href={localizePath(locale, '/login')}
+                  className="flex items-center gap-2"
+                >
+                  {copy.hero.primaryCta}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
               <Button variant="outline" asChild size="lg">
                 <Link href="/explore/books" className="flex items-center gap-2">
                   <Search className="h-4 w-4" />
-                  Browse books
+                  {copy.hero.secondaryCta}
                 </Link>
               </Button>
             </div>
@@ -160,7 +113,7 @@ export default function LandingPage() {
       <section className="border-b border-border">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
-            {stats.map((stat) => (
+            {copy.stats.map((stat) => (
               <div key={stat.label} className="px-8 py-10 first:pl-0">
                 <p className="text-3xl font-bold text-foreground">
                   {stat.value}
@@ -179,15 +132,15 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 py-20">
           <div className="mb-12">
             <p className="text-xs text-muted-foreground tracking-widest uppercase mb-3">
-              For Libraries
+              {copy.forLibraries.eyebrow}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight max-w-lg text-balance">
-              Everything you need to run a modern library.
+              {copy.forLibraries.title}
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-l border-t border-border">
-            {forLibraries.map((item) => {
-              const Icon = item.icon
+            {copy.forLibraries.items.map((item, index) => {
+              const Icon = libraryIcons[index]
               return (
                 <div
                   key={item.title}
@@ -215,15 +168,15 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 py-20">
           <div className="mb-12">
             <p className="text-xs text-muted-foreground tracking-widest uppercase mb-3">
-              For Readers
+              {copy.forReaders.eyebrow}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight max-w-lg text-balance">
-              Borrow books and keep track of your reading.
+              {copy.forReaders.title}
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-l border-t border-border">
-            {forReaders.map((item) => {
-              const Icon = item.icon
+            {copy.forReaders.items.map((item, index) => {
+              const Icon = readerIcons[index]
               return (
                 <div
                   key={item.title}
@@ -255,14 +208,15 @@ export default function LandingPage() {
                 className="h-6 w-6 text-muted-foreground mb-6"
                 strokeWidth={1.5}
               />
-              <h3 className="text-xl font-semibold mb-3">Just here to read?</h3>
+              <h3 className="text-xl font-semibold mb-3">
+                {copy.cta.readerTitle}
+              </h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                Browse books across all libraries on Librarease. No account
-                needed to explore.
+                {copy.cta.readerDescription}
               </p>
               <Button variant="outline" asChild>
                 <Link href="/explore/books" className="flex items-center gap-2">
-                  Explore books
+                  {copy.cta.readerButton}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -272,14 +226,18 @@ export default function LandingPage() {
                 className="h-6 w-6 text-muted-foreground mb-6"
                 strokeWidth={1.5}
               />
-              <h3 className="text-xl font-semibold mb-3">Running a library?</h3>
+              <h3 className="text-xl font-semibold mb-3">
+                {copy.cta.libraryTitle}
+              </h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                Set up your library on Librarease in minutes. Manage your
-                collection, members, and borrowing all in one place.
+                {copy.cta.libraryDescription}
               </p>
               <Button asChild>
-                <Link href="/signup" className="flex items-center gap-2">
-                  Get started free
+                <Link
+                  href={localizePath(locale, '/signup')}
+                  className="flex items-center gap-2"
+                >
+                  {copy.cta.libraryButton}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -292,14 +250,14 @@ export default function LandingPage() {
       <footer className="border-t border-border">
         <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <span className="font-semibold text-muted-foreground">
-            Librarease
+            {copy.brand}
           </span>
           <div className="flex items-center gap-6">
             <Link
               href="/explore/books"
               className="hover:text-foreground transition-colors"
             >
-              Explore Books
+              {copy.footer.exploreBooks}
             </Link>
             <Link
               href="/about"
@@ -308,25 +266,27 @@ export default function LandingPage() {
               About
             </Link>
             <Link
-              href="/terms"
+              href={localizePath(locale, '/terms')}
               className="hover:text-foreground transition-colors"
             >
-              Terms of Service
+              {copy.footer.terms}
             </Link>
             <Link
-              href="/privacy"
+              href={localizePath(locale, '/privacy')}
               className="hover:text-foreground transition-colors"
             >
-              Privacy Policy
+              {copy.footer.privacy}
             </Link>
             <Link
-              href="/login"
+              href={localizePath(locale, '/login')}
               className="hover:text-foreground transition-colors"
             >
-              Sign in
+              {copy.footer.signIn}
             </Link>
           </div>
-          <span>© {new Date().getFullYear()} Librarease</span>
+          <span>
+            {copy.footer.copyright.replace('{year}', `${currentYear}`)}
+          </span>
         </div>
       </footer>
     </div>
