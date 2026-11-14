@@ -23,6 +23,11 @@ COPY . .
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
+# Hostname of the S3 bucket serving public assets, read by next.config.ts at build time
+# e.g. my-bucket.s3.ap-southeast-1.amazonaws.com
+ARG S3_ASSETS_HOSTNAME
+ENV S3_ASSETS_HOSTNAME=$S3_ASSETS_HOSTNAME
+
 # Install all deps (including devDependencies needed for the build)
 RUN yarn
 

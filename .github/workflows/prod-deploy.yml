@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,10 +24,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # GitHub OIDC: short-lived credentials, no stored access keys
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       # - name: export secret key
@@ -35,9 +36,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: "true"
+        uses: aws-actions/amazon-ecr-login@v2
 
       # This is a separate action that sets up buildx runner
       - name: Setup Docker Buildx
@@ -59,9 +58,11 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.REPOSITORY }}
           IMAGE_TAG: ${{ vars.IMAGE_TAG }}
           NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+          S3_ASSETS_HOSTNAME: ${{ vars.S3_ASSETS_HOSTNAME }}
         run: |
           docker build \
             --build-arg NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL \
+            --build-arg S3_ASSETS_HOSTNAME=$S3_ASSETS_HOSTNAME \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -78,7 +79,7 @@ jobs:
         with:
           node-version: 25
       - name: Deploy to server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
         with:
           host: ${{ secrets.PROD_SERVER_IP }}
           username: ${{ secrets.PROD_SERVER_USERNAME }}
