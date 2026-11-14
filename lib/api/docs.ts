@@ -1,21 +1,17 @@
-// import { BASE_URL } from './common'
+import { BASE_URL } from './common'
 
-// NOTE: static generation only, so we can use NEXT_PUBLIC_APP_URL
-
-const TERMS_URL = `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/terms`
-
-export const getTermsDoc = async (): Promise<string> => {
-  const url = new URL(TERMS_URL)
-
-  const response = await fetch(url.toString())
+// Fetched at request time (never during `next build`, where the API is not
+// reachable) and cached for an hour.
+const getDoc = async (name: 'terms' | 'privacy'): Promise<string> => {
+  const response = await fetch(`${BASE_URL}/${name}`, {
+    next: { revalidate: 3600 },
+  })
+  if (!response.ok) {
+    throw new Error(`Failed to load ${name} document: ${response.status}`)
+  }
   return response.text()
 }
 
-const PRIVACY_URL = `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/privacy`
+export const getTermsDoc = () => getDoc('terms')
 
-export const getPrivacyDoc = async (): Promise<string> => {
-  const url = new URL(PRIVACY_URL)
-
-  const response = await fetch(url.toString())
-  return response.text()
-}
+export const getPrivacyDoc = () => getDoc('privacy')

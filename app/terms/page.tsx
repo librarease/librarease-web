@@ -2,8 +2,11 @@ import { getTermsDoc } from '@/lib/api/docs'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { connection } from 'next/server'
 
 export default async function TermsPage() {
+  // Render on request: the API is not reachable while the image is built
+  await connection()
   const doc = await getTermsDoc()
 
   return (

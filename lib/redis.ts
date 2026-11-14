@@ -9,12 +9,14 @@ function getRedisClient(): Redis {
   if (!redis) {
     redis = new Redis({
       host: process.env.REDIS_HOST ?? 'localhost',
-      port: parseInt(process.env.REDISs_PORT ?? '6379'),
+      port: parseInt(process.env.REDIS_PORT ?? '6379'),
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB ?? '0'),
       maxRetriesPerRequest: 3,
       enableReadyCheck: true,
-      lazyConnect: false,
+      // Connect on first command, not on import, so `next build` (which imports
+      // this module) does not try to reach Redis
+      lazyConnect: true,
       retryStrategy(times) {
         const delay = Math.min(times * 50, 2000)
         return delay
@@ -59,11 +61,14 @@ export default getRedisClient()
 if (typeof window === 'undefined') {
   // Only run on server-side
   const cleanup = async () => {
-    if (redis) {
-      console.log('Redis connection...')
+    if (!redis) return
+    // Never connected (e.g. build workers): nothing to close, and quit()
+    // would open a connection just to close it
+    if (redis.status !== 'wait') {
+      console.log('Closing Redis connection...')
       await redis.quit()
-      redis = null
     }
+    redis = null
   }
 
   process.on('SIGTERM', cleanup)
